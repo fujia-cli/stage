@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/fujia-cli/stage/issues"
   },
-  "gitHead": "43a7444a2550ed574dad1e062d21708f8cf78ebf"
+  "gitHead": "12c19c9108320379ca8b9684a02cc746def031bc",
+  "publishConfig": {
+    "access": "public"
+  }
 }

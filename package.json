@@ -1,6 +1,5 @@
 {
   "name": "@fujia/stage",
-  "private": false,
   "description": "An awesome CLI tool kits",
   "keywords": [
     "cli",
