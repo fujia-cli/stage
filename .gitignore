@@ -41,6 +41,18 @@ build/Release
 node_modules/
 jspm_packages/
 
+package-lock.json
+yarn.lock
+
+# lerna
+packages/**/node_modules
+packages/**/package-lock.json
+packages/**/yarn.lock
+
+# editor
+.vscode
+.idea
+
 # TypeScript v1 declaration files
 typings/
 

@@ -1,0 +1,26 @@
+{
+  "name": "@fujia/cli-utils",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "fujia <fujia.site@outlook.com>",
+  "homepage": "https://github.com/fujia-cli/stage/tree/main/packages/utils#readme",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fujia-cli/stage.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/fujia-cli/stage/issues"
+  }
+}
