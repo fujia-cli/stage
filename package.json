@@ -23,7 +23,18 @@
     "url": "https://github.com/fujia-cli/stage"
   },
   "license": "MIT",
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
   "devDependencies": {
+    "@commitlint/config-conventional": "^15.0.0",
+    "commitlint": "^15.0.0",
+    "husky": "^7.0.4",
     "lerna": "^4.0.0"
+  },
+  "scripts": {
+    "prepare": "husky install"
   }
 }

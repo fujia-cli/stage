@@ -1,9 +1,12 @@
 {
-  "name": "@fujia/cli-core",
+  "name": "@fujia/cli-log",
   "version": "1.0.3",
-  "description": "cli core",
+  "description": "A logger package for stage cli.",
+  "keywords": [
+    "log"
+  ],
   "author": "fujia <fujia.site@outlook.com>",
-  "homepage": "https://github.com/fujia-cli/stage/tree/main/packages/core#readme",
+  "homepage": "https://github.com/fujia-cli/stage/tree/main/utils/cli-log#readme",
   "license": "ISC",
   "main": "lib/index.js",
   "directories": {
@@ -13,8 +16,8 @@
   "files": [
     "lib"
   ],
-  "bin": {
-    "stage": "bin/index.js"
+  "publishConfig": {
+    "access": "public"
   },
   "repository": {
     "type": "git",
@@ -26,15 +29,7 @@
   "bugs": {
     "url": "https://github.com/fujia-cli/stage/issues"
   },
-  "gitHead": "12c19c9108320379ca8b9684a02cc746def031bc",
-  "publishConfig": {
-    "access": "public"
-  },
   "dependencies": {
-    "@fujia/cli-log": "file:../../utils/cli-log",
-    "colors": "^1.4.0",
-    "import-local": "^3.0.3",
-    "npmlog": "^6.0.0",
-    "semver": "^7.3.5"
+    "npmlog": "^6.0.0"
   }
 }
