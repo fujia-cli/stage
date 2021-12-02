@@ -44,10 +44,12 @@ jspm_packages/
 package-lock.json
 yarn.lock
 
+.DS_Store
+**/*/.DS_Store
 # lerna
-packages/**/node_modules
-packages/**/package-lock.json
-packages/**/yarn.lock
+**/*/node_modules
+**/*/package-lock.json
+**/*/yarn.lock
 
 # editor
 .vscode

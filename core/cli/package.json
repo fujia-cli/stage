@@ -5,7 +5,7 @@
   "author": "fujia <fujia.site@outlook.com>",
   "homepage": "https://github.com/fujia-cli/stage/tree/main/packages/core#readme",
   "license": "ISC",
-  "main": "lib/core.js",
+  "main": "lib/index.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -13,6 +13,9 @@
   "files": [
     "lib"
   ],
+  "bin": {
+    "stage": "bin/index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fujia-cli/stage.git"
@@ -26,5 +29,8 @@
   "gitHead": "12c19c9108320379ca8b9684a02cc746def031bc",
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@fujia/cli-utils": "file:../../utils/utils"
   }
 }
