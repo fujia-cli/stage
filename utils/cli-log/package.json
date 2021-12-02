@@ -30,6 +30,7 @@
     "url": "https://github.com/fujia-cli/stage/issues"
   },
   "dependencies": {
-    "npmlog": "^6.0.0"
+    "npmlog": "^6.0.0",
+    "rimraf": "^3.0.2"
   }
 }

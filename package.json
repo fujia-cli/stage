@@ -30,11 +30,13 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^15.0.0",
+    "@types/node": "^16.11.11",
     "commitlint": "^15.0.0",
     "husky": "^7.0.4",
     "lerna": "^4.0.0"
   },
   "scripts": {
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "publish": "lerna run tsc && lerna publish"
   }
 }
