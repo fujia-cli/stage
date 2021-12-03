@@ -1,0 +1,41 @@
+{
+  "name": "@fujia/get-pkg-info",
+  "version": "1.0.3",
+  "description": "Obtain the package info via npm's api",
+  "author": "fujia <fujia.site@outlook.com>",
+  "homepage": "https://github.com/fujia-cli/stage/tree/main/utils/get-pkg-info#readme",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "types": "./lib/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fujia-cli/stage.git"
+  },
+  "scripts": {
+    "tsc": "rimraf ./lib && tsc",
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/fujia-cli/stage/issues"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@types/semver": "^7.3.9",
+    "@types/url-join": "^4.0.1",
+    "axios": "^0.24.0",
+    "semver": "^7.3.5",
+    "url-join": "^4.0.1"
+  }
+}
