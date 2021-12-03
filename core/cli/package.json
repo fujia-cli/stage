@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@fujia/cli-log": "file:../../utils/cli-log",
+    "@fujia/root": "^0.2.0",
     "colors": "^1.4.0",
     "import-local": "^3.0.3",
     "npmlog": "^6.0.0",

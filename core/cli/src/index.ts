@@ -3,7 +3,7 @@ import { access } from 'fs/promises';
 import log from '@fujia/cli-log';
 import semver from 'semver';
 import { red } from 'colors/safe';
-import rootCheck from 'root-check';
+import { checkRoot } from '@fujia/root';
 
 const pkg = require('../package.json');
 import { LOWEST_NODE_VERSION } from './constant'
@@ -28,8 +28,8 @@ async function checkUserHome() {
   }
 }
 
-function checkRoot() {
-  rootCheck();
+function checkRootPermission() {
+  checkRoot();
 }
 
 function checkNodeVersion() {

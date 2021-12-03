@@ -116,3 +116,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+
+core/*/lib
