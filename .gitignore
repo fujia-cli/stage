@@ -28,8 +28,6 @@ coverage
 # Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
 
-# Bower dependency directory (https://bower.io/)
-bower_components
 
 # node-waf configuration
 .lock-wscript
@@ -50,6 +48,7 @@ yarn.lock
 **/*/node_modules
 **/*/package-lock.json
 **/*/yarn.lock
+**/*/lib
 
 # editor
 .vscode
@@ -89,11 +88,6 @@ typings/
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 
-# Next.js build output
-.next
-
-# Nuxt.js build / generate output
-.nuxt
 dist
 
 # Gatsby files
@@ -102,8 +96,6 @@ dist
 # https://nextjs.org/blog/next-9-1#public-directory-support
 # public
 
-# vuepress build output
-.vuepress/dist
 
 # Serverless directories
 .serverless/
@@ -116,6 +108,3 @@ dist
 
 # TernJS port file
 .tern-port
-
-
-core/*/lib

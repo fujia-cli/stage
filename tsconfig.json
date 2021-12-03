@@ -3,11 +3,15 @@
     "target": "es5",
     "module": "commonjs",
     "lib": [
+      "ES5",
+      "ES6",
       "ESNext"
     ],
     "declaration": true,
+    "sourceMap": true,
     "declarationMap": false,
     "moduleResolution": "node",
+    "outDir": "./lib",
     "esModuleInterop": true,
     "isolatedModules": true,
     "skipLibCheck": true,
