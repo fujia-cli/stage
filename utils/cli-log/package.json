@@ -9,6 +9,7 @@
   "homepage": "https://github.com/fujia-cli/stage/tree/main/utils/cli-log#readme",
   "license": "ISC",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -24,13 +25,17 @@
     "url": "git+https://github.com/fujia-cli/stage.git"
   },
   "scripts": {
+    "tsc": "rimraf ./lib && tsc",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "bugs": {
     "url": "https://github.com/fujia-cli/stage/issues"
   },
   "dependencies": {
-    "npmlog": "^6.0.0",
+    "npmlog": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/npmlog": "^4.1.3",
     "rimraf": "^3.0.2"
   }
 }

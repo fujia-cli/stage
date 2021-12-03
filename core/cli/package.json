@@ -37,7 +37,9 @@
     "@fujia/cli-log": "file:../../utils/cli-log",
     "@fujia/root": "^0.3.2",
     "colors": "^1.4.0",
+    "dotenv": "^10.0.0",
     "import-local": "^3.0.3",
+    "minimist": "^1.2.5",
     "npmlog": "^6.0.0",
     "rimraf": "^3.0.2",
     "semver": "^7.3.5"
