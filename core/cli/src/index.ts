@@ -1,12 +1,13 @@
 import { homedir } from 'os';
 import path from 'path';
 import { access } from 'fs/promises';
-import log from '@fujia/cli-log';
 import semver from 'semver';
-import { red } from 'colors/safe';
+import { red, yellow } from 'colors/safe';
 import { checkRoot } from '@fujia/root';
 import minimist from 'minimist';
 import dotenv from 'dotenv';
+import log from '@fujia/cli-log';
+import { getLatestVersion } from '@fujia/get-pkg-info';
 
 const pkg = require('../package.json');
 import { LOWEST_NODE_VERSION, DEFAULT_CLI_HOME } from './constant'
@@ -23,22 +24,33 @@ interface StageCliHome {
 let args: IArgs;
 let userHome: string;
 
-export default function core() {
+export default async function core() {
   try {
     checkPkgVersion();
     checkNodeVersion();
     checkRoot();
-    checkUserHome();
+    await checkUserHome();
     checkInputArgs();
-    checkEnv();
+    await checkEnv();
+    await checkVersionUpgrade();
   } catch (e: any) {
     log.error('[core/cli]', e.message);
   }
 }
 
-function checkVersionUpgrade() {
+async function checkVersionUpgrade() {
   const curVersion = pkg.version;
   const npmName = pkg.name;
+  const latestVersion = await getLatestVersion(curVersion, npmName);
+
+  if (latestVersion && semver.gt(latestVersion, curVersion)) {
+    log.warn(`[${npmName} - upgrade]`, yellow(`
+      The latest version(${latestVersion}) is available, please upgrade it manually!
+      Current version is ${curVersion}, you can run follows command to install it:
+
+      npm i -g ${npmName}
+    `))
+  }
 }
 
 async function checkEnv() {
