@@ -1,15 +1,12 @@
+import { homedir } from 'os';
+import { access } from 'fs/promises';
 import log from '@fujia/cli-log';
 import semver from 'semver';
 import { red } from 'colors/safe';
-// import userHome from 'home-or-tmp';
 import rootCheck from 'root-check';
 
-// import pkg from '../package.json';
+const pkg = require('../package.json');
 import { LOWEST_NODE_VERSION } from './constant'
-
-const version = PACKAGE_JSON.version;
-
-console.log(version);
 
 export default function core() {
   try {
@@ -22,8 +19,13 @@ export default function core() {
   }
 }
 
-function checkUserHome() {
-  // console.log(userHome);
+async function checkUserHome() {
+  try {
+    const userHome = homedir();
+    await access(userHome)
+  } catch (error) {
+    throw new Error(red('Doesn\'t exist home directory for current login user.'));
+  }
 }
 
 function checkRoot() {
@@ -39,6 +41,6 @@ function checkNodeVersion() {
 }
 
 function checkPkgVersion() {
-  // log.info('cli', pkg.version);
+  log.info('core/cli', pkg.version);
 }
 
