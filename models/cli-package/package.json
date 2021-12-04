@@ -1,17 +1,12 @@
 {
-  "name": "@fujia/cli-exec",
+  "name": "@fujia/cli-package",
   "version": "1.0.0",
-  "description": "An execute package of stage cli ",
-  "keywords": [
-    "stage",
-    "exec",
-    "cli"
-  ],
+  "description": "A class of cli module",
   "author": "fujia <fujia.site@outlook.com>",
-  "homepage": "https://github.com/fujia-cli/stage/tree/main/core/cli-exec#readme",
+  "homepage": "https://github.com/fujia-cli/stage/tree/main/models/cli-package#readme",
   "license": "MIT",
   "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "types": "./lib/index.d.ts",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -33,10 +28,10 @@
   "bugs": {
     "url": "https://github.com/fujia-cli/stage/issues"
   },
-  "dependencies": {
-    "@fujia/cli-package": "file:../../models/cli-package"
-  },
   "devDependencies": {
     "rimraf": "^3.0.2"
+  },
+  "dependencies": {
+    "@fujia/hammer": "^0.5.2"
   }
 }

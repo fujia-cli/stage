@@ -16,6 +16,7 @@ import { LOWEST_NODE_VERSION, DEFAULT_CLI_HOME } from './constant'
 import {
   StageCliHome,
   StageCli,
+  NewEnvVariables,
 } from './interface';
 
 let userHome: string;
@@ -60,15 +61,15 @@ function registerCommand() {
   // NOTE: enable debug model
   program.on('option:debug', (optVal: boolean) => {
     if (optVal) {
-      process.env.LOG_LEVEL = 'verbose';
+      process.env[NewEnvVariables.LOG_LEVEL] = 'verbose';
     } else {
-      process.env.LOG_LEVEL = 'info';
+      process.env[NewEnvVariables.LOG_LEVEL] = 'info';
     }
-    log.level = process.env.LOG_LEVEL;
+    log.level = process.env[NewEnvVariables.LOG_LEVEL]!;
   });
 
   program.on('option:localPath', (optVal: string) => {
-    process.env.STAGE_CLI_LOCAL = optVal;
+    process.env[NewEnvVariables.STAGE_CLI_LOCAL] = optVal;
   });
 
   // NOTE: listener any unknown commands
@@ -121,17 +122,18 @@ async function checkEnv() {
 }
 
 function createDefaultEnvConfig() {
+  const cliHomeDir = process.env[NewEnvVariables.STAGE_CLI_HOME];
   const cliConfig: StageCliHome = {
     home: userHome
   };
 
-  if (process.env.STAGE_CLI_HOME) {
-    cliConfig['stageCliHome'] = path.join(userHome, process.env.STAGE_CLI_HOME);
+  if (cliHomeDir) {
+    cliConfig['stageCliHome'] = path.join(userHome, cliHomeDir);
   } else {
     cliConfig['stageCliHome'] = path.join(userHome, DEFAULT_CLI_HOME);
   }
   // to inject the .env path into the PATH
-  process.env.STAGE_CLI_HOME = cliConfig.stageCliHome;
+  process.env[NewEnvVariables.STAGE_CLI_HOME] = cliConfig.stageCliHome;
 }
 
 async function checkUserHome() {
