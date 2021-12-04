@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 15:48:52
- * @LastEditTime: 2021-12-04 18:09:03
+ * @LastEditTime: 2021-12-04 20:22:21
  * @LastEditors: fujia(as default)
  * @Description:
  * @FilePath: /stage/core/cli-exec/src/index.ts
@@ -17,6 +17,11 @@ function exec() {
   const cmdName = cmdObj.name() as string;
   const pkgName = CMD_MAP_PACKAGE[cmdName] as string;
   const packageVersion = 'latest';
+
+  if (!localPath) {
+    // NOTE: generate cache path
+  }
+
   const pkg = new CliPackage({
     localPath,
     storePath: homeDir,
