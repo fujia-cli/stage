@@ -1,9 +1,15 @@
 {
-  "name": "@fujia/cli-package",
+  "name": "@fujia/cross-path",
   "version": "1.0.0",
-  "description": "A class of cli module",
+  "description": "A package compatible with Mac and window paths",
+  "keywords": [
+    "path",
+    "mac",
+    "window",
+    "compatibility"
+  ],
   "author": "fujia <fujia.site@outlook.com>",
-  "homepage": "https://github.com/fujia-cli/stage/tree/main/models/cli-package#readme",
+  "homepage": "https://github.com/fujia-cli/stage/tree/main/utils/cross-path#readme",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "./lib/index.d.ts",
@@ -30,11 +36,5 @@
   },
   "devDependencies": {
     "rimraf": "^3.0.2"
-  },
-  "dependencies": {
-    "@fujia/cross-path": "file:../../utils/cross-path",
-    "@fujia/hammer": "^0.5.2",
-    "npminstall": "^5.3.1",
-    "pkg-dir": "^6.0.1"
   }
 }
