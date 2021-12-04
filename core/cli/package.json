@@ -1,6 +1,6 @@
 {
   "name": "@fujia/cli-core",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "description": "cli core",
   "author": "fujia <fujia.site@outlook.com>",
   "homepage": "https://github.com/fujia-cli/stage/tree/main/packages/core#readme",
@@ -36,11 +36,13 @@
   "dependencies": {
     "@fujia/cli-log": "file:../../utils/cli-log",
     "@fujia/get-pkg-info": "file:../../utils/get-pkg-info",
+    "@fujia/cli-init": "file:../../commands/cli-init",
+    "@fujia/cli-exec": "file:../cli-exec",
     "@fujia/root": "^0.3.2",
     "colors": "^1.4.0",
+    "commander": "^8.3.0",
     "dotenv": "^10.0.0",
     "import-local": "^3.0.3",
-    "minimist": "^1.2.5",
     "npmlog": "^6.0.0",
     "rimraf": "^3.0.2",
     "semver": "^7.3.5"
