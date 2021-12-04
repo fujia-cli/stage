@@ -1,9 +1,5 @@
 import { Command } from 'commander';
 
-export interface IArgs {
-  [key: string]: any;
-  debug?: boolean;
-}
 export interface StageCliHome {
   home: string;
   stageCliHome?: string;
@@ -11,4 +7,5 @@ export interface StageCliHome {
 
 export interface StageCli extends Command {
   debug?: boolean;
+  localPath?: string; // specify the local debug file path
 }

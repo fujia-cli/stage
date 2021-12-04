@@ -8,58 +8,67 @@ import dotenv from 'dotenv';
 import commander from 'commander';
 import log from '@fujia/cli-log';
 import init from '@fujia/cli-init';
+import exec from '@fujia/cli-exec';
 import { getLatestVersion } from '@fujia/get-pkg-info';
 
 const pkg = require('../package.json');
 import { LOWEST_NODE_VERSION, DEFAULT_CLI_HOME } from './constant'
 import {
-  IArgs,
   StageCliHome,
   StageCli,
 } from './interface';
 
-let args: IArgs;
 let userHome: string;
 const program: StageCli = new commander.Command();
 
-export default async function core() {
+/**
+* NOTE: The core flow
+*/
+const core = async () => {
   try {
-    checkPkgVersion();
-    checkNodeVersion();
-    checkRoot();
-    await checkUserHome();
-    // checkInputArgs();
-    await checkEnv();
-    await checkVersionUpgrade();
-    await registerCommand();
+    await prepare();
+    registerCommand();
   } catch (e: any) {
     log.error('[core/cli]', e?.message);
   }
 }
 
+async function prepare() {
+  checkPkgVersion();
+  checkNodeVersion();
+  checkRoot();
+  await checkUserHome();
+  await checkEnv();
+  await checkVersionUpgrade();
+}
+
 function registerCommand() {
+  // global
   program
     .name(getCliName())
     .usage('<command> [options]')
     .version(pkg.version)
-    .option('-d, --debug', 'enable debug model', false);
+    .option('-d, --debug', 'enable debug model', false)
+    .option('-lp, --localPath <localPath>', 'specify the local debug file path', '');
 
   // NOTE: register command
   program
     .command('init [projectName]')
     .option('-f, --force', 'force to init project')
-    .action((projectName, cmdObj) => {
-
-    });
+    .action(exec);
 
   // NOTE: enable debug model
-  program.on('option:debug', () => {
-    if (program.debug) {
+  program.on('option:debug', (optVal: boolean) => {
+    if (optVal) {
       process.env.LOG_LEVEL = 'verbose';
     } else {
       process.env.LOG_LEVEL = 'info';
     }
     log.level = process.env.LOG_LEVEL;
+  });
+
+  program.on('option:localPath', (optVal: string) => {
+    process.env.STAGE_CLI_LOCAL = optVal;
   });
 
   // NOTE: listener any unknown commands
@@ -72,12 +81,12 @@ function registerCommand() {
     }
   });
 
+  program.parse(process.argv);
+
   if (program.args && program.args.length < 1) {
     program.outputHelp();
-    console.log();
+    console.log(); // add a new empty line
   }
-
-  program.parse(process.argv);
 }
 
 function getCliName() {
@@ -107,11 +116,11 @@ async function checkEnv() {
       path: dotenvPath,
     });
   } catch (err) {
-    createEnvDefaultConfig();
+    createDefaultEnvConfig();
   }
 }
 
-function createEnvDefaultConfig() {
+function createDefaultEnvConfig() {
   const cliConfig: StageCliHome = {
     home: userHome
   };
@@ -124,20 +133,6 @@ function createEnvDefaultConfig() {
   // to inject the .env path into the PATH
   process.env.STAGE_CLI_HOME = cliConfig.stageCliHome;
 }
-
-// function checkInputArgs() {
-//   args = minimist(process.argv.slice(2));
-//   checkArgs();
-// }
-
-// function checkArgs() {
-//   if (args.debug) {
-//     process.env.LOG_LEVEL = 'verbose';
-//   } else {
-//     process.env.LOG_LEVEL = 'info';
-//   }
-//   log.level = process.env.LOG_LEVEL;
-// }
 
 async function checkUserHome() {
   try {
@@ -157,6 +152,8 @@ function checkNodeVersion() {
 }
 
 function checkPkgVersion() {
-  log.info('core/cli', pkg.version);
+  log.info('[core/cli]', pkg.version);
 }
+
+export default core;
 
