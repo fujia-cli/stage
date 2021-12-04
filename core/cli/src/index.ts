@@ -2,27 +2,25 @@ import { homedir } from 'os';
 import path from 'path';
 import { access } from 'fs/promises';
 import semver from 'semver';
-import { red, yellow } from 'colors/safe';
+import { red, yellow, gray } from 'colors/safe';
 import { checkRoot } from '@fujia/root';
-import minimist from 'minimist';
 import dotenv from 'dotenv';
+import commander from 'commander';
 import log from '@fujia/cli-log';
+import init from '@fujia/cli-init';
 import { getLatestVersion } from '@fujia/get-pkg-info';
 
 const pkg = require('../package.json');
 import { LOWEST_NODE_VERSION, DEFAULT_CLI_HOME } from './constant'
-
-interface IArgs {
-  [key: string]: any;
-  debug?: boolean;
-}
-interface StageCliHome {
-  home: string;
-  stageCliHome?: string;
-}
+import {
+  IArgs,
+  StageCliHome,
+  StageCli,
+} from './interface';
 
 let args: IArgs;
 let userHome: string;
+const program: StageCli = new commander.Command();
 
 export default async function core() {
   try {
@@ -30,12 +28,60 @@ export default async function core() {
     checkNodeVersion();
     checkRoot();
     await checkUserHome();
-    checkInputArgs();
+    // checkInputArgs();
     await checkEnv();
     await checkVersionUpgrade();
+    await registerCommand();
   } catch (e: any) {
-    log.error('[core/cli]', e.message);
+    log.error('[core/cli]', e?.message);
   }
+}
+
+function registerCommand() {
+  program
+    .name(getCliName())
+    .usage('<command> [options]')
+    .version(pkg.version)
+    .option('-d, --debug', 'enable debug model', false);
+
+  // NOTE: register command
+  program
+    .command('init [projectName]')
+    .option('-f, --force', 'force to init project')
+    .action((projectName, cmdObj) => {
+
+    });
+
+  // NOTE: enable debug model
+  program.on('option:debug', () => {
+    if (program.debug) {
+      process.env.LOG_LEVEL = 'verbose';
+    } else {
+      process.env.LOG_LEVEL = 'info';
+    }
+    log.level = process.env.LOG_LEVEL;
+  });
+
+  // NOTE: listener any unknown commands
+  program.on('command:*', (cmdList: string[]) => {
+    const availableCommands = program.commands.map(cmd => cmd.name());
+
+    console.log(red(`Unknown Command: ${cmdList[0]}`));
+    if (availableCommands.length > 0) {
+      console.log(gray(`The available commands are: ${availableCommands.join(', ')}`));
+    }
+  });
+
+  if (program.args && program.args.length < 1) {
+    program.outputHelp();
+    console.log();
+  }
+
+  program.parse(process.argv);
+}
+
+function getCliName() {
+  return Object.keys(pkg.bin)[0];
 }
 
 async function checkVersionUpgrade() {
@@ -79,19 +125,19 @@ function createEnvDefaultConfig() {
   process.env.STAGE_CLI_HOME = cliConfig.stageCliHome;
 }
 
-function checkInputArgs() {
-  args = minimist(process.argv.slice(2));
-  checkArgs();
-}
+// function checkInputArgs() {
+//   args = minimist(process.argv.slice(2));
+//   checkArgs();
+// }
 
-function checkArgs() {
-  if (args.debug) {
-    process.env.LOG_LEVEL = 'verbose';
-  } else {
-    process.env.LOG_LEVEL = 'info';
-  }
-  log.level = process.env.LOG_LEVEL;
-}
+// function checkArgs() {
+//   if (args.debug) {
+//     process.env.LOG_LEVEL = 'verbose';
+//   } else {
+//     process.env.LOG_LEVEL = 'info';
+//   }
+//   log.level = process.env.LOG_LEVEL;
+// }
 
 async function checkUserHome() {
   try {

@@ -1,1 +1,1 @@
-declare module '@fujia/get-pkg-info';
+declare module '@fujia/cli-init';
