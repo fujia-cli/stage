@@ -30,10 +30,13 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^15.0.0",
+    "@types/jest": "^27.0.3",
     "@types/node": "^16.11.11",
     "commitlint": "^15.0.0",
     "husky": "^7.0.4",
-    "lerna": "^4.0.0"
+    "jest": "^27.4.3",
+    "lerna": "^4.0.0",
+    "ts-jest": "^27.1.0"
   },
   "scripts": {
     "prepare": "husky install",

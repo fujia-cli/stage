@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-03 19:45:46
- * @LastEditTime: 2021-12-03 20:52:50
+ * @LastEditTime: 2021-12-06 17:24:30
  * @LastEditors: fujia(as default)
  * @Description: Obtain the package info via npm's api.
  * @FilePath: /stage/utils/get-pkg-info/src/index.ts
@@ -64,27 +64,31 @@ export function getPkgInfo(pkgName: string, registry?: string): Promise<PkgInfo>
     });
 }
 
-export function getSemverVersions(curVersion: string, versions: string[]) {
-  return versions
-    .filter(v => semver.satisfies(v, `^${curVersion}`))
-    .sort((a, b) => (semver.gt(b, a)) ? 1 : -1);
+export function getSemverVersions(versions: string[], curVersion?: string) {
+  if (curVersion) {
+    return versions
+      .filter(v => semver.satisfies(v, `^${curVersion}`))
+      .sort((a, b) => (semver.gt(b, a)) ? 1 : -1);
+  }
+
+  return versions.sort((a, b) => (semver.gt(b, a)) ? 1 : -1);
 }
 
 export async function getLatestVersion(
-  curVersion: string,
   pkgName: string,
+  curVersion?: string,
   registry?: string
 ) {
   const versions = await getPkgVersions(pkgName, registry);
-  const gtCurVersions = getSemverVersions(curVersion, versions);
+  const gtCurOrAllVersions = getSemverVersions(versions, curVersion);
 
-  if (gtCurVersions && gtCurVersions.length > 0) {
-    return gtCurVersions[0];
+  if (gtCurOrAllVersions && gtCurOrAllVersions.length > 0) {
+    return gtCurOrAllVersions[0];
   }
 
   return null;
 }
 
-function getDefaultRegistry(origin = false) {
+export function getDefaultRegistry(origin = false) {
   return origin ? 'https://registry.npmjs.org' : 'https://registry.npm.taobao.org';
 }
