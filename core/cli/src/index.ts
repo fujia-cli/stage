@@ -7,7 +7,7 @@ import { checkRoot } from '@fujia/root';
 import dotenv from 'dotenv';
 import commander from 'commander';
 import log from '@fujia/cli-log';
-import init from '@fujia/cli-init';
+// import init from '@fujia/cli-init';
 import exec from '@fujia/cli-exec';
 import { getLatestVersion } from '@fujia/get-pkg-info';
 
@@ -31,6 +31,11 @@ const core = async () => {
     registerCommand();
   } catch (e: any) {
     log.error('[core/cli]', e?.message);
+
+    if (program.debug) {
+      // NOTE: in debug mode: print the call stack of error.
+      console.error(e);
+    }
   }
 }
 
@@ -97,7 +102,7 @@ function getCliName() {
 async function checkVersionUpgrade() {
   const curVersion = pkg.version;
   const npmName = pkg.name;
-  const latestVersion = await getLatestVersion(curVersion, npmName);
+  const latestVersion = await getLatestVersion(npmName, curVersion);
 
   if (latestVersion && semver.gt(latestVersion, curVersion)) {
     log.warn(`[${npmName} - upgrade]`, yellow(`

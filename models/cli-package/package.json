@@ -29,11 +29,16 @@
     "url": "https://github.com/fujia-cli/stage/issues"
   },
   "devDependencies": {
+    "@types/fs-extra": "^9.0.13",
     "rimraf": "^3.0.2"
   },
   "dependencies": {
+    "@fujia/check-path": "^1.1.0",
     "@fujia/cross-path": "file:../../utils/cross-path",
+    "@fujia/get-pkg-info": "file:../../utils/get-pkg-info",
     "@fujia/hammer": "^0.5.2",
+    "@fujia/user-home": "^1.0.0",
+    "fs-extra": "^10.0.0",
     "npminstall": "^5.3.1",
     "pkg-dir": "^6.0.1"
   }
