@@ -7,12 +7,11 @@ import { checkRoot } from '@fujia/root';
 import dotenv from 'dotenv';
 import commander from 'commander';
 import log from '@fujia/cli-log';
-// import init from '@fujia/cli-init';
 import exec from '@fujia/cli-exec';
 import { getLatestVersion } from '@fujia/get-pkg-info';
 
 const pkg = require('../package.json');
-import { LOWEST_NODE_VERSION, DEFAULT_CLI_HOME } from './constant'
+import { DEFAULT_CLI_HOME } from './constant'
 import {
   StageCliHome,
   StageCli,
@@ -41,7 +40,7 @@ const core = async () => {
 
 async function prepare() {
   checkPkgVersion();
-  checkNodeVersion();
+  // checkNodeVersion();
   checkRoot();
   await checkUserHome();
   await checkEnv();
@@ -151,13 +150,13 @@ async function checkUserHome() {
   }
 }
 
-function checkNodeVersion() {
-  const curNodeVersion = process.version;
+// function checkNodeVersion() {
+//   const curNodeVersion = process.version;
 
-  if (semver.lt(curNodeVersion, LOWEST_NODE_VERSION)) {
-    throw new Error(red(`[stage] need the lowest version of node.js is ${LOWEST_NODE_VERSION}, but now obtained ${curNodeVersion}.`));
-  }
-}
+//   if (semver.lt(curNodeVersion, LOWEST_NODE_VERSION)) {
+//     throw new Error(red(`[stage] need the lowest version of node.js is ${LOWEST_NODE_VERSION}, but now obtained ${curNodeVersion}.`));
+//   }
+// }
 
 function checkPkgVersion() {
   log.info('[core/cli]', pkg.version);

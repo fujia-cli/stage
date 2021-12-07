@@ -1,12 +1,13 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 15:48:52
- * @LastEditTime: 2021-12-07 11:47:04
+ * @LastEditTime: 2021-12-07 16:36:11
  * @LastEditors: fujia(as default)
  * @Description:
  * @FilePath: /stage/core/cli-exec/src/index.ts
  */
 import path from 'path';
+import cp from 'child_process';
 import CliPackage from '@fujia/cli-package';
 import log from '@fujia/cli-log';
 import { CMD_MAP_PACKAGE } from './constants';
@@ -63,8 +64,49 @@ async function exec(...args: any[]) {
   const rootFile = pkg.getEntryFilePath();
   log.verbose('[cli-exec]', `rootFile: ${rootFile}`);
   if (rootFile) {
-    // NOTE: expects call in the child process
-    require(rootFile).default.apply(null, args);
+    try {
+      // NOTE: expects call in the child process
+      // require(rootFile).default.call(null, Array.from(args));
+      const cmd = args[args.length - 1];
+      const formatCmd = Object.create(null);
+      Object.keys(cmd).forEach(k => {
+        if (cmd.hasOwnProperty(k)
+          && !k.startsWith('_')
+          && k !== 'parent') {
+          formatCmd[k] = cmd[k];
+        }
+      });
+      /**
+      * NOTE: There are some changes in different versions, such as:
+      * 1, to get one option value, in V8.3.0，you can get like this: cmd.opts().force, however
+      *  in v6.x, just run cmd.force
+      */
+      const forceOptVal = cmd.opts().force;
+      formatCmd.force = forceOptVal;
+      args[args.length - 1] = formatCmd;
+
+      const code = `require('${rootFile}').default.call(null, ${JSON.stringify(args)})`;
+
+      const child = cp.spawn('node', ['-e', code], {
+        cwd: process.cwd(),
+        stdio: 'inherit' // Recommended: uses this value
+      });
+
+      child.on('error', err => {
+        log.error('[cli-exec]', err.message);
+        process.exit(1);
+      });
+
+      child.on('exit', (err) => {
+        log.info('[cli-exec]', `
+          run successful!
+          exit code: ${err}
+        `);
+        process.exit(err!)
+      })
+    } catch (err: any) {
+      log.error('[cli-exec]', err?.message);
+    }
   }
 }
 
