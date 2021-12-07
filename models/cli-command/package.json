@@ -1,11 +1,11 @@
 {
-  "name": "@fujia/cli-init",
-  "version": "1.1.0",
-  "description": "cli init",
+  "name": "@fujia/cli-command",
+  "version": "1.0.0",
+  "description": "A command class of stage",
   "author": "fujia <fujia.site@outlook.com>",
-  "homepage": "https://github.com/fujia-cli/stage/tree/main/commands/cli-init#readme",
+  "homepage": "https://github.com/fujia-cli/stage/tree/main/models/cli-command#readme",
   "license": "MIT",
-  "main": "./lib/index.js",
+  "main": "lib/index.js",
   "types": "./lib/index.d.ts",
   "directories": {
     "lib": "lib",
@@ -27,9 +27,6 @@
   },
   "bugs": {
     "url": "https://github.com/fujia-cli/stage/issues"
-  },
-  "dependencies": {
-    "@fujia/cli-command": "file:../../models/cli-command"
   },
   "devDependencies": {
     "rimraf": "^3.0.2"

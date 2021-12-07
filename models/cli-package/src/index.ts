@@ -1,16 +1,17 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 16:57:47
- * @LastEditTime: 2021-12-06 17:45:14
+ * @LastEditTime: 2021-12-07 11:41:24
  * @LastEditors: fujia(as default)
  * @Description: A class of cli module
  * @FilePath: /stage/models/cli-package/src/index.ts
  */
 import path from 'path';
 import { isPlainObject, toRawType } from '@fujia/hammer';
-import { packageDirectorySync } from 'pkg-dir';
+import pkgDir from 'pkg-dir';
 import crossPath from '@fujia/cross-path';
 import { getDefaultRegistry, getLatestVersion } from '@fujia/get-pkg-info';
+import log from '@fujia/cli-log';
 import npmInstall from 'npminstall';
 import { pathExistSync } from '@fujia/check-path';
 import fse from 'fs-extra';
@@ -28,11 +29,19 @@ class CliPackage implements ICliPackage {
     if (!isPlainObject(options)) throw new Error(`The params of options must be an object.
       But now get a value with type of ${toRawType(options)}.`);
 
+    log.verbose('[cli-package]', `
+      localPath: ${options?.localPath}
+      pkgName: ${options?.name}
+      pkgVersion: ${options?.version}
+      storeDir: ${options?.storeDir}
+    `);
+    console.log();
+
     this.localPath = options.localPath;
-    this.storeDir = options.storeDir;
+    this.storeDir = options.storeDir || '';
     this.pkgName = options.name;
     this.pkgVersion = options.version;
-    this.cacheFilePathPrefix = this.pkgName.replace('/', '_')
+    this.cacheFilePathPrefix = this.pkgName.replace('/', '_');
   }
 
   get cacheFilePath() {
@@ -116,16 +125,14 @@ class CliPackage implements ICliPackage {
 
   getEntryFilePath() {
     const _getEntryFile = (localPath: string) => {
-      const pkgDir = packageDirectorySync({
-        cwd: localPath
-      });
+      const packageDir = pkgDir.sync(localPath);
 
-      if (pkgDir) {
-        const pkgFile = require(path.resolve(pkgDir, 'package.json'));
+      if (packageDir) {
+        const pkgFile = require(path.resolve(packageDir, 'package.json'));
 
         if (pkgFile && pkgFile.main) {
           // NOTE: resolve path compatibility
-          return crossPath(path.resolve(pkgDir, pkgFile.main));
+          return crossPath(path.resolve(packageDir, pkgFile.main));
         }
       }
 

@@ -64,17 +64,18 @@ function registerCommand() {
     .action(exec);
 
   // NOTE: enable debug model
-  program.on('option:debug', (optVal: boolean) => {
-    if (optVal) {
+  program.on('option:debug', function (this: StageCli) {
+    if (this.opts().debug) {
       process.env[NewEnvVariables.LOG_LEVEL] = 'verbose';
     } else {
       process.env[NewEnvVariables.LOG_LEVEL] = 'info';
     }
+
     log.level = process.env[NewEnvVariables.LOG_LEVEL]!;
   });
 
-  program.on('option:localPath', (optVal: string) => {
-    process.env[NewEnvVariables.STAGE_CLI_LOCAL] = optVal;
+  program.on('option:localPath', function (this: StageCli) {
+    process.env[NewEnvVariables.STAGE_CLI_LOCAL] = this.opts().localPath;
   });
 
   // NOTE: listener any unknown commands

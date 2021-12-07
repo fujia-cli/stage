@@ -26,4 +26,3 @@ npmlog_1.default.addLevel('success', 2000, {
     bold: true
 });
 exports.default = npmlog_1.default;
-//# sourceMappingURL=index.js.map
