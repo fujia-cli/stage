@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 15:48:52
- * @LastEditTime: 2021-12-06 17:25:22
+ * @LastEditTime: 2021-12-07 11:47:04
  * @LastEditors: fujia(as default)
  * @Description:
  * @FilePath: /stage/core/cli-exec/src/index.ts
@@ -23,6 +23,13 @@ async function exec(...args: any[]) {
   const cmdName = cmdObj.name() as string;
   const pkgName = CMD_MAP_PACKAGE[cmdName] as string;
   const packageVersion = 'latest';
+
+  log.verbose('[cli-exec]', `
+    localPath: ${localPath},
+    pkgName: ${pkgName},
+    cmdName: ${cmdName}
+  `);
+  console.log();
 
   if (!localPath) {
     // NOTE: generate cache path
@@ -48,15 +55,16 @@ async function exec(...args: any[]) {
   } else {
     pkg = new CliPackage({
       localPath,
-      storeDir: homeDir,
       name: pkgName,
       version: packageVersion
     });
   }
 
   const rootFile = pkg.getEntryFilePath();
+  log.verbose('[cli-exec]', `rootFile: ${rootFile}`);
   if (rootFile) {
-    require(rootFile).apply(null, args);
+    // NOTE: expects call in the child process
+    require(rootFile).default.apply(null, args);
   }
 }
 

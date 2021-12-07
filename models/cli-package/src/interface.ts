@@ -2,7 +2,7 @@ export interface ConstructorOptions {
   // file path of package
   localPath: string;
   // cache of path
-  storeDir: string;
+  storeDir?: string;
   // name of package
   name: string;
   // version of package
