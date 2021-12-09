@@ -1,0 +1,42 @@
+{
+  "name": "@fujia/cli-utils",
+  "version": "1.0.3",
+  "description": "An awesome utilities for stage-cli.",
+  "keywords": [
+    "utils",
+    "cli",
+    "stage"
+  ],
+  "author": "fujia <fujia.site@outlook.com>",
+  "homepage": "https://github.com/fujia-cli/stage/tree/main/utils/cli-utils#readme",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fujia-cli/stage.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/fujia-cli/stage/issues"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2"
+  },
+  "dependencies": {
+    "@types/cli-spinner": "^0.2.1",
+    "cli-spinner": "^0.2.10"
+  }
+}
