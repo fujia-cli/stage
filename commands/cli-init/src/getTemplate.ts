@@ -5,6 +5,9 @@ export interface ProjectTemplate {
   name: string;
   version: string;
   npmName: string;
+  type: 'normal' | 'custom';
+  installCommand: string;
+  startCommand: string;
 }
 
 const getTemplate = (): AxiosPromise<ProjectTemplate[]> => {

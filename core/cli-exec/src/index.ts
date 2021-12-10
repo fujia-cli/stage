@@ -1,15 +1,15 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 15:48:52
- * @LastEditTime: 2021-12-07 16:51:35
+ * @LastEditTime: 2021-12-10 16:44:54
  * @LastEditors: fujia(as default)
  * @Description:
  * @FilePath: /stage/core/cli-exec/src/index.ts
  */
 import path from 'path';
-import cp, { CommonSpawnOptions, ChildProcess } from 'child_process';
 import CliPackage from '@fujia/cli-package';
 import log from '@fujia/cli-log';
+import { spawn } from '@fujia/cli-utils';
 import { CMD_MAP_PACKAGE } from './constants';
 
 const CACHE_DIR = 'caches';
@@ -108,16 +108,6 @@ async function exec(...args: any[]) {
       log.error('[cli-exec]', err?.message);
     }
   }
-}
-
-function spawn(command: string, args: readonly string[], options: CommonSpawnOptions): ChildProcess {
-  const isWin32 = process.platform === 'win32';
-
-  // NOTE: In window OS, it need to execute command by cmd
-  const cmd = isWin32 ? 'cmd' : command;
-  const cmdArgs = isWin32 ? ['/c'].concat(command, args) : args;
-
-  return cp.spawn(cmd, cmdArgs, options || {});
 }
 
 export default exec;

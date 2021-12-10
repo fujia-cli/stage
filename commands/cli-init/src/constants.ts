@@ -58,3 +58,10 @@ export const COMPONENT_OPTIONS = [
     name: 'mini-program'
   },
 ];
+
+
+export const WHITE_COMMANDS = [
+  'npm',
+  'cnpm',
+  'yarn'
+];

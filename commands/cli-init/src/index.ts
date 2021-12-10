@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 10:54:19
- * @LastEditTime: 2021-12-09 23:10:34
+ * @LastEditTime: 2021-12-10 17:36:59
  * @LastEditors: fujia(as default)
  * @Description: To initialize a project
  * @FilePath: /stage/commands/cli-init/src/index.ts
@@ -15,13 +15,14 @@ import CliPackage from '@fujia/cli-package';
 import log from '@fujia/cli-log';
 import fse from 'fs-extra';
 import semver from 'semver';
-import { spinnerInstance, sleep } from '@fujia/cli-utils';
+import { spinnerInstance, sleep, spawnAsync } from '@fujia/cli-utils';
 
 import getTemplate, { ProjectTemplate } from './getTemplate';
 import {
   PROJECT_TYPES,
   PROJECT_OPTIONS,
   COMPONENT_OPTIONS,
+  WHITE_COMMANDS,
 } from './constants';
 import {
   ProjectType,
@@ -35,6 +36,8 @@ export class CliInit extends CliCommand {
   force: boolean;
   template: ProjectTemplate[];
   projectInfo: ProjectInfo | null;
+  templateInfo: ProjectTemplate | undefined;
+  templatePkg: CliPackage | undefined;
   constructor(args: any[]) {
     super(args);
     this.projectName = '';
@@ -72,6 +75,7 @@ export class CliInit extends CliCommand {
       if (result) {
         this.projectInfo = result;
         await this.downloadTemplate();
+        await this.installTemplate();
       }
     } catch (err: any) {
       log.error('[cli-init]', err?.message);
@@ -155,6 +159,8 @@ export class CliInit extends CliCommand {
     const storeDir = path.resolve(localPath, 'node_modules');
     const { npmName, version } = templateInfo!;
 
+    this.templateInfo = templateInfo;
+
     const templatePkg = new CliPackage({
       localPath,
       storeDir,
@@ -175,11 +181,12 @@ export class CliInit extends CliCommand {
       await sleep();
       try {
         await templatePkg.install();
-        log.success('[cli-init]', 'Downloaded template successful!')
-      } catch (error) {
-        throw error;
-      } finally {
         spinner.stop(true);
+        log.success('[cli-init]', 'Downloaded template successful!');
+        this.templatePkg = templatePkg;
+      } catch (error) {
+        spinner.stop(true);
+        throw error;
       }
       return;
     }
@@ -189,12 +196,94 @@ export class CliInit extends CliCommand {
     await sleep();
     try {
       await templatePkg.update();
-      log.success('[cli-init]', 'Updated template successful!')
+      spinner.stop(true);
+      log.success('[cli-init]', 'Updated template successful!');
+      this.templatePkg = templatePkg;
     } catch (error) {
+      spinner.stop(true);
       throw error;
+    }
+  }
+
+  async installTemplate() {
+    if (!this.templateInfo) throw new Error('The info of project template isn\'t exist.');
+
+    const { type = 'normal' } = this.templateInfo;
+
+    if (type === 'normal') {
+      // NOTE: normal install
+      await this.installTemplateNormal();
+    } else if (type === 'custom') {
+      // NOTE: custom install
+      await this.installTemplateCustom();
+    } else {
+      throw new Error('The type of template is invalid.');
+    }
+  }
+
+  async installTemplateNormal() {
+    const { installCommand, startCommand } = this.templateInfo!;
+
+    log.verbose('[cli-init]', 'start normal installing  ...');
+
+    const spinner = spinnerInstance('template installing...');
+    await sleep();
+    try {
+      // NOTE: copy template code to current directory
+      const cacheFilePath = this.templatePkg?.cacheFilePath;
+
+      if (!cacheFilePath) {
+        log.warn('[cli-init]', 'The cached file path is not exist!');
+        return;
+      }
+
+      const templatePath = path.resolve(cacheFilePath, 'template');
+      fse.ensureDirSync(templatePath);
+      const cwdPath = process.cwd();
+      fse.copySync(templatePath, cwdPath);
+    } catch (err) {
+      throw err;
     } finally {
       spinner.stop(true);
+      log.success('[cli-init]', 'template installed successful!')
     }
+
+    /**
+    * NOTE: next steps
+    *
+    * 1, install dependencies
+    *
+    * 2, run command
+    */
+    await this.execCommand(installCommand, 'Installing dependencies failed.');
+
+    await this.execCommand(startCommand);
+  }
+
+  async execCommand(command: string, errMsg?: string) {
+    let result: number | unknown;
+
+    if (command && command.length > 0) {
+      const cmdList = command.split(' ');
+      const cmd = this.verifyCmd(cmdList[0]);
+
+      if (!cmd) throw new Error(`The command of ${cmd} is invalid.`);
+
+      const args = cmdList.slice(1);
+
+      result = await spawnAsync(cmd, args, {
+        stdio: 'inherit',
+        cwd: process.cwd(),
+      });
+
+      if (result !== 0) throw new Error(errMsg || '');
+    }
+
+    return result;
+  }
+
+  async installTemplateCustom() {
+    log.verbose('[cli-init]', 'start installing custom ...');
   }
 
   async isDirEmpty(curDir: string, ignoreFiles = ['node_modules']) {
@@ -276,6 +365,10 @@ export class CliInit extends CliCommand {
     }
 
     return projectInfo;
+  }
+
+  verifyCmd(cmd: string) {
+    return WHITE_COMMANDS.includes(cmd) ? cmd : null;
   }
 
   createTemplateChoices () {

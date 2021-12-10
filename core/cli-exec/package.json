@@ -35,7 +35,9 @@
   },
   "dependencies": {
     "@fujia/cli-package": "file:../../models/cli-package",
-    "@fujia/cli-log": "file:../../utils/cli-log"
+    "@fujia/cli-log": "file:../../utils/cli-log",
+    "@fujia/cli-utils": "file:../../utils/cli-utils"
+
   },
   "devDependencies": {
     "rimraf": "^3.0.2"
