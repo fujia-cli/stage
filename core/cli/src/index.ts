@@ -56,11 +56,15 @@ function registerCommand() {
     .option('-d, --debug', 'enable debug model', false)
     .option('-lp, --localPath <localPath>', 'specify the local debug file path', '');
 
-  // NOTE: register command
+  // NOTE: register init command
   program
     .command('init [projectName]')
     .option('-f, --force', 'force to init project')
     .action(exec);
+
+  // NOTE: register publish command
+  program
+    .command('publish')
 
   // NOTE: enable debug model
   program.on('option:debug', function (this: StageCli) {
@@ -149,14 +153,6 @@ async function checkUserHome() {
     throw new Error(red('Doesn\'t exist home directory for current login user.'));
   }
 }
-
-// function checkNodeVersion() {
-//   const curNodeVersion = process.version;
-
-//   if (semver.lt(curNodeVersion, LOWEST_NODE_VERSION)) {
-//     throw new Error(red(`[stage] need the lowest version of node.js is ${LOWEST_NODE_VERSION}, but now obtained ${curNodeVersion}.`));
-//   }
-// }
 
 function checkPkgVersion() {
   log.info('[core/cli]', pkg.version);
