@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 16:57:47
- * @LastEditTime: 2021-12-07 11:41:24
+ * @LastEditTime: 2021-12-10 19:49:56
  * @LastEditors: fujia(as default)
  * @Description: A class of cli module
  * @FilePath: /stage/models/cli-package/src/index.ts
@@ -118,7 +118,8 @@ class CliPackage implements ICliPackage {
           }
         ]
       });
-
+      this.pkgVersion = latestVersion;
+    } else {
       this.pkgVersion = latestVersion;
     }
   }

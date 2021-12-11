@@ -19,4 +19,5 @@ export interface ProjectInfo {
   projectName: ProjectTypeList;
   projectVersion: string;
   projectTemplate: string;
+  packageName?: string;
 }

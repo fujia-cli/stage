@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 10:54:19
- * @LastEditTime: 2021-12-10 17:36:59
+ * @LastEditTime: 2021-12-10 19:59:33
  * @LastEditors: fujia(as default)
  * @Description: To initialize a project
  * @FilePath: /stage/commands/cli-init/src/index.ts
@@ -14,7 +14,10 @@ import CliCommand from '@fujia/cli-command';
 import CliPackage from '@fujia/cli-package';
 import log from '@fujia/cli-log';
 import fse from 'fs-extra';
+import kebabCase from 'kebab-case';
 import semver from 'semver';
+import ejs from 'ejs';
+import glob from 'glob';
 import { spinnerInstance, sleep, spawnAsync } from '@fujia/cli-utils';
 
 import getTemplate, { ProjectTemplate } from './getTemplate';
@@ -79,6 +82,10 @@ export class CliInit extends CliCommand {
       }
     } catch (err: any) {
       log.error('[cli-init]', err?.message);
+
+      if (process.env.LOG_LEVEL === 'verbose') {
+        console.log(err);
+      }
     }
   }
 
@@ -248,6 +255,9 @@ export class CliInit extends CliCommand {
       log.success('[cli-init]', 'template installed successful!')
     }
 
+    const ignoreFiles = ['node_modules/**', 'public/**'];
+    await this.ejsRender(ignoreFiles);
+
     /**
     * NOTE: next steps
     *
@@ -293,9 +303,9 @@ export class CliInit extends CliCommand {
      return files && files.length > 0;
   }
 
-  async getProjectInfo(): Promise<ProjectInfo> {
+  async getProjectInfo(): Promise<ProjectInfo | undefined> {
     const self = this;
-    let projectInfo = null;
+    let projectInfo: ProjectInfo | undefined;
     const projectType = (await inquirer.prompt({
       type: 'list',
       message: 'Please select the type of initial project',
@@ -364,7 +374,46 @@ export class CliInit extends CliCommand {
 
     }
 
+    if (projectInfo?.projectName) {
+      projectInfo.packageName = kebabCase(projectInfo.projectName).replace(/^-/, '');
+    }
+
     return projectInfo;
+  }
+
+  ejsRender(ignoreFiles: string[]) {
+    const cwdDir = process.cwd();
+    return new Promise((resolve, reject) => {
+      glob('**', {
+        cwd: cwdDir,
+        ignore: ignoreFiles,
+        nodir: true,
+      }, (err, files) => {
+        if (err) {
+          reject(err);
+        }
+
+        Promise.all(files.map(file => {
+          const filePath = path.join(cwdDir, file);
+
+          return new Promise((innerResolve, innerReject) => {
+            ejs.renderFile(filePath, this.projectInfo || {}, (err, res) => {
+              if (err) {
+                return innerReject(err);
+              }
+              fse.writeFileSync(filePath, res);
+              innerResolve(res);
+            });
+          });
+        }))
+        .then(() => {
+          resolve(true);
+        })
+        .catch(err => {
+          reject(err);
+        })
+      });
+    })
   }
 
   verifyCmd(cmd: string) {
