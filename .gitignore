@@ -51,7 +51,7 @@ jspm_packages/
 **/*/lib
 
 # editor
-.vscode
+# .vscode
 .idea
 
 # TypeScript v1 declaration files

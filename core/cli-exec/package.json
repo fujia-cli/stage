@@ -1,7 +1,7 @@
 {
   "name": "@fujia/cli-exec",
   "version": "1.1.1-alpha.0",
-  "description": "An execute package of stage cli ",
+  "description": "An execute package of stage cli",
   "keywords": [
     "stage",
     "exec",
@@ -36,7 +36,8 @@
   "dependencies": {
     "@fujia/cli-log": "file:../../utils/cli-log",
     "@fujia/cli-package": "file:../../models/cli-package",
-    "@fujia/cli-utils": "file:../../utils/cli-utils"
+    "@fujia/cli-utils": "file:../../utils/cli-utils",
+    "@fujia/cli-core": "file:../cli-core"
   },
   "devDependencies": {
     "rimraf": "^3.0.2"

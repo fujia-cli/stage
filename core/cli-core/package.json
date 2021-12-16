@@ -39,6 +39,7 @@
     "@fujia/cli-log": "file:../../utils/cli-log",
     "@fujia/get-pkg-info": "file:../../utils/get-pkg-info",
     "@fujia/root": "^0.3.2",
+    "@fujia/user-home": "^1.1.0",
     "colors": "^1.4.0",
     "commander": "^8.3.0",
     "dotenv": "^10.0.0",

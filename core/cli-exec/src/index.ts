@@ -1,28 +1,32 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 15:48:52
- * @LastEditTime: 2021-12-10 16:44:54
+ * @LastEditTime: 2021-12-16 15:32:50
  * @LastEditors: fujia(as default)
- * @Description:
+ * @Description: An execute package of stage cli
  * @FilePath: /stage/core/cli-exec/src/index.ts
  */
 import path from 'path';
 import CliPackage from '@fujia/cli-package';
 import log from '@fujia/cli-log';
 import { spawn } from '@fujia/cli-utils';
+import { NewEnvVariables } from '@fujia/cli-core';
+
 import { CMD_MAP_PACKAGE } from './constants';
+
+export type CmdList = keyof typeof CMD_MAP_PACKAGE;
 
 const CACHE_DIR = 'caches';
 
 async function exec(...args: any[]) {
-  let localPath = process.env.STAGE_CLI_LOCAL;
+  let localPath = process.env[NewEnvVariables.STAGE_CLI_LOCAL];
   let storeDir = '';
   let pkg: CliPackage | undefined;
-  const homeDir = process.env.STAGE_CLI_HOME || '';
+  const stageCliHome = process.env[NewEnvVariables.STAGE_CLI_HOME]!;
   // NOTE: type is Command
   const cmdObj = args[args.length - 1];
-  const cmdName = cmdObj.name() as string;
-  const pkgName = CMD_MAP_PACKAGE[cmdName] as string;
+  const cmdName = cmdObj.name() as CmdList;
+  const pkgName = CMD_MAP_PACKAGE[cmdName];
   const packageVersion = 'latest';
 
   log.verbose('[cli-exec]', `
@@ -34,14 +38,14 @@ async function exec(...args: any[]) {
 
   if (!localPath) {
     // NOTE: generate cache path
-    localPath = path.resolve(homeDir, CACHE_DIR);
+    localPath = path.resolve(stageCliHome, CACHE_DIR);
     storeDir = path.resolve(localPath, 'node_modules')
     log.verbose('localPath', localPath);
     log.verbose('storeDir', storeDir);
 
     pkg = new CliPackage({
       localPath,
-      storeDir: homeDir,
+      storeDir: stageCliHome,
       name: pkgName,
       version: packageVersion
     });
