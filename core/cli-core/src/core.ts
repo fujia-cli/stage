@@ -1,4 +1,4 @@
-import { homedir } from 'os';
+
 import path from 'path';
 import { access } from 'fs/promises';
 import semver from 'semver';
@@ -9,17 +9,14 @@ import commander from 'commander';
 import log from '@fujia/cli-log';
 import exec from '@fujia/cli-exec';
 import { getLatestVersion } from '@fujia/get-pkg-info';
+import userHome from '@fujia/user-home';
 
 const pkg = require('../package.json');
-import { DEFAULT_CLI_HOME } from './constant'
-import {
-  StageCliHome,
-  StageCli,
-  NewEnvVariables,
-} from './interface';
+import { DEFAULT_CLI_HOME, NewEnvVariables } from './constant'
+import { StageCliHome, StageCliCmd } from './interface';
 
-let userHome: string;
-const program: StageCli = new commander.Command();
+let homeDir: string;
+const program: StageCliCmd = new commander.Command();
 
 /**
 * NOTE: The core flow
@@ -40,7 +37,6 @@ const core = async () => {
 
 async function prepare() {
   checkPkgVersion();
-  // checkNodeVersion();
   checkRoot();
   await checkUserHome();
   await checkEnv();
@@ -67,7 +63,7 @@ function registerCommand() {
     .command('publish')
 
   // NOTE: enable debug model
-  program.on('option:debug', function (this: StageCli) {
+  program.on('option:debug', function (this: StageCliCmd) {
     if (this.opts().debug) {
       process.env[NewEnvVariables.LOG_LEVEL] = 'verbose';
     } else {
@@ -77,17 +73,16 @@ function registerCommand() {
     log.level = process.env[NewEnvVariables.LOG_LEVEL]!;
   });
 
-  program.on('option:localPath', function (this: StageCli) {
+  program.on('option:localPath', function (this: StageCliCmd) {
     process.env[NewEnvVariables.STAGE_CLI_LOCAL] = this.opts().localPath;
   });
 
   // NOTE: listener any unknown commands
   program.on('command:*', (cmdList: string[]) => {
-    const availableCommands = program.commands.map(cmd => cmd.name());
 
     console.log(red(`Unknown Command: ${cmdList[0]}`));
-    if (availableCommands.length > 0) {
-      console.log(gray(`The available commands are: ${availableCommands.join(', ')}`));
+    if (cmdList.length > 0) {
+      console.log(gray(`The available commands are: ${cmdList.join(', ')}`));
     }
   });
 
@@ -120,7 +115,7 @@ async function checkVersionUpgrade() {
 
 async function checkEnv() {
   try {
-    const dotenvPath = path.resolve(userHome, '.env');
+    const dotenvPath = path.resolve(homeDir, '.env');
     await access(dotenvPath)
     dotenv.config({
       path: dotenvPath,
@@ -131,27 +126,26 @@ async function checkEnv() {
 }
 
 function createDefaultEnvConfig() {
-  const cliHomeDir = process.env[NewEnvVariables.STAGE_CLI_HOME];
+  const stageCliHome = process.env[NewEnvVariables.STAGE_CLI_HOME];
   const cliConfig: StageCliHome = {
-    home: userHome
+    home: homeDir
   };
 
-  if (cliHomeDir) {
-    cliConfig['stageCliHome'] = path.join(userHome, cliHomeDir);
+  if (stageCliHome) {
+    cliConfig['stageCliHome'] = path.join(homeDir, stageCliHome);
   } else {
-    cliConfig['stageCliHome'] = path.join(userHome, DEFAULT_CLI_HOME);
+    cliConfig['stageCliHome'] = path.join(homeDir, DEFAULT_CLI_HOME);
   }
   // to inject the .env path into the PATH
   process.env[NewEnvVariables.STAGE_CLI_HOME] = cliConfig.stageCliHome;
 }
 
 async function checkUserHome() {
-  try {
-    userHome = homedir();
-    await access(userHome)
-  } catch (error) {
-    throw new Error(red('Doesn\'t exist home directory for current login user.'));
-  }
+  const curUserHome = await userHome();
+
+  if(!curUserHome) throw new Error(red('Doesn\'t exist home directory for current login user.'));
+
+  homeDir = curUserHome;
 }
 
 function checkPkgVersion() {
@@ -159,4 +153,3 @@ function checkPkgVersion() {
 }
 
 export default core;
-

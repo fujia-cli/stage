@@ -1,0 +1,23 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "typescript",
+			"tsconfig": "commands/cli-publish/tsconfig.json",
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build",
+			"label": "tsc: build - commands/cli-publish/tsconfig.json"
+		},
+    {
+			"type": "typescript",
+			"tsconfig": "core/cli/tsconfig.json",
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build",
+			"label": "tsc: build - core/cli/tsconfig.json"
+		}
+	]
+}
