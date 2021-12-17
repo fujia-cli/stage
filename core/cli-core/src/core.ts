@@ -7,12 +7,13 @@ import { checkRoot } from '@fujia/root';
 import dotenv from 'dotenv';
 import commander from 'commander';
 import log from '@fujia/cli-log';
+import { NewEnvVariables } from '@fujia/cli-utils';
 import exec from '@fujia/cli-exec';
 import { getLatestVersion } from '@fujia/get-pkg-info';
 import userHome from '@fujia/user-home';
 
 const pkg = require('../package.json');
-import { DEFAULT_CLI_HOME, NewEnvVariables } from './constant'
+import { DEFAULT_CLI_HOME } from './constant'
 import { StageCliHome, StageCliCmd } from './interface';
 
 let homeDir: string;
@@ -54,7 +55,8 @@ function registerCommand() {
 
   // NOTE: register init command
   program
-    .command('init [projectName]')
+    .command('init [projectName] [relativeDirectory]')
+    .description('create a project or component in current directory or relative to the current directory')
     .option('-f, --force', 'force to init project')
     .action(exec);
 

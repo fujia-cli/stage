@@ -1,13 +1,15 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-09 21:31:09
- * @LastEditTime: 2021-12-10 17:12:31
+ * @LastEditTime: 2021-12-16 16:32:58
  * @LastEditors: fujia(as default)
  * @Description: An awesome utilities for stage-cli
  * @FilePath: /stage/utils/cli-utils/src/index.ts
  */
 import cp, { CommonSpawnOptions, ChildProcess, SpawnOptions } from 'child_process';
 import { Spinner } from 'cli-spinner';
+
+export { NewEnvVariables } from './constants';
 
 export function spinnerInstance(message = 'loading...', spinnerString = '|/-\\') {
   const spinner = new Spinner(`${message} %s`);
@@ -47,3 +49,4 @@ export const spawnAsync = (
     });
   })
 };
+

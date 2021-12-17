@@ -1,3 +1,18 @@
+export const TEMPLATE_TYPES = [
+  {
+    name: 'default',
+    value: 'default',
+  },
+  {
+    name: 'custom',
+    value: 'custom',
+  },
+  {
+    name: 'remote',
+    value: 'remote',
+  },
+];
+
 export const PROJECT_TYPES = [
   {
     name: 'project',
@@ -6,10 +21,14 @@ export const PROJECT_TYPES = [
   {
     name: 'component',
     value: 'component',
+  },
+  {
+    name: 'component-package',
+    value: 'component-package',
   }
 ];
 
-export const PROJECT_OPTIONS = [
+export const PROJECT_INQUIRE_LIST = [
   {
     name: 'vue',
     value: 'vue',
@@ -19,8 +38,20 @@ export const PROJECT_OPTIONS = [
     value: 'nustJS',
   },
   {
+    name: 'vue-admin',
+    value: 'vue-admin',
+  },
+  {
     name: 'react',
     value: 'react',
+  },
+  {
+    name: 'react-native',
+    value: 'react-native',
+  },
+  {
+    name: 'electron',
+    value: 'electron',
   },
   {
     name: 'lib-rollup',
@@ -30,9 +61,17 @@ export const PROJECT_OPTIONS = [
     name: 'lib-webpack',
     value: 'lib-webpack',
   },
+  {
+    name: 'mini-program',
+    value: 'mini-program',
+  },
+  {
+    name: 'mini-game',
+    value: 'mini-game',
+  },
 ];
 
-export const COMPONENT_OPTIONS = [
+export const COMPONENT_INQUIRE_LIST = [
   {
     value: 'react',
     name: 'react',
@@ -59,6 +98,31 @@ export const COMPONENT_OPTIONS = [
   },
 ];
 
+export const DefaultProjectTemplate = [
+  {
+    _id: `STAGE_${Date.now()}`,
+    name: '',
+    version: 'latest',
+    npmName: '',
+    type: 'custom',
+    installCommand: '',
+    startCommand: '',
+  }
+];
+
+export const DefaultComponentTemplate = [
+  {
+    _id: `STAGE_${Date.now()}`,
+    name: '',
+    version: 'latest',
+    npmName: '',
+  }
+];
+
+export const EJS_IGNORE_FILES = [
+  'node_modules/**',
+  'public/**'
+];
 
 export const WHITE_COMMANDS = [
   'npm',

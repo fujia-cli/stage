@@ -1,9 +1,9 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 16:57:47
- * @LastEditTime: 2021-12-10 19:49:56
+ * @LastEditTime: 2021-12-16 16:22:44
  * @LastEditors: fujia(as default)
- * @Description: A class of cli module
+ * @Description: A package class for stage cli
  * @FilePath: /stage/models/cli-package/src/index.ts
  */
 import path from 'path';
@@ -15,7 +15,6 @@ import log from '@fujia/cli-log';
 import npmInstall from 'npminstall';
 import { pathExistSync } from '@fujia/check-path';
 import fse from 'fs-extra';
-import userHome from '@fujia/user-home';
 
 import { ConstructorOptions, ICliPackage } from './interface';
 
@@ -59,6 +58,7 @@ class CliPackage implements ICliPackage {
 
     if (this.pkgVersion === 'latest') {
       const latestVer = await getLatestVersion(this.pkgName);
+      log.verbose('[cli-package]', `The version of installing package is: ${latestVer}`);
       if (latestVer) {
         this.pkgVersion = latestVer;
       }

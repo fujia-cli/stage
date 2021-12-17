@@ -37,7 +37,7 @@
     "@fujia/cli-log": "file:../../utils/cli-log",
     "@fujia/cross-path": "file:../../utils/cross-path",
     "@fujia/get-pkg-info": "file:../../utils/get-pkg-info",
-    "@fujia/hammer": "^0.5.2",
+    "@fujia/hammer": "^0.5.3",
     "@fujia/user-home": "^1.0.0",
     "fs-extra": "^10.0.0",
     "npminstall": "^5.3.1",
