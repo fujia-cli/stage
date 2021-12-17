@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 15:48:52
- * @LastEditTime: 2021-12-16 15:32:50
+ * @LastEditTime: 2021-12-16 16:56:49
  * @LastEditors: fujia(as default)
  * @Description: An execute package of stage cli
  * @FilePath: /stage/core/cli-exec/src/index.ts
@@ -9,8 +9,7 @@
 import path from 'path';
 import CliPackage from '@fujia/cli-package';
 import log from '@fujia/cli-log';
-import { spawn } from '@fujia/cli-utils';
-import { NewEnvVariables } from '@fujia/cli-core';
+import { spawn, NewEnvVariables } from '@fujia/cli-utils';
 
 import { CMD_MAP_PACKAGE } from './constants';
 
@@ -67,6 +66,7 @@ async function exec(...args: any[]) {
 
   const rootFile = pkg.getEntryFilePath();
   log.verbose('[cli-exec]', `rootFile: ${rootFile}`);
+
   if (rootFile) {
     try {
       // NOTE: expects call in the child process

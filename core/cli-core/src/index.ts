@@ -5,6 +5,6 @@ export type {
   StageCliCmd,
 } from './interface';
 
-export { DEFAULT_CLI_HOME, NewEnvVariables } from './constant';
+export { DEFAULT_CLI_HOME } from './constant';
 
 export default core;

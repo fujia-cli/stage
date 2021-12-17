@@ -15,7 +15,7 @@
     "lib"
   ],
   "bin": {
-    "stage": "bin/index.js"
+    "stage-dev": "bin/index.js"
   },
   "repository": {
     "type": "git",
@@ -37,6 +37,7 @@
     "@fujia/cli-exec": "file:../cli-exec",
     "@fujia/cli-init": "file:../../commands/cli-init",
     "@fujia/cli-log": "file:../../utils/cli-log",
+    "@fujia/cli-utils": "file:../../utils/cli-utils",
     "@fujia/get-pkg-info": "file:../../utils/get-pkg-info",
     "@fujia/root": "^0.3.2",
     "@fujia/user-home": "^1.1.0",
