@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 10:54:19
- * @LastEditTime: 2021-12-17 18:55:50
+ * @LastEditTime: 2021-12-18 11:30:36
  * @LastEditors: fujia(as default)
  * @Description: To initialize a project
  * @FilePath: /stage/commands/cli-init/src/index.ts
@@ -19,6 +19,7 @@ import { spinnerInstance, sleep, spawnAsync } from '@fujia/cli-utils';
 
 import {
   inquireProjectType,
+  inquireProjectCategory,
   inquireTemplateType,
   inquireCleanContinued,
   inquireCleanConfirmed,
@@ -101,9 +102,10 @@ export class CliInit extends CliCommand {
     let template: ITemplate;
 
     if (this.isProjectType) {
-      template = await getProjectTemplate(templateType)
+      const projectCategory = (await inquireProjectCategory()).projectCategory;
+      template = await getProjectTemplate(templateType, projectCategory);
     } else {
-      template = await getComponentTemplate(templateType)
+      template = await getComponentTemplate(templateType);
     }
 
     if (!template.data || template.data.length <= 0) throw new Error('The template doesn\'t exist');
@@ -118,7 +120,8 @@ export class CliInit extends CliCommand {
         // NOTE: Inquiry into whether continue creating
         const continued = (await inquireCleanContinued()).continued;
 
-        if (!continued) return null;
+        // NOTE: if the value of continued is false, ends the process
+        if (!continued) return process.exit(0);
       }
 
       /**
@@ -127,12 +130,12 @@ export class CliInit extends CliCommand {
       */
       const cleanConfirmed = (await inquireCleanConfirmed()).cleanConfirmed
 
-      if (!cleanConfirmed) return null;
-
-      await fse.emptyDir(cwdPath);
+      if (cleanConfirmed) {
+        await fse.emptyDir(cwdPath);
+      };
     }
 
-    this.getProjectOrCompInfo();
+    await this.getProjectOrCompInfo();
   }
 
   async getProjectOrCompInfo() {
@@ -148,6 +151,14 @@ export class CliInit extends CliCommand {
       }
 
       this.projectInfo = projectDetail;
+
+      log.verbose('[cli-init]', `this.projectInfo:
+        packageName?: ${this.projectInfo?.packageName}
+        projectType: ${this.projectInfo?.projectType}
+        projectName: ${this.projectInfo?.projectName}
+        projectVersion: ${this.projectInfo?.version}
+        projectTemplate: ${this.projectInfo?.projectTemplate}
+      `);
     } else {
       componentDetail = await inquireComponentInfo(this.template);
 

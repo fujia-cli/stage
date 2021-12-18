@@ -28,14 +28,37 @@ export const PROJECT_TYPES = [
   }
 ];
 
-export const PROJECT_INQUIRE_LIST = [
+export const INQUIRE_PROJECTS = [
+  {
+    name: 'web',
+    value: 'web',
+  },
+  {
+    name: 'app',
+    value: 'app',
+  },
+  {
+    name: 'library',
+    value: 'library',
+  },
+  {
+    name: 'mini-program',
+    value: 'mini-program',
+  },
+];
+
+export const INQUIRE_WEB_LIST = [
   {
     name: 'vue',
     value: 'vue',
   },
   {
-    name: 'nustJS',
-    value: 'nustJS',
+    name: 'vue-next',
+    value: 'vue-next',
+  },
+  {
+    name: 'nuxtjs',
+    value: 'nuxtjs',
   },
   {
     name: 'vue-admin',
@@ -45,33 +68,54 @@ export const PROJECT_INQUIRE_LIST = [
     name: 'react',
     value: 'react',
   },
+];
+
+export const INQUIRE_APP_LIST = [
   {
     name: 'react-native',
     value: 'react-native',
   },
   {
-    name: 'electron',
-    value: 'electron',
+    name: 'electron-rect',
+    value: 'electron-rect',
   },
   {
-    name: 'lib-rollup',
-    value: 'lib-rollup',
+    name: 'electron-antd',
+    value: 'electron-antd',
   },
   {
-    name: 'lib-webpack',
-    value: 'lib-webpack',
+    name: 'electron-element',
+    value: 'electron-element',
+  },
+];
+
+export const INQUIRE_LIB_LIST = [
+  {
+    name: 'rollup',
+    value: 'rollup',
   },
   {
-    name: 'mini-program',
-    value: 'mini-program',
+    name: 'webpack',
+    value: 'webpack',
+  },
+];
+
+export const INQUIRE_MINI_PROGRAMS = [
+  {
+    name: 'wechat',
+    value: 'wechat',
   },
   {
     name: 'mini-game',
     value: 'mini-game',
   },
+  {
+    name: 'alipay',
+    value: 'alipay',
+  }
 ];
 
-export const COMPONENT_INQUIRE_LIST = [
+export const INQUIRE_COMPONENTS = [
   {
     value: 'react',
     name: 'react',
@@ -98,27 +142,6 @@ export const COMPONENT_INQUIRE_LIST = [
   },
 ];
 
-export const DefaultProjectTemplate = [
-  {
-    _id: `STAGE_${Date.now()}`,
-    name: '',
-    version: 'latest',
-    npmName: '',
-    type: 'custom',
-    installCommand: '',
-    startCommand: '',
-  }
-];
-
-export const DefaultComponentTemplate = [
-  {
-    _id: `STAGE_${Date.now()}`,
-    name: '',
-    version: 'latest',
-    npmName: '',
-  }
-];
-
 export const EJS_IGNORE_FILES = [
   'node_modules/**',
   'public/**'
@@ -128,4 +151,167 @@ export const WHITE_COMMANDS = [
   'npm',
   'cnpm',
   'yarn'
+];
+
+export const DEFAULT_WEB_TEMPLATES = [
+  {
+    _id: `STAGE_${Date.now()}`,
+    name: 'vue',
+    version: 'latest',
+    npmName: '@fujia/vue2-template',
+    installCommand: 'npm install --registry=https://registry.npmmirror.com',
+    startCommand: 'npm run serve',
+  },
+  {
+    _id: `STAGE_${Date.now()}`,
+    name: 'vue-next',
+    version: 'latest',
+    npmName: '@fujia/vue-next-template',
+    installCommand: 'npm install --registry=https://registry.npmmirror.com',
+    startCommand: 'npm run serve',
+  },
+  {
+    _id: `STAGE_${Date.now()}`,
+    name: 'nuxtjs',
+    version: 'latest',
+    npmName: '@fujia/nuxtjs-template',
+    installCommand: 'npm install --registry=https://registry.npmmirror.com',
+    startCommand: 'npm run serve',
+  },
+  {
+    _id: `STAGE_${Date.now()}`,
+    name: 'vue-admin',
+    version: 'latest',
+    npmName: '@fujia/vue2-admin-template',
+    installCommand: 'npm install --registry=https://registry.npmmirror.com',
+    startCommand: 'npm start',
+  },
+  {
+    _id: `STAGE_${Date.now()}`,
+    name: 'react',
+    version: 'latest',
+    npmName: '@fujia/react-template',
+    installCommand: 'npm install --registry=https://registry.npmmirror.com',
+    startCommand: 'npm start',
+  },
+];
+
+export const DEFAULT_APP_TEMPLATES = [
+  {
+    _id: `STAGE_${Date.now()}`,
+    name: 'react-native',
+    version: 'latest',
+    npmName: '@fujia/react-native-template',
+    installCommand: 'npm install --registry=https://registry.npmmirror.com',
+    startCommand: 'npm run serve',
+  },
+  {
+    _id: `STAGE_${Date.now()}`,
+    name: 'electron-rect',
+    version: 'latest',
+    npmName: '@fujia/electron-rect-template',
+    installCommand: 'npm install --registry=https://registry.npmmirror.com',
+    startCommand: 'npm start',
+  },
+  {
+    _id: `STAGE_${Date.now()}`,
+    name: 'electron-antd',
+    version: 'latest',
+    npmName: '@fujia/electron-antd-template',
+    installCommand: 'npm install --registry=https://registry.npmmirror.com',
+    startCommand: 'npm start',
+  },
+  {
+    _id: `STAGE_${Date.now()}`,
+    name: 'electron-element',
+    version: 'latest',
+    npmName: '@fujia/electron-element-template',
+    installCommand: 'npm install --registry=https://registry.npmmirror.com',
+    startCommand: 'npm start',
+  },
+];
+
+export const DEFAULT_LIBRARY_TEMPLATES = [
+  {
+    _id: `STAGE_${Date.now()}`,
+    name: 'library-rollup',
+    version: 'latest',
+    npmName: '@fujia/library-rollup-template',
+    installCommand: 'npm install --registry=https://registry.npmmirror.com',
+    startCommand: 'npm start',
+  },
+  {
+    _id: `STAGE_${Date.now()}`,
+    name: 'library-webpack',
+    version: 'latest',
+    npmName: '@fujia/library-rollup-template',
+    installCommand: 'npm install --registry=https://registry.npmmirror.com',
+    startCommand: 'npm start',
+  },
+];
+
+export const DEFAULT_MINI_PROGRAM_TEMPLATES = [
+  {
+    _id: `STAGE_${Date.now()}`,
+    name: 'wechat',
+    version: 'latest',
+    npmName: '@fujia/wechat-template',
+    installCommand: 'npm install --registry=https://registry.npmmirror.com',
+    startCommand: 'npm start',
+  },
+  {
+    _id: `STAGE_${Date.now()}`,
+    name: 'mini-game',
+    version: 'latest',
+    npmName: '@fujia/mini-game-template',
+    installCommand: 'npm install --registry=https://registry.npmmirror.com',
+    startCommand: 'npm start',
+  },
+  {
+    _id: `STAGE_${Date.now()}`,
+    name: 'alipay',
+    version: 'latest',
+    npmName: '@fujia/alipay-template',
+    installCommand: 'npm install --registry=https://registry.npmmirror.com',
+    startCommand: 'npm start',
+  },
+];
+
+export const DEFAULT_COMPONENT_TEMPLATES = [
+  {
+    _id: `STAGE_${Date.now()}`,
+    name: 'react',
+    version: 'latest',
+    npmName: '@fujia/react-component-template',
+  },
+  {
+    _id: `STAGE_${Date.now()}`,
+    name: 'vue',
+    version: 'latest',
+    npmName: '@fujia/vue-component-template',
+  },
+  {
+    _id: `STAGE_${Date.now()}`,
+    name: 'react',
+    version: 'latest',
+    npmName: '@fujia/h5-component-template',
+  },
+  {
+    _id: `STAGE_${Date.now()}`,
+    name: 'web-component',
+    version: 'latest',
+    npmName: '@fujia/web-component-template',
+  },
+  {
+    _id: `STAGE_${Date.now()}`,
+    name: 'react-native',
+    version: 'latest',
+    npmName: '@fujia/react-native-component-template',
+  },
+  {
+    _id: `STAGE_${Date.now()}`,
+    name: 'mini-program',
+    version: 'latest',
+    npmName: '@fujia/mini-program-component-template',
+  },
 ];

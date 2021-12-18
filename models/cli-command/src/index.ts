@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-07 09:42:37
- * @LastEditTime: 2021-12-07 16:10:10
+ * @LastEditTime: 2021-12-17 23:03:47
  * @LastEditors: fujia(as default)
  * @Description:
  * @FilePath: /stage/models/cli-command/src/index.ts
@@ -45,7 +45,7 @@ class CliCommand {
   }
 
   genRunner() {
-    return new Promise((resolve, reject) => {
+    return new Promise((_, reject) => {
       let chain = Promise.resolve();
 
       chain = chain.then(() => {
