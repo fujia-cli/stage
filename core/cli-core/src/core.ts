@@ -2,7 +2,7 @@
 import path from 'path';
 import { access } from 'fs/promises';
 import semver from 'semver';
-import { red, yellow, gray } from 'colors/safe';
+import { red, yellow, blue } from 'colors/safe';
 import { checkRoot } from '@fujia/root';
 import dotenv from 'dotenv';
 import commander from 'commander';
@@ -81,10 +81,12 @@ function registerCommand() {
 
   // NOTE: listener any unknown commands
   program.on('command:*', (cmdList: string[]) => {
-
+    const availableCommands = program.commands.map(cmd => cmd.name());
     console.log(red(`Unknown Command: ${cmdList[0]}`));
-    if (cmdList.length > 0) {
-      console.log(gray(`The available commands are: ${cmdList.join(', ')}`));
+
+    if (availableCommands.length > 0) {
+      console.log(blue(`The available commands are: ${availableCommands.join(', ')}`));
+      console.log();
     }
   });
 

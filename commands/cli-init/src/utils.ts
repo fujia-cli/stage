@@ -25,6 +25,6 @@ export const isValidProjectName = (name: string) => {
 export const isDirEmpty = async (curDir: string, ignoreFiles = ['node_modules']) => {
   let files = await readdir(curDir);
 
-  files.filter((f) => !f.startsWith('.') && !ignoreFiles.includes(f));
-   return files && files.length > 0;
+  const fileList = files.filter((f) => !f.startsWith('.') && !ignoreFiles.includes(f));
+  return fileList.length <= 0;
 }

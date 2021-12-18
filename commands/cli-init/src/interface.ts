@@ -3,6 +3,8 @@ export type TemplateType = 'default' | 'custom' | 'remote';
 
 export type ProjectType = 'project' | 'component-package' | 'component';
 
+export type ProjectCategory = 'web' | 'app' | 'library' | 'mini-program';
+
 export type ProjectTypeList = 'vue'
   | 'nuxtJS'
   | 'vue-admin'
@@ -32,11 +34,10 @@ export interface ComponentInfo {
   packageName?: string;
   projectType: Extract<ProjectType, 'component'>;
   componentName: ComponentTypeList;
-  componentVersion: string;
+  version: string;
   componentTemplate: string;
 }
 export interface ProjectTemplate extends ComponentTemplate {
-  type: string;
   installCommand: string;
   startCommand: string;
 }
@@ -45,7 +46,7 @@ export interface ProjectInfo {
   packageName?: string;
   projectType: Exclude<ProjectType, 'component'>;
   projectName: ProjectTypeList;
-  projectVersion: string;
+  version: string;
   projectTemplate: string;
 }
 

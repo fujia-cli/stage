@@ -1,13 +1,28 @@
 import inquirer from 'inquirer';
 import semver from 'semver';
 
-import { TemplateType, ProjectType, ProjectTemplate, ComponentTemplate } from './interface';
-import { TEMPLATE_TYPES, PROJECT_TYPES } from './constants';
 import {
-  verifyCmd,
+  TemplateType,
+  ProjectType,
+  ProjectTemplate,
+  ComponentTemplate,
+  ProjectCategory,
+} from './interface';
+import {
   createTemplateChoices,
   isValidProjectName,
 } from './utils';
+import { TEMPLATE_TYPES, PROJECT_TYPES, INQUIRE_PROJECTS } from './constants';
+
+export const inquireTemplateType = async () => await inquirer.prompt<{
+  templateType: TemplateType
+}>({
+  type: 'list',
+  name: 'templateType',
+  default: 0,
+  message: 'Please select the type of template',
+  choices: TEMPLATE_TYPES
+});
 
 export const inquireProjectType = async () => await inquirer.prompt<{
   projectType: ProjectType
@@ -19,15 +34,16 @@ export const inquireProjectType = async () => await inquirer.prompt<{
   choices: PROJECT_TYPES
 });
 
-export const inquireTemplateType = async () => await inquirer.prompt<{
-  templateType: TemplateType
+export const inquireProjectCategory = async () => await inquirer.prompt<{
+  projectCategory: ProjectCategory
 }>({
   type: 'list',
-  name: 'templateType',
+  name: 'projectCategory',
   default: 0,
-  message: 'Please select the type of template',
-  choices: TEMPLATE_TYPES
+  message: 'Please select the category of project',
+  choices: INQUIRE_PROJECTS
 });
+
 
 export const inquireCleanContinued = async () => await inquirer.prompt({
   type: 'confirm',
@@ -68,7 +84,7 @@ export const inquireProjectInfo = async (temps: ProjectTemplate[]) => await inqu
   },
   {
     type: 'input',
-    name: 'projectVersion',
+    name: 'version',
     message: 'Please input version of project',
     default: '1.0.0',
     validate: function (version){

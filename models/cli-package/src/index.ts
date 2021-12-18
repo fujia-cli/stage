@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 16:57:47
- * @LastEditTime: 2021-12-16 16:22:44
+ * @LastEditTime: 2021-12-17 19:24:16
  * @LastEditors: fujia(as default)
  * @Description: A package class for stage cli
  * @FilePath: /stage/models/cli-package/src/index.ts
@@ -127,6 +127,11 @@ class CliPackage implements ICliPackage {
   getEntryFilePath() {
     const _getEntryFile = (localPath: string) => {
       const packageDir = pkgDir.sync(localPath);
+      log.verbose('[cli-package]', `
+        localPath: ${localPath}
+        cacheFilePath: ${this.cacheFilePath}
+        packageDir: ${packageDir}
+      `);
 
       if (packageDir) {
         const pkgFile = require(path.resolve(packageDir, 'package.json'));

@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 15:48:52
- * @LastEditTime: 2021-12-16 16:56:49
+ * @LastEditTime: 2021-12-17 23:07:21
  * @LastEditors: fujia(as default)
  * @Description: An execute package of stage cli
  * @FilePath: /stage/core/cli-exec/src/index.ts
@@ -44,7 +44,7 @@ async function exec(...args: any[]) {
 
     pkg = new CliPackage({
       localPath,
-      storeDir: stageCliHome,
+      storeDir,
       name: pkgName,
       version: packageVersion
     });
@@ -54,7 +54,7 @@ async function exec(...args: any[]) {
       await pkg.update()
     } else {
       // NOTE: install package
-      pkg.install();
+      await pkg.install();
     }
   } else {
     pkg = new CliPackage({
@@ -102,10 +102,7 @@ async function exec(...args: any[]) {
       });
 
       child.on('exit', (err) => {
-        log.info('[cli-exec]', `
-          run successful!
-          exit code: ${err}
-        `);
+        log.info('[cli-exec]', `exit code: ${err}`);
         process.exit(err!)
       })
     } catch (err: any) {
