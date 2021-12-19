@@ -1,0 +1,51 @@
+{
+  "name": "@fujia/cli-git",
+  "version": "1.0.0",
+  "description": "A package of git for stage cli.",
+  "keywords": [
+    "git",
+    "package",
+    "stage"
+  ],
+  "author": "fujia <fujia.site@outlook.com>",
+  "homepage": "https://github.com/fujia-cli/stage/tree/main/models/cli-git#readme",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fujia-cli/stage.git"
+  },
+  "scripts": {
+    "tsc": "rimraf ./lib && tsc",
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/fujia-cli/stage/issues"
+  },
+  "devDependencies": {
+    "@types/semver": "^7.3.9",
+    "rimraf": "^3.0.2"
+  },
+  "dependencies": {
+    "@fujia/user-home": "^1.1.0",
+    "@imooc-cli-dev/log": "file:../../utils/log",
+    "@imooc-cli-dev/utils": "file:../../utils/utils",
+    "axios": "^0.24.0",
+    "fs-extra": "^10.0.0",
+    "inquirer": "^8.2.0",
+    "semver": "^7.3.5",
+    "simple-git": "^2.48.0",
+    "terminal-link": "^3.0.0"
+  }
+}

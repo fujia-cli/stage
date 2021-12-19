@@ -1,12 +1,13 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-09 21:31:09
- * @LastEditTime: 2021-12-16 16:32:58
+ * @LastEditTime: 2021-12-19 17:33:57
  * @LastEditors: fujia(as default)
  * @Description: An awesome utilities for stage-cli
  * @FilePath: /stage/utils/cli-utils/src/index.ts
  */
 import cp, { CommonSpawnOptions, ChildProcess, SpawnOptions } from 'child_process';
+import fs from 'fs';
 import { Spinner } from 'cli-spinner';
 
 export { NewEnvVariables } from './constants';
@@ -50,3 +51,43 @@ export const spawnAsync = (
   })
 };
 
+export const readFile = (path: string, options : {
+  toJson?: boolean
+} = {}) => {
+  if (fs.existsSync(path)) {
+    const buffer = fs.readFileSync(path);
+
+    if (buffer) {
+      if (options.toJson) {
+        return buffer.toJSON();
+      }
+
+      return buffer.toString();
+    }
+  }
+
+  return null;
+};
+
+export const writeFile = (
+  path: string,
+  data: string | NodeJS.ArrayBufferView,
+  options: {
+    rewrite?: boolean
+  } = {
+    rewrite: true,
+  }
+) => {
+  if (fs.existsSync(path)) {
+    if (options.rewrite) {
+      fs.writeFileSync(path, data);
+
+      return true;
+    }
+
+    return false;
+  }
+
+  fs.writeFileSync(path, data);
+  return true;
+};
