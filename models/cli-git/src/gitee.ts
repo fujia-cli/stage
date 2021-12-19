@@ -15,11 +15,11 @@ export default class Gitee extends GitServer {
   }
 
   getUser() {
-    return this.request.get('/user');
+    return this.request?.get('/user');
   }
 
   getOrg(username: string) {
-    return this.request.get(`/users/${username}/orgs`, {
+    return this.request?.get(`/users/${username}/orgs`, {
       page: 1,
       per_page: 100
     })
@@ -27,20 +27,20 @@ export default class Gitee extends GitServer {
 
   getRepo(loginName: string, projectName: string) {
     return this.request
-      .get(`/repos/${loginName}/${projectName}`)
+      ?.get(`/repos/${loginName}/${projectName}`)
       .then(res => {
         return this.handleResponse(res);
       });
   }
 
   createRepo(projectName: string) {
-    return this.request.post('/user/repos', {
+    return this.request?.post('/user/repos', {
       name: projectName,
     });
   }
 
   createOrgRepo(loginName: string, projectName: string) {
-    return this.request.post(`/orgs/${loginName}/repos`, {
+    return this.request?.post(`/orgs/${loginName}/repos`, {
       name: projectName
     });
   }

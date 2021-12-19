@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-11 21:10:04
- * @LastEditTime: 2021-12-13 15:55:39
+ * @LastEditTime: 2021-12-19 23:29:15
  * @LastEditors: fujia(as default)
  * @Description: A package to achieve deploy flows for stage cli.
  * @FilePath: /stage/commands/cli-publish/src/index.ts
@@ -12,10 +12,11 @@ import log from '@fujia/cli-log';
 import fse from 'fs-extra';
 import { pathExistSync } from '@fujia/check-path';
 
-import { PkgInfo } from './interface';
+import { PkgInfo, PublishCmdOptions } from './interface';
 
 export class PublishCommand extends CliCommand {
   pkgInfo: PkgInfo | undefined;
+  options: PublishCmdOptions | undefined;
   constructor(args: any[]) {
     super(args);
     this.pkgInfo = undefined;
@@ -23,6 +24,13 @@ export class PublishCommand extends CliCommand {
 
   init() {
     // NOTE: handle params
+    log.verbose('[cli-publish]', '', this.argv, this.cmd);
+
+    this.options = {
+      refreshRepo: this.cmd?.opts().refreshRepo,
+      refreshOwner: this.cmd?.opts().refreshOwner,
+      refreshToken: this.cmd?.opts().refreshToken
+    }
   }
 
   async exec() {
@@ -33,7 +41,7 @@ export class PublishCommand extends CliCommand {
     * 3, build and publish
     */
     try {
-      await this.prepare();
+      this.prepare();
     } catch (err: any) {
       log.error('[cli-init]', err?.message);
 

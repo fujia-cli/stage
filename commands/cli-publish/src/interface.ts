@@ -3,3 +3,9 @@ export interface PkgInfo {
   version: string;
   cwd: string;
 }
+
+export interface PublishCmdOptions {
+  refreshRepo?: boolean;
+  refreshToken?: boolean;
+  refreshOwner?: boolean;
+}
