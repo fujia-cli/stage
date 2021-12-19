@@ -55,7 +55,7 @@ function registerCommand() {
 
   // NOTE: register init command
   program
-    .command('init [projectName] [relativeDirectory]')
+    .command('init [projectName] [destination]')
     .description('create a project or component in current directory or relative to the current directory')
     .option('-f, --force', 'force to init project')
     .action(exec);
@@ -63,6 +63,11 @@ function registerCommand() {
   // NOTE: register publish command
   program
     .command('publish')
+    .description('publish a project')
+    .option('--refreshRepo', 'force to update the remote Git repository')
+    .option('--refreshToken', 'force to update the token of remote repository')
+    .option('--refreshOwner', 'force to update the type of remote repository')
+    .action(exec);
 
   // NOTE: enable debug model
   program.on('option:debug', function (this: StageCliCmd) {
