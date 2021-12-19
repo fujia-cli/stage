@@ -15,7 +15,7 @@
     "lib"
   ],
   "bin": {
-    "stage-dev": "bin/index.js"
+    "stage": "bin/index.js"
   },
   "repository": {
     "type": "git",
