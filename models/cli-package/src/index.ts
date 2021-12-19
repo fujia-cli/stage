@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 16:57:47
- * @LastEditTime: 2021-12-17 19:24:16
+ * @LastEditTime: 2021-12-19 17:00:09
  * @LastEditors: fujia(as default)
  * @Description: A package class for stage cli
  * @FilePath: /stage/models/cli-package/src/index.ts
@@ -10,7 +10,7 @@ import path from 'path';
 import { isPlainObject, toRawType } from '@fujia/hammer';
 import pkgDir from 'pkg-dir';
 import crossPath from '@fujia/cross-path';
-import { getDefaultRegistry, getLatestVersion } from '@fujia/get-pkg-info';
+import { getDefaultRegistry, getLatestVersion, getPkgInfo } from '@fujia/get-pkg-info';
 import log from '@fujia/cli-log';
 import npmInstall from 'npminstall';
 import { pathExistSync } from '@fujia/check-path';
@@ -52,16 +52,27 @@ class CliPackage implements ICliPackage {
   }
 
   async prepare() {
-    if (this.storeDir && !pathExistSync(this.storeDir)) {
-      fse.mkdirp(this.storeDir);
-    }
+    // NOTE: check if the package is exist
+    try {
+      await getPkgInfo(this.pkgName);
 
-    if (this.pkgVersion === 'latest') {
-      const latestVer = await getLatestVersion(this.pkgName);
-      log.verbose('[cli-package]', `The version of installing package is: ${latestVer}`);
-      if (latestVer) {
-        this.pkgVersion = latestVer;
+      if (this.storeDir && !pathExistSync(this.storeDir)) {
+        fse.mkdirp(this.storeDir);
       }
+
+      if (this.pkgVersion === 'latest') {
+        const latestVer = await getLatestVersion(this.pkgName);
+        log.verbose('[cli-package]', `The version of installing package is: ${latestVer}`);
+        if (latestVer) {
+          this.pkgVersion = latestVer;
+        }
+      }
+    } catch (err: any) {
+      if (err?.response?.status === 404) {
+        log.error('[cli-package]', `Oops! The package of ${this.pkgName} not found. Ensure that you have published in https://www.npmjs.com/`);
+      }
+      log.error('[cli-package]', err?.message);
+      process.exit(1);
     }
   }
 
@@ -76,6 +87,7 @@ class CliPackage implements ICliPackage {
   }
 
   async install() {
+    log.verbose('[cli-package]', `Starting install ${this.pkgName}...`)
     await this.prepare();
 
     return npmInstall({
@@ -99,6 +111,7 @@ class CliPackage implements ICliPackage {
     * 3, if not, installing the latest version
     */
     await this.prepare();
+
     const latestVersion = await getLatestVersion(this.pkgName);
     if (!latestVersion) {
       console.log(`oops! Don't get the latest version of ${latestVersion} when invoked update in [cli-package]`);

@@ -176,7 +176,7 @@ export const DEFAULT_WEB_TEMPLATES = [
     version: 'latest',
     npmName: '@fujia/nuxtjs-template',
     installCommand: 'npm install --registry=https://registry.npmmirror.com',
-    startCommand: 'npm run serve',
+    startCommand: 'npm run dev',
   },
   {
     _id: `STAGE_${Date.now()}`,
@@ -203,7 +203,7 @@ export const DEFAULT_APP_TEMPLATES = [
     version: 'latest',
     npmName: '@fujia/react-native-template',
     installCommand: 'npm install --registry=https://registry.npmmirror.com',
-    startCommand: 'npm run serve',
+    startCommand: 'yarn ios',
   },
   {
     _id: `STAGE_${Date.now()}`,
@@ -238,15 +238,15 @@ export const DEFAULT_LIBRARY_TEMPLATES = [
     version: 'latest',
     npmName: '@fujia/library-rollup-template',
     installCommand: 'npm install --registry=https://registry.npmmirror.com',
-    startCommand: 'npm start',
+    startCommand: '',
   },
   {
     _id: `STAGE_${Date.now()}`,
     name: 'library-webpack',
     version: 'latest',
-    npmName: '@fujia/library-rollup-template',
+    npmName: '@fujia/library-webpack-template',
     installCommand: 'npm install --registry=https://registry.npmmirror.com',
-    startCommand: 'npm start',
+    startCommand: '',
   },
 ];
 
@@ -257,7 +257,7 @@ export const DEFAULT_MINI_PROGRAM_TEMPLATES = [
     version: 'latest',
     npmName: '@fujia/wechat-template',
     installCommand: 'npm install --registry=https://registry.npmmirror.com',
-    startCommand: 'npm start',
+    startCommand: '',
   },
   {
     _id: `STAGE_${Date.now()}`,
@@ -265,7 +265,7 @@ export const DEFAULT_MINI_PROGRAM_TEMPLATES = [
     version: 'latest',
     npmName: '@fujia/mini-game-template',
     installCommand: 'npm install --registry=https://registry.npmmirror.com',
-    startCommand: 'npm start',
+    startCommand: '',
   },
   {
     _id: `STAGE_${Date.now()}`,
@@ -273,7 +273,7 @@ export const DEFAULT_MINI_PROGRAM_TEMPLATES = [
     version: 'latest',
     npmName: '@fujia/alipay-template',
     installCommand: 'npm install --registry=https://registry.npmmirror.com',
-    startCommand: 'npm start',
+    startCommand: '',
   },
 ];
 
@@ -292,7 +292,7 @@ export const DEFAULT_COMPONENT_TEMPLATES = [
   },
   {
     _id: `STAGE_${Date.now()}`,
-    name: 'react',
+    name: 'h5',
     version: 'latest',
     npmName: '@fujia/h5-component-template',
   },
@@ -310,8 +310,8 @@ export const DEFAULT_COMPONENT_TEMPLATES = [
   },
   {
     _id: `STAGE_${Date.now()}`,
-    name: 'mini-program',
+    name: 'wechat',
     version: 'latest',
-    npmName: '@fujia/mini-program-component-template',
+    npmName: '@fujia/wechat-component-template',
   },
 ];

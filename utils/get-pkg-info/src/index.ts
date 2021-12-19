@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-03 19:45:46
- * @LastEditTime: 2021-12-06 17:24:30
+ * @LastEditTime: 2021-12-19 15:35:33
  * @LastEditors: fujia(as default)
  * @Description: Obtain the package info via npm's api.
  * @FilePath: /stage/utils/get-pkg-info/src/index.ts
@@ -90,5 +90,5 @@ export async function getLatestVersion(
 }
 
 export function getDefaultRegistry(origin = false) {
-  return origin ? 'https://registry.npmjs.org' : 'https://registry.npm.taobao.org';
+  return origin ? 'https://registry.npmmirror.com' : 'https://registry.npmjs.org';
 }

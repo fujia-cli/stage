@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 10:54:19
- * @LastEditTime: 2021-12-18 11:30:36
+ * @LastEditTime: 2021-12-19 16:45:27
  * @LastEditors: fujia(as default)
  * @Description: To initialize a project
  * @FilePath: /stage/commands/cli-init/src/index.ts
@@ -208,7 +208,7 @@ export class CliInit extends CliCommand {
     }`);
     console.log();
 
-    if (!await templatePkg.exist()) {
+    if (!(await templatePkg.exist())) {
       const spinner = spinnerInstance('template downloading...');
       // NOTE: if install's speed are quickly, hold on one second!
       await sleep();
@@ -291,7 +291,9 @@ export class CliInit extends CliCommand {
     */
     await this.execCommand(installCommand, 'Installing dependencies failed.');
 
-    await this.execCommand(startCommand);
+    if (startCommand) {
+      await this.execCommand(startCommand);
+    }
   }
 
   async installComponentTemplate(templatePath: string) {
