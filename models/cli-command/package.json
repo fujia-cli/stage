@@ -33,6 +33,7 @@
     "rimraf": "^3.0.2"
   },
   "dependencies": {
+    "@fujia/cli-core": "file:../../core/cli-core",
     "@fujia/cli-log": "file:../../utils/cli-log",
     "colors": "^1.4.0",
     "semver": "^7.3.5"
