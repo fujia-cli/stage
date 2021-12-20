@@ -1,3 +1,4 @@
-export const index = () => {
-  // NOTE: do something
-};
+import GitCore from './git-core';
+
+
+export default GitCore;
