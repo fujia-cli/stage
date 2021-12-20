@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-11 21:10:04
- * @LastEditTime: 2021-12-20 23:54:17
+ * @LastEditTime: 2021-12-20 23:58:43
  * @LastEditors: fujia(as default)
  * @Description: A package to achieve deploy flows for stage cli.
  * @FilePath: /stage/commands/cli-publish/src/index.ts
@@ -52,9 +52,9 @@ export class PublishCommand extends CliCommand {
       }
 
       const endTime = new Date().getTime();
-      log.info('本次发布耗时：', Math.floor((endTime - startTime) / 1000) + '秒');
+      log.info('[cli-publish]', `this release took time: ${Math.floor((endTime - startTime) / 1000)}secs`);
     } catch (err: any) {
-      log.error('[cli-init]', err?.message);
+      log.error('[cli-publish]', err?.message);
 
       if (process.env.LOG_LEVEL === 'verbose') {
         console.log(err);
