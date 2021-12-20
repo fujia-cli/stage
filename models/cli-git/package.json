@@ -34,13 +34,15 @@
     "url": "https://github.com/fujia-cli/stage/issues"
   },
   "devDependencies": {
+    "@types/fs-extra": "^9.0.13",
+    "@types/inquirer": "^8.1.3",
     "@types/semver": "^7.3.9",
     "rimraf": "^3.0.2"
   },
   "dependencies": {
+    "@fujia/cli-log": "file:../../utils/cli-log",
+    "@fujia/cli-utils": "file:../../utils/cli-utils",
     "@fujia/user-home": "^1.1.0",
-    "@imooc-cli-dev/log": "file:../../utils/log",
-    "@imooc-cli-dev/utils": "file:../../utils/utils",
     "axios": "^0.24.0",
     "fs-extra": "^10.0.0",
     "inquirer": "^8.2.0",

@@ -26,7 +26,7 @@ export default class GithubRequest {
     );
 
     this.service.interceptors.response.use(
-      response => response.data,
+      response => response,
       error => {
         if (error?.response?.data) {
           return error.response;
@@ -37,12 +37,12 @@ export default class GithubRequest {
     );
   }
 
-  get(
+  get<T>(
     url: string,
     params = {},
     headers?: AxiosRequestHeaders
   ) {
-    return this.service({
+    return this.service.request<T>({
       url,
       params,
       method: 'get',

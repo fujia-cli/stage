@@ -1,5 +1,6 @@
 import GitServer from './git-server';
 import GiteeRequest from './gitee-request';
+import { AxiosPromise } from 'axios';
 
 export default class Gitee extends GitServer {
   request: GiteeRequest | null;

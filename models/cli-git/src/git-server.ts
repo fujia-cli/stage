@@ -1,4 +1,5 @@
 import { classMethodNotImplError } from './helper';
+import { AxiosResponse } from 'axios';
 
 export default class GitServer {
   constructor(public type: string, public token?: string) {
@@ -42,9 +43,9 @@ export default class GitServer {
       classMethodNotImplError('getTokenHelpUrl');
   }
 
-  isHttpResponse = res => res && res.status;
+  isHttpResponse = (res: AxiosResponse) => res && res.status;
 
-  handleResponse(res) {
+  handleResponse(res: AxiosResponse) {
     if (this.isHttpResponse(res) && res.status !== 200) return null;
 
     return res;
