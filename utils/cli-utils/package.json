@@ -33,6 +33,7 @@
     "url": "https://github.com/fujia-cli/stage/issues"
   },
   "devDependencies": {
+    "commander": "^8.3.0",
     "rimraf": "^3.0.2"
   },
   "dependencies": {

@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-09 21:31:09
- * @LastEditTime: 2021-12-20 14:42:19
+ * @LastEditTime: 2021-12-21 00:09:54
  * @LastEditors: fujia(as default)
  * @Description: An awesome utilities for stage-cli
  * @FilePath: /stage/utils/cli-utils/src/index.ts
@@ -11,6 +11,8 @@ import fs from 'fs';
 import { Spinner } from 'cli-spinner';
 
 export { NewEnvVariables } from './constants';
+
+export type { StageCliCmd } from './interface';
 
 export function spinnerInstance(message = 'loading...', spinnerString = '|/-\\') {
   const spinner = new Spinner(`${message} %s`);
