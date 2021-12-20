@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-11 21:10:04
- * @LastEditTime: 2021-12-20 10:28:20
+ * @LastEditTime: 2021-12-20 23:58:43
  * @LastEditors: fujia(as default)
  * @Description: A package to achieve deploy flows for stage cli.
  * @FilePath: /stage/commands/cli-publish/src/index.ts
@@ -11,6 +11,7 @@ import CliCommand from '@fujia/cli-command';
 import log from '@fujia/cli-log';
 import fse from 'fs-extra';
 import { pathExistSync } from '@fujia/check-path';
+import CliGit from '@fujia/cli-git';
 
 import { PkgInfo, PublishCmdOptions } from './interface';
 
@@ -38,12 +39,22 @@ export class PublishCommand extends CliCommand {
     * NOTE: steps
     * 1, initial
     * 2, git flow automatic
-    * 3, build and publish
+    * 3, local build & publish or cloud build & publish
     */
     try {
+      const startTime = new Date().getTime();
       this.prepare();
+
+      if (this.pkgInfo && this.options) {
+        const git = new CliGit(this.pkgInfo, this.options); // new instance of CliGit
+        await git.prepare();         // automatic prepare for commit operation and initial code repository
+        await git.commit();          // automatic commit code
+      }
+
+      const endTime = new Date().getTime();
+      log.info('[cli-publish]', `this release took time: ${Math.floor((endTime - startTime) / 1000)}secs`);
     } catch (err: any) {
-      log.error('[cli-init]', err?.message);
+      log.error('[cli-publish]', err?.message);
 
       if (process.env.LOG_LEVEL === 'verbose') {
         console.log(err);

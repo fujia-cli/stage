@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-07 09:42:37
- * @LastEditTime: 2021-12-19 23:23:29
+ * @LastEditTime: 2021-12-21 00:12:47
  * @LastEditors: fujia(as default)
  * @Description:
  * @FilePath: /stage/models/cli-command/src/index.ts
@@ -9,7 +9,7 @@
 import { red } from 'colors/safe';
 import semver from 'semver';
 import log from '@fujia/cli-log';
-import { StageCliCmd } from '@fujia/cli-core';
+import { StageCliCmd } from '@fujia/cli-utils';
 
 import { LOWEST_NODE_VERSION } from './constants';
 
