@@ -1,7 +1,7 @@
 export interface PkgInfo {
-  name: string;
+  projectName: string;
   version: string;
-  cwd: string;
+  sourceDir: string;
 }
 
 export interface PublishCmdOptions {

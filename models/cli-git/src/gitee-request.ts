@@ -12,7 +12,7 @@ export default class GiteeRequest {
     });
     this.service.interceptors.response.use(
       response => {
-        return response.data;
+        return response;
       },
       error => {
         if (error.response && error.response.data) {

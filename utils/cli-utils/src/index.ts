@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-09 21:31:09
- * @LastEditTime: 2021-12-19 17:33:57
+ * @LastEditTime: 2021-12-20 14:42:19
  * @LastEditors: fujia(as default)
  * @Description: An awesome utilities for stage-cli
  * @FilePath: /stage/utils/cli-utils/src/index.ts
@@ -91,3 +91,19 @@ export const writeFile = (
   fs.writeFileSync(path, data);
   return true;
 };
+
+export const isPlainObject = (val: unknown) => Object.prototype.toString.call(val) === '[object Object]';
+
+export const spreadObjToString = (val: any, prefix?: string) => {
+  if (!isPlainObject(val)) return prefix;
+
+  let str = prefix ? `${prefix}: ` : '';
+  const keys = Object.keys(val);
+  keys.forEach(k => {
+    str += `\n\t${k}: ${val[k]}`
+  });
+
+  return str;
+};
+
+

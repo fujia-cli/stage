@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-11 21:10:04
- * @LastEditTime: 2021-12-19 23:29:15
+ * @LastEditTime: 2021-12-20 10:28:20
  * @LastEditors: fujia(as default)
  * @Description: A package to achieve deploy flows for stage cli.
  * @FilePath: /stage/commands/cli-publish/src/index.ts
@@ -72,9 +72,9 @@ export class PublishCommand extends CliCommand {
       throw new Error('The file of package.json is invalid, which should include these fields: name, version, scripts and build command!')
     }
     this.pkgInfo = {
-      name,
+      projectName: name,
       version,
-      cwd: cwdPath
+      sourceDir: cwdPath
     };
   }
 }

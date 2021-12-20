@@ -1,7 +1,8 @@
+import { AxiosPromise } from 'axios';
 import GitServer from './git-server';
 import GithubRequest from './github-request';
 
-export default class Gitee extends GitServer {
+export default class Github extends GitServer {
   request: GithubRequest | null;
   constructor() {
     super('github');

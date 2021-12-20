@@ -8,3 +8,9 @@
 //   ) => AxiosInstance;
 //   post: () => AxiosInstance;
 // }
+
+export type GitPlatformType = 'Github' | 'Gitlab' | 'Gitee';
+
+export type BranchType = 'release' | 'feature' | 'develop';
+
+export type UpgradeVersionType = 'major' | 'minor' | 'patch';
