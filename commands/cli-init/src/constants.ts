@@ -144,7 +144,9 @@ export const INQUIRE_COMPONENTS = [
 
 export const EJS_IGNORE_FILES = [
   'node_modules/**',
-  'public/**'
+  'public/**',
+  'static/**',
+  'store/**'
 ];
 
 export const WHITE_COMMANDS = [

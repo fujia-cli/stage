@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 10:54:19
- * @LastEditTime: 2021-12-21 12:04:30
+ * @LastEditTime: 2021-12-21 19:48:04
  * @LastEditors: fujia(as default)
  * @Description: To initialize a project
  * @FilePath: /stage/commands/cli-init/src/index.ts
@@ -15,7 +15,7 @@ import fse from 'fs-extra';
 import kebabCase from 'kebab-case';
 import ejs from 'ejs';
 import glob from 'glob';
-import { spinnerInstance, sleep, spawnAsync } from '@fujia/cli-utils';
+import { spinnerInstance, sleep, spawnAsync, printErrorStackInDebug } from '@fujia/cli-utils';
 
 import {
   inquireProjectType,
@@ -37,6 +37,7 @@ import { EJS_IGNORE_FILES } from './constants';
 
 export class CliInit extends CliCommand {
   projectName: string;
+  destination: string;
   force: boolean;
   template: Array<ProjectTemplate | ComponentTemplate>;
   isProjectType: boolean;
@@ -47,6 +48,7 @@ export class CliInit extends CliCommand {
   constructor(args: any[]) {
     super(args);
     this.projectName = '';
+    this.destination = '';
     this.force = false;
     this.template = [];
     this.isProjectType = true;
@@ -54,10 +56,13 @@ export class CliInit extends CliCommand {
 
   init() {
     this.projectName = this.argv[0] || '';
+    this.destination = this.argv[1] || process.cwd();
     this.force = !!this.cmd?.force;
 
     log.verbose('[cli-init]', `
+      argv: ${this.argv.join(', ')}
       projectName: ${this.projectName}
+      destination: ${this.destination}
       force: ${this.force}
     `);
   }
@@ -143,11 +148,11 @@ export class CliInit extends CliCommand {
     let componentDetail: ComponentInfo | undefined;
 
     if (this.isProjectType) {
-      projectDetail = await inquireProjectInfo((this.template as ProjectTemplate[]));
-      const { projectName } = projectDetail || {};
+      projectDetail = await inquireProjectInfo((this.template as ProjectTemplate[]), this.projectName);
+      const { projectName = this.projectName } = projectDetail || {};
 
       if (projectDetail && projectName) {
-        projectDetail.packageName = kebabCase(projectDetail.projectName).replace(/^-/, '');
+        projectDetail.packageName = kebabCase(projectName).replace(/^-/, '');
       }
 
       this.projectInfo = projectDetail;
