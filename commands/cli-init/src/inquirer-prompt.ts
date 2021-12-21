@@ -1,5 +1,6 @@
 import inquirer from 'inquirer';
 import semver from 'semver';
+import { getCurDirName } from '@fujia/cli-utils';
 
 import {
   TemplateType,
@@ -20,7 +21,7 @@ export const inquireTemplateType = async () => await inquirer.prompt<{
   type: 'list',
   name: 'templateType',
   default: 0,
-  message: 'Please select the template type: ',
+  message: 'Please select the template type:',
   choices: TEMPLATE_TYPES
 });
 
@@ -30,7 +31,7 @@ export const inquireProjectType = async () => await inquirer.prompt<{
   type: 'list',
   name: 'projectType',
   default: 0,
-  message: 'Please select the project type: ',
+  message: 'Please select the project type:',
   choices: PROJECT_TYPES
 });
 
@@ -40,7 +41,7 @@ export const inquireProjectCategory = async () => await inquirer.prompt<{
   type: 'list',
   name: 'projectCategory',
   default: 0,
-  message: 'Please select the application category: ',
+  message: 'Please select the application category:',
   choices: INQUIRE_PROJECTS
 });
 
@@ -59,67 +60,75 @@ export const inquireCleanConfirmed = async () => await inquirer.prompt({
   message: 'This operation will clean all files in the current folder and is irrevocable, Please confirm again!'
 });
 
-export const inquireProjectInfo = async (temps: ProjectTemplate[]) => await inquirer.prompt([
-  {
-    type: 'input',
-    name: 'projectName',
-    message: 'Please input the project name: ',
-    default: '',
-    validate: function (name) {
-      const done = (this as any).async();
+export const inquireProjectInfo = async (temps: ProjectTemplate[], initProjectName?: string) => {
+  const curCwdName = getCurDirName();
+  const promptList = [
+    {
+      type: 'input',
+      name: 'version',
+      message: 'Please input the project version:',
+      default: '0.1.0',
+      validate: function (version: string){
+        const done = (this as any).async();
 
-      setTimeout(function () {
-        if (!isValidProjectName(name)) {
-          done('Oops! this name is invalid, please re-enter!');
-          return;
+        setTimeout(function () {
+          if (!(!!semver.valid(version))) {
+            done('Oops! this version is invalid, please re-enter!');
+            return;
+          }
+
+          done(null, true);
+        }, 300);
+      },
+      filter: (version: string) => {
+        if (semver.valid(version)) {
+          return semver.valid(version);
         }
 
-        done(null, true);
-      }, 300);
-      // return self.isValidProjectName(name);
-    },
-    filter: (name) => {
-      return name;
-    }
-  },
-  {
-    type: 'input',
-    name: 'version',
-    message: 'Please input the project version: ',
-    default: '0.1.0',
-    validate: function (version){
-      const done = (this as any).async();
-
-      setTimeout(function () {
-        if (!(!!semver.valid(version))) {
-          done('Oops! this version is invalid, please re-enter!');
-          return;
-        }
-
-        done(null, true);
-      }, 300);
-    },
-    filter: (version) => {
-      if (semver.valid(version)) {
-        return semver.valid(version);
+        return version;
       }
-
-      return version;
+    },
+    {
+      type: 'list',
+      name: 'projectTemplate',
+      message: 'Please select one template for the project:',
+      choices: createTemplateChoices(temps),
     }
-  },
-  {
-    type: 'list',
-    name: 'projectTemplate',
-    message: 'Please select one template for the project: ',
-    choices: createTemplateChoices(temps),
+  ];
+
+  if (initProjectName && !isValidProjectName(initProjectName)) {
+    promptList.unshift( {
+      type: 'input',
+      name: 'projectName',
+      message: 'Please input the project name:',
+      default: curCwdName,
+      validate: function (name: string) {
+        const done = (this as any).async();
+
+        setTimeout(function () {
+          if (!isValidProjectName(name)) {
+            done('Oops! this name is invalid, please re-enter!');
+            return;
+          }
+
+          done(null, true);
+        }, 300);
+        // return self.isValidProjectName(name);
+      },
+      filter: (name: string) => {
+        return name;
+      }
+    })
   }
-]);
+
+  return await inquirer.prompt(promptList);
+}
 
 export const inquireComponentInfo = async (temps: ComponentTemplate[]) => await inquirer.prompt([
   {
     type: 'input',
     name: 'componentName',
-    message: 'Please input the component name: ',
+    message: 'Please input the component name:',
     default: '',
     validate: function (name) {
       const done = (this as any).async();
@@ -138,7 +147,7 @@ export const inquireComponentInfo = async (temps: ComponentTemplate[]) => await 
   {
     type: 'list',
     name: 'componentTemplate',
-    message: 'Please select one template for the component: ',
+    message: 'Please select one template for the component:',
     choices: createTemplateChoices(temps),
   }
 ]);

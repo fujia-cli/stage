@@ -19,7 +19,10 @@ export const createTemplateChoices = (temps: Array<ProjectTemplate | ComponentTe
 }
 
 export const isValidProjectName = (name: string) => {
-  return /^[a-zA-Z]+([-][a-zA-Z][a-zA-Z0-9]*|[_][a-zA-Z][a-zA-Z0-9]*|[a-zA-Z0-9])*$/.test(name);
+  const nameReg = /^[a-zA-Z]+([-][a-zA-Z][a-zA-Z0-9]*|[_][a-zA-Z][a-zA-Z0-9]*|[a-zA-Z0-9])*$/;
+  const nameByOrgReg = /^\@[a-zA-Z]+\/([-][a-zA-Z][a-zA-Z0-9]*|[_][a-zA-Z][a-zA-Z0-9]*|[a-zA-Z0-9])*$/;
+
+  return nameReg.test(name) || nameByOrgReg.test(name);
 }
 
 export const isDirEmpty = async (curDir: string, ignoreFiles = ['node_modules']) => {
