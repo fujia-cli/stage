@@ -7,7 +7,6 @@ export const GITLAB_BASE_URL = '';
 export const DEFAULT_CLI_HOME = '.stage-cli';
 export const GIT_ROOT_DIR = '.git';
 export const GIT_SERVER_FILE = '.git_server';
-export const GIT_TOKEN_FILE = '.git_token';
 export const GIT_OWN_FILE = '.git_own';
 export const GIT_LOGIN_FILE = '.git_login';
 export const GIT_IGNORE_FILE = '.gitignore';
@@ -18,6 +17,12 @@ export const REPO_OWNER_USER = 'user';
 export const REPO_OWNER_ORG = 'org';
 export const VERSION_RELEASE = 'release';
 export const VERSION_FEATURE = 'feature';
+
+export const GIT_TOKEN_FILE_MAP = {
+  github: '.github_token',
+  gitee: '.gitee_token',
+  gitlab: '.gitlab_token',
+};
 
 export const INQUIRE_GIT_PLATFORMS = [{
   name: 'Github',

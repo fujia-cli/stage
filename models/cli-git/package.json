@@ -48,6 +48,6 @@
     "inquirer": "^8.2.0",
     "semver": "^7.3.5",
     "simple-git": "^2.48.0",
-    "terminal-link": "^3.0.0"
+    "terminal-link": "^2.1.1"
   }
 }

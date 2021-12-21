@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 10:54:19
- * @LastEditTime: 2021-12-19 16:45:27
+ * @LastEditTime: 2021-12-21 12:04:30
  * @LastEditors: fujia(as default)
  * @Description: To initialize a project
  * @FilePath: /stage/commands/cli-init/src/index.ts
@@ -206,7 +206,6 @@ export class CliInit extends CliCommand {
       name: ${npmName},
       version: ${version},
     }`);
-    console.log();
 
     if (!(await templatePkg.exist())) {
       const spinner = spinnerInstance('template downloading...');

@@ -20,7 +20,7 @@ export const inquireTemplateType = async () => await inquirer.prompt<{
   type: 'list',
   name: 'templateType',
   default: 0,
-  message: 'Please select the type of template',
+  message: 'Please select the template type: ',
   choices: TEMPLATE_TYPES
 });
 
@@ -30,7 +30,7 @@ export const inquireProjectType = async () => await inquirer.prompt<{
   type: 'list',
   name: 'projectType',
   default: 0,
-  message: 'Please select the type of project',
+  message: 'Please select the project type: ',
   choices: PROJECT_TYPES
 });
 
@@ -40,7 +40,7 @@ export const inquireProjectCategory = async () => await inquirer.prompt<{
   type: 'list',
   name: 'projectCategory',
   default: 0,
-  message: 'Please select the category of project',
+  message: 'Please select the application category: ',
   choices: INQUIRE_PROJECTS
 });
 
@@ -49,21 +49,21 @@ export const inquireCleanContinued = async () => await inquirer.prompt({
   type: 'confirm',
   name: 'continued',
   default: false,
-  message: 'Current folder is not empty, whether continue?'
+  message: 'The current folder is not empty, whether to continue?'
 });
 
 export const inquireCleanConfirmed = async () => await inquirer.prompt({
   type: 'confirm',
   name: 'cleanConfirmed',
   default: false,
-  message: 'This operation will cleanup all files in current folder and irrevocable, Please confirm again!'
+  message: 'This operation will clean all files in the current folder and is irrevocable, Please confirm again!'
 });
 
 export const inquireProjectInfo = async (temps: ProjectTemplate[]) => await inquirer.prompt([
   {
     type: 'input',
     name: 'projectName',
-    message: 'Please input name of project',
+    message: 'Please input the project name: ',
     default: '',
     validate: function (name) {
       const done = (this as any).async();
@@ -85,8 +85,8 @@ export const inquireProjectInfo = async (temps: ProjectTemplate[]) => await inqu
   {
     type: 'input',
     name: 'version',
-    message: 'Please input version of project',
-    default: '1.0.0',
+    message: 'Please input the project version: ',
+    default: '0.1.0',
     validate: function (version){
       const done = (this as any).async();
 
@@ -110,7 +110,7 @@ export const inquireProjectInfo = async (temps: ProjectTemplate[]) => await inqu
   {
     type: 'list',
     name: 'projectTemplate',
-    message: 'Please select one template for the project',
+    message: 'Please select one template for the project: ',
     choices: createTemplateChoices(temps),
   }
 ]);
@@ -119,7 +119,7 @@ export const inquireComponentInfo = async (temps: ComponentTemplate[]) => await 
   {
     type: 'input',
     name: 'componentName',
-    message: 'Please input name of component',
+    message: 'Please input the component name: ',
     default: '',
     validate: function (name) {
       const done = (this as any).async();
@@ -138,7 +138,7 @@ export const inquireComponentInfo = async (temps: ComponentTemplate[]) => await 
   {
     type: 'list',
     name: 'componentTemplate',
-    message: 'Please select one template for the component',
+    message: 'Please select one template for the component: ',
     choices: createTemplateChoices(temps),
   }
 ]);

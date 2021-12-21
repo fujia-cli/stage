@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-09 21:31:09
- * @LastEditTime: 2021-12-21 00:09:54
+ * @LastEditTime: 2021-12-21 12:18:29
  * @LastEditors: fujia(as default)
  * @Description: An awesome utilities for stage-cli
  * @FilePath: /stage/utils/cli-utils/src/index.ts
@@ -9,8 +9,9 @@
 import cp, { CommonSpawnOptions, ChildProcess, SpawnOptions } from 'child_process';
 import fs from 'fs';
 import { Spinner } from 'cli-spinner';
+import { NewEnvVariables } from './constants';
 
-export { NewEnvVariables } from './constants';
+export { NewEnvVariables };
 
 export type { StageCliCmd } from './interface';
 
@@ -108,4 +109,9 @@ export const spreadObjToString = (val: any, prefix?: string) => {
   return str;
 };
 
+export const printErrorStackInDebug = (err: any) => {
+  if (process.env[NewEnvVariables.LOG_LEVEL] === 'verbose') {
+    console.error(err);
+  }
+};
 

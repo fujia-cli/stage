@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 16:57:47
- * @LastEditTime: 2021-12-19 17:00:09
+ * @LastEditTime: 2021-12-21 11:59:00
  * @LastEditors: fujia(as default)
  * @Description: A package class for stage cli
  * @FilePath: /stage/models/cli-package/src/index.ts
@@ -33,8 +33,8 @@ class CliPackage implements ICliPackage {
       pkgName: ${options?.name}
       pkgVersion: ${options?.version}
       storeDir: ${options?.storeDir}
+
     `);
-    console.log();
 
     this.localPath = options.localPath;
     this.storeDir = options.storeDir || '';

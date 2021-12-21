@@ -6,12 +6,18 @@ import userHome from '@fujia/user-home';
 import terminalLink from 'terminal-link';
 import semver from 'semver';
 import log from '@fujia/cli-log';
-import { readFile, writeFile, spinnerInstance, NewEnvVariables, spreadObjToString } from '@fujia/cli-utils';
-import { AxiosResponse, AxiosPromise } from 'axios';
+import { AxiosResponse } from 'axios';
+import {
+  readFile,
+  writeFile,
+  spinnerInstance,
+  NewEnvVariables,
+  spreadObjToString,
+} from '@fujia/cli-utils';
 
 import Github from './Github';
+import Gitlab from './gitlab';
 import Gitee from './Gitee';
-import GitServer from './git-server';
 import {
   inquireGitPlatform,
   inquireGitToken,
@@ -24,7 +30,7 @@ import {
   DEFAULT_CLI_HOME,
   GIT_ROOT_DIR,
   GIT_SERVER_FILE,
-  GIT_TOKEN_FILE,
+  GIT_TOKEN_FILE_MAP,
   GIT_OWN_FILE,
   GIT_LOGIN_FILE,
   GIT_IGNORE_FILE,
@@ -36,8 +42,7 @@ import {
   GIT_OWNER_TYPE,
   VERSION_MAP_REG
 } from './constants';
-import { GitPlatformType, BranchType } from './interface';
-import Gitlab from './gitlab';
+import { GitPlatformType, BranchType, GitServer } from './interface';
 
 class GitCore {
   projectName: string;
@@ -47,7 +52,7 @@ class GitCore {
   gitServer: Github | Gitlab| Gitee | undefined;
   homePath: string;
   user: unknown;
-  orgs: AxiosResponse | undefined;
+  orgs: unknown;
   owner: string | undefined;
   loginName: string | undefined;
   repo: string | undefined;
@@ -57,6 +62,7 @@ class GitCore {
   branch: string | undefined;
   remote: string;
   token: string;
+  gitType: GitPlatformType;
   constructor({
     projectName,
     version,
@@ -89,21 +95,18 @@ class GitCore {
     this.branch = undefined;                                            // local develop branch
     this.remote = '';                                                   // the url of repository, such as: git@github.com:${loginName}/${projectName}.git
     this.token = '';
+    this.gitType = 'github';
   }
 
   async prepare() {
-    try {
-      await this.checkHomePath();               // check the main cached directory
-      await this.checkGitServer();              // check the type of user's remote repository
-      await this.checkGitToken();               // check and obtain the token of remote repository
-      await this.getUserAndOrgs();              // obtain the user of repository and organization information
-      await this.checkGitOwner();               // confirm the type of remote repository
-      await this.checkRepoAndCreate();          // check and create remote repository
-      this.checkGitIgnore();                    // check and create the file of .gitignore
-      await this.init();                        // initial local repository
-    } catch (error: any) {
-      log.error('[cli-git]', error?.message);
-    }
+    await this.checkHomePath();               // check the main cached directory
+    await this.checkGitServer();              // check the type of user's remote repository
+    await this.checkGitToken();               // check and obtain the token of remote repository
+    await this.getUserAndOrgs();              // obtain the user of repository and organization information
+    await this.checkGitOwner();               // confirm the type of remote repository
+    await this.checkRepoAndCreate();          // check and create remote repository
+    this.checkGitIgnore();                    // check and create the file of .gitignore
+    await this.init();                        // initial local repository
   }
 
   async init() {
@@ -157,16 +160,12 @@ class GitCore {
   }
 
   async commit() {
-    try {
-      await this.getCorrectVersion();            // generate develop branch
-      await this.checkStash();                   // check stash zone
-      await this.checkConflicted();
-      await this.checkoutBranch(this.branch);     // check out develop branch
-      await this.pullRemoteMainToBranch();       // merge remote main branch and develop branch code
-      await this.pushRemoteRepo(this.branch);     // push develop branch to remote repository
-    } catch (err: any) {
-      log.error('[cli-git]', `commit error: ${err?.message}`);
-    }
+    await this.getCorrectVersion();            // generate develop branch
+    await this.checkStash();                   // check stash zone
+    await this.checkConflicted();
+    await this.checkoutBranch(this.branch);     // check out develop branch
+    await this.pullRemoteMainToBranch();       // merge remote main branch and develop branch code
+    await this.pushRemoteRepo(this.branch);     // push develop branch to remote repository
   }
 
   async pullRemoteMainToBranch() {
@@ -371,12 +370,15 @@ class GitCore {
     let gitServer = readFile(gitServerPath) as GitPlatformType;
 
     if (!gitServer || this.refreshRepo) {
-      gitServer = (await inquireGitPlatform()).gitServer;
+      gitServer = (await inquireGitPlatform()).gitType;
+
+      this.gitType = gitServer;
+
       writeFile(gitServerPath, gitServer);
 
       log.success('[cli-git]', `write git server success: ${gitServer} -> ${gitServerPath}`);
     } else {
-      log.success('[cli-git]', `get gitServer success: ${GitServer}`);
+      log.success('[cli-git]', `get gitServer success: ${gitServerPath}`);
     }
 
     this.gitServer = this.createGitServer(gitServer);
@@ -387,7 +389,8 @@ class GitCore {
   }
 
   async checkGitToken() {
-    const tokenPath = this.createPath(GIT_TOKEN_FILE);
+    const gitTokenFile = GIT_TOKEN_FILE_MAP[this.gitType];
+    const tokenPath = this.createPath(gitTokenFile);
     let token = readFile(tokenPath) as string | null;
 
     if (!token || this.refreshToken) {
@@ -417,11 +420,15 @@ class GitCore {
     if (!this.user) {
       throw new Error('fetch user information failed.')
     }
-    log.verbose('[cli-git]', spreadObjToString(this.user, 'user') || '');
+    log.verbose('[cli-git]', `user:
+      login: ${(this.user as any)?.login}
+    `);
 
-    this.orgs = await this.gitServer?.getOrg((this.user as any).login);
+    const orgRes = await this.gitServer?.getOrg((this.user as any).login);
 
-    log.verbose('[cli-git]', `orgs: ${this.orgs}`);
+    this.orgs = orgRes?.data;
+
+    log.verbose('[cli-git]', `${spreadObjToString((this.orgs as any)[0]?.login, 'orgs')}`);
     log.success('[cli-git]', `${this.gitServer?.type}: obtain user and organizations information successful.`);
   }
 
@@ -500,11 +507,11 @@ class GitCore {
   }
 
   createGitServer(gitType: GitPlatformType) {
-    if (gitType === 'Github') {
+    if (gitType === 'github') {
       return new Github();
-    } else if (gitType === 'Gitee') {
+    } else if (gitType === 'gitee') {
       return new Gitee();
-    } else if (gitType === 'Gitlab') {
+    } else if (gitType === 'gitlab') {
       return new Gitlab();
     }
   }
