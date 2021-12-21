@@ -3,16 +3,14 @@
     "target": "es5",
     "module": "commonjs",
     "lib": [
-      "ES5",
-      "ES6",
       "ESNext"
     ],
     "declaration": true,
     "sourceMap": true,
-    "declarationMap": false,
+    // "declarationMap": true,
     "moduleResolution": "node",
-    "outDir": "./lib",
     "esModuleInterop": true,
+    "emitDeclarationOnly": false,
     // "isolatedModules": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
