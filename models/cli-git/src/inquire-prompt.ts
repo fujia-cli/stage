@@ -13,11 +13,11 @@ import {
 } from './constants';
 
 export const inquireGitPlatform = async () => await inquirer.prompt<{
-  gitServer: GitPlatformType,
+  gitType: GitPlatformType,
 }>({
   type: 'list',
   name: 'gitType',
-  message: 'please select the platform of git',
+  message: 'please select the git platform:',
   default: GITHUB,
   choices: INQUIRE_GIT_PLATFORMS,
 });
@@ -27,7 +27,7 @@ export const inquireGitToken = async () => await inquirer.prompt<{
 }>({
   type: 'password',
   name: 'token',
-  message: 'please copy your token to here',
+  message: 'please copy your token to here:',
   default: '',
 });
 
@@ -36,7 +36,7 @@ export const inquireRepoOwner = async (orgs: any) => await inquirer.prompt<{
 }>({
   type: 'list',
   name: 'owner',
-  message: 'please the type of remote repository',
+  message: 'please select remote repository type:',
   default: REPO_OWNER_USER,
   choices: orgs?.length > 0 ? GIT_OWNER_TYPE : GIT_OWNER_TYPE_ONLY
 });

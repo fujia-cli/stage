@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-11 21:10:04
- * @LastEditTime: 2021-12-20 23:58:43
+ * @LastEditTime: 2021-12-21 12:04:08
  * @LastEditors: fujia(as default)
  * @Description: A package to achieve deploy flows for stage cli.
  * @FilePath: /stage/commands/cli-publish/src/index.ts
@@ -25,12 +25,12 @@ export class PublishCommand extends CliCommand {
 
   init() {
     // NOTE: handle params
-    log.verbose('[cli-publish]', '', this.argv, this.cmd);
+    log.verbose('[cli-publish]', '', this.argv);
 
     this.options = {
-      refreshRepo: this.cmd?.opts().refreshRepo,
-      refreshOwner: this.cmd?.opts().refreshOwner,
-      refreshToken: this.cmd?.opts().refreshToken
+      refreshRepo: this.cmd?.refreshRepo,
+      refreshOwner: this.cmd?.refreshOwner,
+      refreshToken: this.cmd?.refreshToken
     }
   }
 

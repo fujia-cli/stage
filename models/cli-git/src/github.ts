@@ -1,6 +1,10 @@
 import { AxiosPromise } from 'axios';
+import log from '@fujia/cli-log';
+
 import GitServer from './git-server';
 import GithubRequest from './github-request';
+
+import { GithubUserInfo } from './interface';
 
 export default class Github extends GitServer {
   request: GithubRequest | null;
@@ -16,7 +20,7 @@ export default class Github extends GitServer {
   }
 
   getUser() {
-    return this.request?.get('/user');
+    return this.request?.get<GithubUserInfo>('/user');
   }
 
   getOrg() {
@@ -43,6 +47,10 @@ export default class Github extends GitServer {
   }
 
   createOrgRepo(loginName: string, projectName: string) {
+    log.verbose('[cli-git]', `createOrgRepo:
+      loginName: ${loginName}
+      projectName: ${projectName}
+    `)
     return this.request?.post(`/orgs/${loginName}/repos`, {
       name: projectName
     }, {

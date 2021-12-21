@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 15:48:52
- * @LastEditTime: 2021-12-17 23:07:21
+ * @LastEditTime: 2021-12-21 12:04:30
  * @LastEditors: fujia(as default)
  * @Description: An execute package of stage cli
  * @FilePath: /stage/core/cli-exec/src/index.ts
@@ -33,7 +33,6 @@ async function exec(...args: any[]) {
     pkgName: ${pkgName},
     cmdName: ${cmdName}
   `);
-  console.log();
 
   if (!localPath) {
     // NOTE: generate cache path
@@ -85,8 +84,17 @@ async function exec(...args: any[]) {
       * 1, to get one option value, in V8.3.0，you can get like this: cmd.opts().force, however
       *  in v6.x, just run cmd.force
       */
-      const forceOptVal = cmd.opts().force;
-      formatCmd.force = forceOptVal;
+      const {
+        force,
+        refreshRepo,
+        refreshOwner,
+        refreshToken,
+      } = cmd.opts();
+      log.verbose('[cli-exec]', `the commander options: ${cmd.opts()}`);
+      formatCmd.force = force;
+      formatCmd.refreshRepo = refreshRepo;
+      formatCmd.refreshOwner = refreshOwner;
+      formatCmd.refreshToken = refreshToken;
       args[args.length - 1] = formatCmd;
 
       const code = `require('${rootFile}').default.call(null, ${JSON.stringify(args)})`;
