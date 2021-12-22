@@ -96,8 +96,8 @@ export const inquireProjectInfo = async (temps: ProjectTemplate[], initProjectNa
     }
   ];
 
-  if (initProjectName && !isValidProjectName(initProjectName)) {
-    promptList.unshift( {
+  if (!initProjectName || !isValidProjectName(initProjectName)) {
+    promptList.unshift({
       type: 'input',
       name: 'projectName',
       message: 'Please input the project name:',
@@ -118,10 +118,14 @@ export const inquireProjectInfo = async (temps: ProjectTemplate[], initProjectNa
       filter: (name: string) => {
         return name;
       }
-    })
+    });
   }
 
-  return await inquirer.prompt(promptList);
+  return await inquirer.prompt<{
+    projectName?: string;
+    version: string;
+    projectTemplate: string;
+  }>(promptList);
 }
 
 export const inquireComponentInfo = async (temps: ComponentTemplate[]) => await inquirer.prompt([

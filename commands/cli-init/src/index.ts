@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 10:54:19
- * @LastEditTime: 2021-12-22 09:25:03
+ * @LastEditTime: 2021-12-22 22:05:24
  * @LastEditors: fujia(as default)
  * @Description: To initialize a project
  * @FilePath: /stage/commands/cli-init/src/index.ts
@@ -148,8 +148,14 @@ export class CliInit extends CliCommand {
     let componentDetail: ComponentInfo | undefined;
 
     if (this.isProjectType) {
+      log.verbose('[cli-init]', `this.projectName: ${this.projectName}`);
+
       projectDetail = await inquireProjectInfo((this.template as ProjectTemplate[]), this.projectName);
-      const { projectName = this.projectName } = projectDetail || {};
+      let { projectName } = projectDetail || {};
+
+      if (!projectName && this.projectName) {
+        projectName = this.projectName;
+      }
 
       if (projectDetail && projectName) {
         projectDetail.packageName = kebabCase(projectName).replace(/^-/, '');
@@ -159,7 +165,6 @@ export class CliInit extends CliCommand {
 
       log.verbose('[cli-init]', `this.projectInfo:
         packageName?: ${this.projectInfo?.packageName}
-        projectType: ${this.projectInfo?.projectType}
         projectName: ${this.projectInfo?.projectName}
         projectVersion: ${this.projectInfo?.version}
         projectTemplate: ${this.projectInfo?.projectTemplate}

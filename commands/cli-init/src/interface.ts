@@ -44,8 +44,7 @@ export interface ProjectTemplate extends ComponentTemplate {
 
 export interface ProjectInfo {
   packageName?: string;
-  projectType: Exclude<ProjectType, 'component'>;
-  projectName: ProjectTypeList;
+  projectName?: string;
   version: string;
   projectTemplate: string;
 }
