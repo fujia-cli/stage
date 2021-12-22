@@ -1,7 +1,7 @@
 export const CMD_MAP_PACKAGE = {
   init: '@fujia/cli-init',
   publish: '@fujia/cli-publish',
-  package: '@fujia/cli-package',
+  release: '@fujia/cli-release',
   deploy: '@fujia/cli-deploy',
   clean: '@fujia/cli-clean',
 };

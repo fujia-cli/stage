@@ -71,9 +71,9 @@ function registerCommand() {
 
   // NOTE: register package command
   program
-    .command('package')
-    .description('publish a package to npm')
-    .option('-a, --access', 'config of publish, two optional values: restricted and public', 'public')
+    .command('release')
+    .description('release a package to npm')
+    .option('-a, --access <publishAccess>', 'set publish access is true', 'public')
     .action(exec);
 
   // NOTE: register deploy command
@@ -174,6 +174,7 @@ async function checkUserHome() {
   if(!curUserHome) throw new Error(red('Doesn\'t exist home directory for current login user.'));
 
   homeDir = curUserHome;
+  process.env[NewEnvVariables.USER_HOME] = curUserHome;
 }
 
 function checkPkgVersion() {

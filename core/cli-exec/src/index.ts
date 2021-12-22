@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 15:48:52
- * @LastEditTime: 2021-12-22 09:33:01
+ * @LastEditTime: 2021-12-22 17:04:23
  * @LastEditors: fujia(as default)
  * @Description: An execute package of stage cli
  * @FilePath: /stage/core/cli-exec/src/index.ts
@@ -108,7 +108,7 @@ async function exec(...args: any[]) {
       });
 
       child.on('exit', (err) => {
-        log.info('[cli-exec]', `exit code: ${err}`);
+        log.info('[cli-exec]', 'process exited!');
         process.exit(err!)
       })
     } catch (err: any) {
