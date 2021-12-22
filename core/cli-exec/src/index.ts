@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 15:48:52
- * @LastEditTime: 2021-12-21 12:04:30
+ * @LastEditTime: 2021-12-22 09:33:01
  * @LastEditors: fujia(as default)
  * @Description: An execute package of stage cli
  * @FilePath: /stage/core/cli-exec/src/index.ts
@@ -11,11 +11,9 @@ import CliPackage from '@fujia/cli-package';
 import log from '@fujia/cli-log';
 import { spawn, NewEnvVariables } from '@fujia/cli-utils';
 
-import { CMD_MAP_PACKAGE } from './constants';
+import { CMD_MAP_PACKAGE, CACHE_DIR } from './constants';
 
 export type CmdList = keyof typeof CMD_MAP_PACKAGE;
-
-const CACHE_DIR = 'caches';
 
 async function exec(...args: any[]) {
   let localPath = process.env[NewEnvVariables.STAGE_CLI_LOCAL];

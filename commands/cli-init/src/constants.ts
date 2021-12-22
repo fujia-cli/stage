@@ -317,3 +317,5 @@ export const DEFAULT_COMPONENT_TEMPLATES = [
     npmName: '@fujia/wechat-component-template',
   },
 ];
+
+export const STAGE_CLI_TEMPLATES_DIR = 'templates';

@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 10:54:19
- * @LastEditTime: 2021-12-21 19:48:04
+ * @LastEditTime: 2021-12-22 09:25:03
  * @LastEditors: fujia(as default)
  * @Description: To initialize a project
  * @FilePath: /stage/commands/cli-init/src/index.ts
@@ -33,7 +33,7 @@ import {
 
 import { ComponentTemplate, ITemplate, ProjectInfo, ProjectTemplate, ComponentInfo } from './interface';
 import { verifyCmd, isDirEmpty } from './utils';
-import { EJS_IGNORE_FILES } from './constants';
+import { EJS_IGNORE_FILES, STAGE_CLI_TEMPLATES_DIR } from './constants';
 
 export class CliInit extends CliCommand {
   projectName: string;
@@ -193,7 +193,7 @@ export class CliInit extends CliCommand {
 
     const templateInfo = this.template.find(t => t.npmName === selectTemplate);
     const homeDir = await userHome();
-    const localPath = path.resolve(homeDir!, '.stage-cli', 'template');
+    const localPath = path.resolve(homeDir!, '.stage-cli', STAGE_CLI_TEMPLATES_DIR);
     const storeDir = path.resolve(localPath, 'node_modules');
     const { npmName, version } = templateInfo!;
 

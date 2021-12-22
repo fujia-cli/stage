@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-11 21:10:04
- * @LastEditTime: 2021-12-21 12:04:08
+ * @LastEditTime: 2021-12-21 23:26:00
  * @LastEditors: fujia(as default)
  * @Description: A package to achieve deploy flows for stage cli.
  * @FilePath: /stage/commands/cli-publish/src/index.ts
@@ -89,7 +89,6 @@ export class PublishCommand extends CliCommand {
     };
   }
 }
-
 
 function publishCmd (args: any[]) {
   return new PublishCommand(args);

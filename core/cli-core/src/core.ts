@@ -69,6 +69,26 @@ function registerCommand() {
     .option('--refreshOwner', 'force to update the type of remote repository')
     .action(exec);
 
+  // NOTE: register package command
+  program
+    .command('package')
+    .description('publish a package to npm')
+    .option('-a, --access', 'config of publish, two optional values: restricted and public', 'public')
+    .action(exec);
+
+  // NOTE: register deploy command
+  program
+    .command('deploy')
+    .description('deploy an application to cloud server manually')
+    .action(exec);
+
+  // NOTE: register clean command
+  program
+    .command('clean')
+    .description('clean stage cli caches')
+    .option('-c, --cacheDir', 'specify the cache directory', '')
+    .action(exec);
+
   // NOTE: enable debug model
   program.on('option:debug', function (this: StageCliCmd) {
     if (this.opts().debug) {

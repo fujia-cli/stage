@@ -4,27 +4,27 @@ import log from '@fujia/cli-log';
 import fse from 'fs-extra';
 import { pathExistSync } from '@fujia/check-path';
 
-export class DeployCommand extends CliCommand {
+export class ReleaseCommand extends CliCommand {
   constructor(args: any[]) {
     super(args);
   }
 
   init() {
-    log.verbose('[cli-clean]', `init`);
+    log.verbose('[cli-release]', `init`);
   }
 
   async exec() {
     try {
 
     } catch (err: any) {
-      log.error('[cli-deploy]', `err?.message`);
+      log.error('[cli-release]', `err?.message`);
       throw err;
     }
   }
 }
 
-function deployCmd (args: any[]) {
-  return new DeployCommand(args);
+function releaseCmd (args: any[]) {
+  return new ReleaseCommand(args);
 }
 
-export default deployCmd;
+export default releaseCmd;
