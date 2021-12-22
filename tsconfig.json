@@ -9,6 +9,7 @@
     "sourceMap": true,
     // "declarationMap": true,
     "moduleResolution": "node",
+    "outDir": "./lib",
     "esModuleInterop": true,
     "emitDeclarationOnly": false,
     // "isolatedModules": true,

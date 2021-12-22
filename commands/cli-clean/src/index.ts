@@ -13,7 +13,7 @@ export class CleanCommand extends CliCommand {
   }
 
   init() {
-    log.verbose('[cli-clean]', `init: ${this.argv.join(', ')}`);
+    log.verbose('[cli-clean]', `cache directory: ${this.argv[0]}`);
     this.cacheDir = this.argv[0] || '';
   }
 
@@ -26,13 +26,16 @@ export class CleanCommand extends CliCommand {
       const cachesDir = path.resolve(stageCliHome, 'caches');
       const templateCacheDir = path.resolve(stageCliHome, 'templates');
 
-      if (this.cacheDir === 'caches' && pathExistSync(cachesDir)) {
-        await fse.emptyDir(cachesDir);
-      } else if (this.cacheDir === 'templates' && pathExistSync(templateCacheDir)) {
-        await fse.emptyDir(templateCacheDir);
-      } else {
+      if (!this.cacheDir) {
+        log.info('[cli-clean]', `starting to clean cached directories: ${cachesDir}, ${templateCacheDir}`);
+
         pathExistSync(cachesDir) && (await fse.emptyDir(cachesDir));
         pathExistSync(templateCacheDir) && (await fse.emptyDir(templateCacheDir));
+      } else {
+        const specificDir = path.resolve(stageCliHome, this.cacheDir);
+        log.info('[cli-clean]', `starting to clean the directory: ${specificDir}`);
+
+        pathExistSync(specificDir) && (await fse.emptyDir(specificDir));
       }
     } catch (err: any) {
       log.error('[cli-clean]', `err?.message`);

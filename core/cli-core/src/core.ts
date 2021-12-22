@@ -84,9 +84,8 @@ function registerCommand() {
 
   // NOTE: register clean command
   program
-    .command('clean')
+    .command('clean [cacheFileName]')
     .description('clean stage cli caches')
-    .option('-c, --cacheDir', 'specify the cache directory', '')
     .action(exec);
 
   // NOTE: enable debug model
