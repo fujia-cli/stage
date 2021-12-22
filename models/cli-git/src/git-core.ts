@@ -6,7 +6,6 @@ import userHome from '@fujia/user-home';
 import terminalLink from 'terminal-link';
 import semver from 'semver';
 import log from '@fujia/cli-log';
-import { AxiosResponse } from 'axios';
 import {
   readFile,
   writeFile,

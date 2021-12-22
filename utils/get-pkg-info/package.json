@@ -26,15 +26,18 @@
     "url": "https://github.com/fujia-cli/stage/issues"
   },
   "devDependencies": {
+    "@types/fs-extra": "^9.0.13",
     "rimraf": "^3.0.2"
   },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
+    "@fujia/check-path": "^1.1.0",
     "@types/semver": "^7.3.9",
     "@types/url-join": "^4.0.1",
     "axios": "^0.24.0",
+    "fs-extra": "^10.0.0",
     "semver": "^7.3.5",
     "url-join": "^4.0.1"
   }

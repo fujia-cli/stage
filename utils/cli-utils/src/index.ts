@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-09 21:31:09
- * @LastEditTime: 2021-12-21 19:06:03
+ * @LastEditTime: 2021-12-22 16:20:29
  * @LastEditors: fujia(as default)
  * @Description: An awesome utilities for stage-cli
  * @FilePath: /stage/utils/cli-utils/src/index.ts
@@ -130,5 +130,24 @@ export const getCurDirName = (filePath?: string) => {
   }
 
   return dirName;
+};
+
+export const readDotFileToObj = (filePath: string) => {
+  if (!fs.existsSync(filePath)) throw new Error(`[cli-utils]/readDotFileToObj: the path of ${filePath} is not exist`);
+
+  const dotConfig: Record<string, string> = {};
+  const fileToStr = readFile(filePath) as string;
+
+  const configList = fileToStr.split('\n')
+    .filter(_ => _)
+    .map(c => c.split('='));
+
+  configList.forEach(c => {
+    if (c[0] && c[1]) {
+      dotConfig[c[0]] = c[1]
+    }
+  });
+
+  return dotConfig;
 };
 

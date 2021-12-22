@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-03 19:45:46
- * @LastEditTime: 2021-12-19 15:35:33
+ * @LastEditTime: 2021-12-22 12:59:10
  * @LastEditors: fujia(as default)
  * @Description: Obtain the package info via npm's api.
  * @FilePath: /stage/utils/get-pkg-info/src/index.ts
@@ -10,6 +10,9 @@
 import axios from 'axios';
 import urlJoin from 'url-join';
 import semver from 'semver';
+import path from 'path';
+import fse from 'fs-extra';
+import { pathExistSync } from '@fujia/check-path';
 
 // simple to define the shape of package info
 export interface PkgInfo {
@@ -92,3 +95,24 @@ export async function getLatestVersion(
 export function getDefaultRegistry(origin = false) {
   return origin ? 'https://registry.npmmirror.com' : 'https://registry.npmjs.org';
 }
+
+export const getInfoFromPkgJson = (
+  rootPath?: string,
+) => {
+  const cwdPath = rootPath || process.cwd();
+  const pkgJsonPath = path.resolve(cwdPath, 'package.json');
+
+  if (!pathExistSync(pkgJsonPath)) {
+    throw new Error('The file of package.json is not exist!');
+  }
+
+  const pkgInfo = fse.readJSONSync(pkgJsonPath);
+
+  const { name, version, scripts } = pkgInfo;
+
+  if (!name || !version || !scripts) {
+    throw new Error('The package.json is invalid, which should include these fields: name, version, scripts.');
+  }
+
+  return pkgInfo;
+};
