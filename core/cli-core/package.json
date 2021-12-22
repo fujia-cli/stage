@@ -1,6 +1,6 @@
 {
   "name": "@fujia/cli-core",
-  "version": "1.1.4-alpha.0",
+  "version": "1.1.5-alpha.0",
   "description": "cli core",
   "author": "fujia <fujia.site@outlook.com>",
   "homepage": "https://github.com/fujia-cli/stage/tree/main/packages/core#readme",
@@ -49,8 +49,8 @@
     "semver": "^7.3.5"
   },
   "devDependencies": {
-    "rimraf": "^3.0.2",
     "@types/root-check": "^1.0.0",
-    "@types/semver": "^7.3.9"
+    "@types/semver": "^7.3.9",
+    "rimraf": "^3.0.2"
   }
 }
