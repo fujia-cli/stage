@@ -1,22 +1,22 @@
-import fs from 'fs';
-import path from 'path';
-import simpleGit, { SimpleGit, TaskOptions } from 'simple-git';
-import fse from 'fs-extra';
-import userHome from '@fujia/user-home';
-import terminalLink from 'terminal-link';
-import semver from 'semver';
-import log from '@fujia/cli-log';
+import fs from "fs";
+import path from "path";
+import simpleGit, { SimpleGit, TaskOptions } from "simple-git";
+import fse from "fs-extra";
+import userHome from "@fujia/user-home";
+import terminalLink from "terminal-link";
+import semver from "semver";
+import log from "@fujia/cli-log";
 import {
   readFile,
   writeFile,
   spinnerInstance,
   NewEnvVariables,
   spreadObjToString,
-} from '@fujia/cli-utils';
+} from "@fujia/cli-utils";
 
-import Github from './Github';
-import Gitlab from './gitlab';
-import Gitee from './Gitee';
+import Github from "./Github";
+import Gitlab from "./gitlab";
+import Gitee from "./Gitee";
 import {
   inquireGitPlatform,
   inquireGitToken,
@@ -24,7 +24,7 @@ import {
   inquireOrg,
   inquireCommitMessage,
   inquireUpgradeVersionType,
-} from './inquire-prompt';
+} from "./inquire-prompt";
 import {
   DEFAULT_CLI_HOME,
   GIT_ROOT_DIR,
@@ -39,16 +39,16 @@ import {
   VERSION_RELEASE,
   VERSION_FEATURE,
   GIT_OWNER_TYPE,
-  VERSION_MAP_REG
-} from './constants';
-import { GitPlatformType, BranchType, GitServer } from './interface';
+  VERSION_MAP_REG,
+} from "./constants";
+import { GitPlatformType, BranchType, GitServer } from "./interface";
 
 class GitCore {
   projectName: string;
   version: string;
   sourceDir: string;
   git: SimpleGit;
-  gitServer: Github | Gitlab| Gitee | undefined;
+  gitServer: Github | Gitlab | Gitee | undefined;
   homePath: string;
   user: unknown;
   orgs: unknown;
@@ -62,135 +62,134 @@ class GitCore {
   remote: string;
   token: string;
   gitType: GitPlatformType;
-  constructor({
-    projectName,
-    version,
-    sourceDir
-  }: {
-    projectName: string,
-    version: string,
-    sourceDir: string
-  }, {
-    refreshRepo = false,
-    refreshToken = false,
-    refreshOwner = false,
-  }) {
-    this.projectName = projectName;                                     // project name
-    this.version = version;                                             // version of project
-    this.sourceDir = sourceDir;                                         // directory of source code
-    this.git = simpleGit({                                              // instance of SimpleGit
+  constructor(
+    {
+      projectName,
+      version,
+      sourceDir,
+    }: {
+      projectName: string;
+      version: string;
+      sourceDir: string;
+    },
+    { refreshRepo = false, refreshToken = false, refreshOwner = false }
+  ) {
+    this.projectName = projectName; // project name
+    this.version = version; // version of project
+    this.sourceDir = sourceDir; // directory of source code
+    this.git = simpleGit({
+      // instance of SimpleGit
       baseDir: this.sourceDir,
     });
-    this.gitServer = undefined;                                         // instance of GitServer
-    this.homePath = process.env[NewEnvVariables.STAGE_CLI_HOME] || '';  // directory of local caches
-    this.user = undefined;                                              // user information
-    this.orgs = undefined;                                              // the list of organizations that the user own
-    this.owner = undefined;                                             // the type of remote repository
-    this.loginName = undefined;                                         // the login name of remote repository
-    this.repo = undefined;                                              // the information of remote repository
-    this.refreshRepo = refreshRepo;                                     // force to update the remote Git repository
-    this.refreshToken = refreshToken;                                   // force to update the token of remote repository
-    this.refreshOwner = refreshOwner;                                   // force to update the type of remote repository
-    this.branch = undefined;                                            // local develop branch
-    this.remote = '';                                                   // the url of repository, such as: git@github.com:${loginName}/${projectName}.git
-    this.token = '';
-    this.gitType = 'github';
+    this.gitServer = undefined; // instance of GitServer
+    this.homePath = process.env[NewEnvVariables.STAGE_CLI_HOME] || ""; // directory of local caches
+    this.user = undefined; // user information
+    this.orgs = undefined; // the list of organizations that the user own
+    this.owner = undefined; // the type of remote repository
+    this.loginName = undefined; // the login name of remote repository
+    this.repo = undefined; // the information of remote repository
+    this.refreshRepo = refreshRepo; // force to update the remote Git repository
+    this.refreshToken = refreshToken; // force to update the token of remote repository
+    this.refreshOwner = refreshOwner; // force to update the type of remote repository
+    this.branch = undefined; // local develop branch
+    this.remote = ""; // the url of repository, such as: git@github.com:${loginName}/${projectName}.git
+    this.token = "";
+    this.gitType = "github";
   }
 
   async prepare() {
-    await this.checkHomePath();               // check the main cached directory
-    await this.checkGitServer();              // check the type of user's remote repository
-    await this.checkGitToken();               // check and obtain the token of remote repository
-    await this.getUserAndOrgs();              // obtain the user of repository and organization information
-    await this.checkGitOwner();               // confirm the type of remote repository
-    await this.checkRepoAndCreate();          // check and create remote repository
-    this.checkGitIgnore();                    // check and create the file of .gitignore
-    await this.init();                        // initial local repository
+    await this.checkHomePath(); // check the main cached directory
+    await this.checkGitServer(); // check the type of user's remote repository
+    await this.checkGitToken(); // check and obtain the token of remote repository
+    await this.getUserAndOrgs(); // obtain the user of repository and organization information
+    await this.checkGitOwner(); // confirm the type of remote repository
+    await this.checkRepoAndCreate(); // check and create remote repository
+    this.checkGitIgnore(); // check and create the file of .gitignore
+    await this.init(); // initial local repository
   }
 
   async init() {
     if (this.getRemote()) return;
 
-    await this.initAndAddRemote();               // execute "git remote add origin ...
+    await this.initAndAddRemote(); // execute "git remote add origin ...
 
     await this.initCommit();
   }
 
   async initAndAddRemote() {
-    log.info('[cli-git]', 'execute git initializing...');
+    log.info("", "execute git initializing...");
     await this.git.init();
-    log.info('[cli-git]', 'execute "git remote add ..."');
+    log.info("", 'execute "git remote add ..."');
 
     const remotes = await this.git.getRemotes();
 
-    log.verbose('[cli-git]', `git remotes: ${remotes.join(', ')}`);
+    log.verbose("[cli-git]", `git remotes: ${remotes.join(", ")}`);
 
-    if (!remotes.find(i => i.name === 'origin')) {
-      await this.git.addRemote('origin', this.remote);
+    if (!remotes.find((i) => i.name === "origin")) {
+      await this.git.addRemote("origin", this.remote);
     }
   }
 
   async initCommit() {
-    await this.checkConflicted();               // check if have code conflicts
+    await this.checkConflicted(); // check if have code conflicts
     await this.checkNotCommitted();
 
     if (await this.checkRemoteMain()) {
-      await this.pullRemoteRepo('main', {
-        '--allow-unrelated-histories': null
-      })
+      await this.pullRemoteRepo("main", {
+        "--allow-unrelated-histories": null,
+      });
     } else {
-      await this.pushRemoteRepo('main');
+      await this.pushRemoteRepo("main");
     }
   }
 
   async pullRemoteRepo(branchName: string, options?: TaskOptions) {
-    log.info('[cli-git]', `synchronizing remote ${branchName} branch code`);
+    log.info("", `synchronizing remote ${branchName} branch code`);
 
-    await this.git.pull('origin', branchName, options)
-      .catch((err: any) => {
-        log.error('[cli-git]', err?.message);
-      });
+    await this.git.pull("origin", branchName, options).catch((err: any) => {
+      log.error("", err?.message);
+    });
   }
 
   async pushRemoteRepo(branchName?: string) {
-    log.info('[cli-git]', `push code to ${branchName} branch`);
-    await this.git.push('origin', branchName);
-    log.success('[cli-git]', 'push code successful');
+    log.info("", `push code to ${branchName} branch`);
+    await this.git.push("origin", branchName);
+    log.success("", "push code successful");
   }
 
   async commit() {
-    await this.getCorrectVersion();            // generate develop branch
-    await this.checkStash();                   // check stash zone
+    await this.getCorrectVersion(); // generate develop branch
+    await this.checkStash(); // check stash zone
     await this.checkConflicted();
-    await this.checkoutBranch(this.branch);     // check out develop branch
-    await this.pullRemoteMainToBranch();       // merge remote main branch and develop branch code
-    await this.pushRemoteRepo(this.branch);     // push develop branch to remote repository
+    await this.checkoutBranch(this.branch); // check out develop branch
+    await this.pullRemoteMainToBranch(); // merge remote main branch and develop branch code
+    await this.pushRemoteRepo(this.branch); // push develop branch to remote repository
   }
 
   async pullRemoteMainToBranch() {
-    log.info('[cli-git]', `merge [main] branch to [${this.branch}] branch`);
-    await this.pullRemoteRepo('main');
-    log.success('[cli-git]', 'merge remote [main] branch code successful');
+    log.info("", `merge [main] branch to [${this.branch}] branch`);
+    await this.pullRemoteRepo("main");
+    log.success("", "merge remote [main] branch code successful");
 
     await this.checkRemoteMain();
-    log.info('[cli-git]', 'check remote develop branch');
+    log.info("", "check remote develop branch");
 
-    const remoteBranchList = await this.getRemoteBranchList('feature');
+    const remoteBranchList = await this.getRemoteBranchList("feature");
 
     if (remoteBranchList.includes(this.version)) {
-      log.info('[cli-git]', 'merge remote develop branch to local develop branch');
+      log.info("", "merge remote develop branch to local develop branch");
       await this.pullRemoteRepo(this.branch!);
 
-      log.success('[cli-git]', `merge remote [${this.branch}] branch code successful`);
+      log.success("", `merge remote [${this.branch}] branch code successful`);
 
       await this.checkConflicted();
     } else {
-      log.info('[cli-git]', `the remote ${this.branch} branch is not exist`);
+      log.info("", `the remote ${this.branch} branch is not exist`);
     }
   }
 
   async checkoutBranch(branch: string | undefined) {
-    if (!branch) throw new Error(`the branch is not exist.`)
+    if (!branch) throw new Error(`the branch is not exist.`);
     const localBranchList = await this.git.branchLocal();
 
     if (localBranchList.all.includes(branch)) {
@@ -201,25 +200,25 @@ class GitCore {
   }
 
   async checkStash() {
-    log.info('[cli-git]', 'check stash records');
+    log.info("", "check stash records");
 
     const stashList = await this.git.stashList();
 
     if (stashList.all.length > 0) {
-      await this.git.stash(['pop']);
-      log.success('[cli-git]', 'stash pop successful');
+      await this.git.stash(["pop"]);
+      log.success("", "stash pop successful");
     }
   }
 
   async getCorrectVersion() {
     /**
-    * NOTE: steps
-    *
-    * 1, fetch remote branches
-    * 2, generate local develop branch
-    * 3, synchronizing version to package.json
-    */
-    log.info('[cli-git]', 'fetch code branches');
+     * NOTE: steps
+     *
+     * 1, fetch remote branches
+     * 2, generate local develop branch
+     * 3, synchronizing version to package.json
+     */
+    log.info("", "fetch code branches");
 
     const remoteBranchList = await this.getRemoteBranchList(VERSION_RELEASE);
 
@@ -228,23 +227,29 @@ class GitCore {
       releaseVersion = remoteBranchList[0];
     }
 
-    log.verbose('[cli-git]', `The latest remote version: ${releaseVersion}`);
+    log.verbose("[cli-git]", `The latest remote version: ${releaseVersion}`);
 
     const featureVersion = this.version;
     if (!releaseVersion) {
       this.branch = `${VERSION_FEATURE}/${featureVersion}`;
-    } else if(semver.gt(this.version, releaseVersion)) {
-      log.info('[cli-git]', `current version greater than remote latest version:
+    } else if (semver.gt(this.version, releaseVersion)) {
+      log.info(
+        "",
+        `current version greater than remote latest version:
         feature: ${featureVersion}
         release: ${releaseVersion}
-      `);
+      `
+      );
 
       this.branch = `${VERSION_FEATURE}/${featureVersion}`;
     } else {
-      log.info('[cli-git]', `current version less than remote latest version:
+      log.info(
+        "",
+        `current version less than remote latest version:
         feature: ${featureVersion}
         release: ${releaseVersion}
-      `);
+      `
+      );
 
       const upgradeType = (await inquireUpgradeVersionType(releaseVersion)).upgradeType;
 
@@ -252,18 +257,19 @@ class GitCore {
       this.branch = `${VERSION_FEATURE}/${incVersion}`;
       this.version = incVersion!;
 
-      log.verbose('[cli-git]', `the branch: ${this.branch}`);
+      log.verbose("[cli-git]", `the branch: ${this.branch}`);
 
       this.syncVersionToPackageJson();
     }
   }
 
   async getRemoteBranchList(type: BranchType) {
-    const remoteList = await this.git.listRemote(['--refs']);
+    const remoteList = await this.git.listRemote(["--refs"]);
     const versionReg = VERSION_MAP_REG[type];
 
-    return remoteList.split('\n')
-      .map(remote => {
+    return remoteList
+      .split("\n")
+      .map((remote) => {
         const match = versionReg.exec(remote);
 
         versionReg.lastIndex = 0;
@@ -272,7 +278,7 @@ class GitCore {
           return match[1];
         }
       })
-      .filter(_ => _)
+      .filter((_) => _)
       .sort((a, b) => {
         if (semver.lte(b as string, a as string)) {
           if (a === b) return 0;
@@ -285,51 +291,50 @@ class GitCore {
   }
 
   async checkRemoteMain() {
-    const remoteList = await this.git.listRemote(['--refs']);
+    const remoteList = await this.git.listRemote(["--refs"]);
 
-    return remoteList.indexOf('refs/heads/main') >= 0 || remoteList.indexOf('refs/heads/master') >= 0;
+    return (
+      remoteList.indexOf("refs/heads/main") >= 0 || remoteList.indexOf("refs/heads/master") >= 0
+    );
   }
 
   async checkNotCommitted() {
     const status = await this.git.status();
-    const {
-      not_added,
-      created,
-      deleted,
-      modified,
-      renamed,
-    } = status;
-    const isNotEmptyStatus = not_added.length > 0
-      || created.length > 0
-      || deleted.length > 0
-      || modified.length > 0
-      || renamed.length > 0;
+    const { not_added, created, deleted, modified, renamed } = status;
+    const isNotEmptyStatus =
+      not_added.length > 0 ||
+      created.length > 0 ||
+      deleted.length > 0 ||
+      modified.length > 0 ||
+      renamed.length > 0;
 
     if (isNotEmptyStatus) {
       await this.git.add(status.not_added);
       await this.git.add(status.created);
       await this.git.add(status.deleted);
       await this.git.add(status.modified);
-      await this.git.add(status.renamed.map(f => f.to));
+      await this.git.add(status.renamed.map((f) => f.to));
 
       const message = (await inquireCommitMessage()).message;
 
       if (message) {
         await this.git.commit(message);
-        log.success('[cli-git]', 'commit successful');
+        log.success("", "commit successful");
       }
     }
   }
 
   async checkConflicted() {
-    log.info('[cli-git]', 'check whether have conflicts for code.')
+    log.info("", "check whether have conflicts for code.");
     const status = await this.git.status();
 
     if (status.conflicted.length > 0) {
-      throw new Error('There are conflicts in current code. please manually handle the merge and try again.')
+      throw new Error(
+        "There are conflicts in current code. please manually handle the merge and try again."
+      );
     }
 
-    log.success('[cli-git]', 'code conflict check passed.')
+    log.success("", "code conflict check passed.");
   }
 
   async checkRepoAndCreate() {
@@ -337,7 +342,7 @@ class GitCore {
     let repo = res?.data;
 
     if (!repo) {
-      const spinner = spinnerInstance('Starting to create remote repository...');
+      const spinner = spinnerInstance("Starting to create remote repository...");
       try {
         if (this.owner === REPO_OWNER_USER) {
           const result = await this.gitServer?.createRepo(this.projectName);
@@ -346,21 +351,21 @@ class GitCore {
           this.gitServer?.createOrgRepo(this.loginName!, this.projectName);
         }
       } catch (err: any) {
-        log.error('[cli-git]', err?.message);
+        log.error("", err?.message);
       } finally {
         spinner.stop(true);
       }
 
       if (repo) {
-        log.success('[cli-git]', 'created the remote repository successful.')
+        log.success("", "created the remote repository successful.");
       } else {
-        throw new Error('Oops! created the remote repository failed.')
+        throw new Error("Oops! created the remote repository failed.");
       }
     } else {
-      log.success('[cli-git]', 'get the information of remote repository successful.');
+      log.success("", "get the information of remote repository successful.");
     }
 
-    log.verbose('[cli-git]', `the repo: ${repo}`);
+    log.verbose("[cli-git]", `the repo: ${repo}`);
     this.repo = repo;
   }
 
@@ -375,15 +380,15 @@ class GitCore {
 
       writeFile(gitServerPath, gitServer);
 
-      log.success('[cli-git]', `write git server success: ${gitServer} -> ${gitServerPath}`);
+      log.success("", `write git server success: ${gitServer} -> ${gitServerPath}`);
     } else {
-      log.success('[cli-git]', `get gitServer success: ${gitServerPath}`);
+      log.success("", `get gitServer success: ${gitServerPath}`);
     }
 
     this.gitServer = this.createGitServer(gitServer);
 
     if (!this.gitServer) {
-      throw new Error('initial GitServer failed');
+      throw new Error("initial GitServer failed");
     }
   }
 
@@ -393,18 +398,21 @@ class GitCore {
     let token = readFile(tokenPath) as string | null;
 
     if (!token || this.refreshToken) {
-      const tokenUrl = terminalLink('Personal access tokens', this.gitServer?.getTokenUrl()!)
-      log.warn('[cli-git]', `
+      const tokenUrl = terminalLink("Personal access tokens", this.gitServer?.getTokenUrl()!);
+      log.warn(
+        "",
+        `
         The token of ${this.gitServer?.type} have not generated, Please make sure that exist.
         seeing here: ${tokenUrl}
-      `);
+      `
+      );
       console.log();
 
       token = (await inquireGitToken()).token;
       writeFile(tokenPath, token);
-      log.success('[cli-git]', 'write token successful');
+      log.success("", "write token successful");
     } else {
-      log.success('[cli-git]', `get token successful from ${tokenPath}`);
+      log.success("", `get token successful from ${tokenPath}`);
     }
 
     this.token = token;
@@ -417,18 +425,24 @@ class GitCore {
     this.user = res?.data;
 
     if (!this.user) {
-      throw new Error('fetch user information failed.')
+      throw new Error("fetch user information failed.");
     }
-    log.verbose('[cli-git]', `user:
+    log.verbose(
+      "[cli-git]",
+      `user:
       login: ${(this.user as any)?.login}
-    `);
+    `
+    );
 
     const orgRes = await this.gitServer?.getOrg((this.user as any).login);
 
     this.orgs = orgRes?.data;
 
-    log.verbose('[cli-git]', `${spreadObjToString((this.orgs as any)[0]?.login, 'orgs')}`);
-    log.success('[cli-git]', `${this.gitServer?.type}: obtain user and organizations information successful.`);
+    log.verbose("[cli-git]", `${spreadObjToString((this.orgs as any)[0]?.login, "orgs")}`);
+    log.success(
+      "",
+      `${this.gitServer?.type}: obtain user and organizations information successful.`
+    );
   }
 
   async checkGitOwner() {
@@ -442,18 +456,18 @@ class GitCore {
       owner = (await inquireRepoOwner(this.orgs)).owner;
 
       if (owner === REPO_OWNER_USER) {
-        login = (this.user as any).login
+        login = (this.user as any).login;
       } else {
         login = (await inquireOrg(this.orgs)).login;
 
         writeFile(ownerPath, owner);
         writeFile(loginPath, login);
-        log.success('[cli-git]', `write the ${owner} in ${ownerPath} successful.`);
-        log.success('[cli-git]', `write the ${login} in ${loginPath} successful.`);
+        log.success("", `write the ${owner} in ${ownerPath} successful.`);
+        log.success("", `write the ${login} in ${loginPath} successful.`);
       }
     } else {
-      log.success('[cli-git]', `read the ${owner} successful.`);
-      log.success('[cli-git]', `read the ${login} successful.`);
+      log.success("", `read the ${owner} successful.`);
+      log.success("", `read the ${login} successful.`);
     }
 
     this.owner = owner;
@@ -466,11 +480,11 @@ class GitCore {
       this.homePath = path.resolve(homeDir!, DEFAULT_CLI_HOME);
     }
 
-    log.verbose('[cli-git]', `homePath: ${this.homePath}`);
+    log.verbose("[cli-git]", `homePath: ${this.homePath}`);
 
     fse.ensureDirSync(this.homePath);
     if (!fs.existsSync(this.homePath)) {
-      throw new Error('Oops! Gets user home directory failed.')
+      throw new Error("Oops! Gets user home directory failed.");
     }
   }
 
@@ -491,7 +505,7 @@ class GitCore {
     }
 
     if (fs.existsSync(gitPath)) {
-      log.success('[cli-git]', 'Git finished initialization');
+      log.success("", "Git finished initialization");
       return true;
     }
   }
@@ -501,16 +515,16 @@ class GitCore {
 
     if (!fs.existsSync(gitIgnore)) {
       writeFile(gitIgnore, IGNORE_FILE_CONTENT);
-      log.success('[cli-git]', `write the git ignore content in ${gitIgnore} successful.`);
+      log.success("", `write the git ignore content in ${gitIgnore} successful.`);
     }
   }
 
   createGitServer(gitType: GitPlatformType) {
-    if (gitType === 'github') {
+    if (gitType === "github") {
       return new Github();
-    } else if (gitType === 'gitee') {
+    } else if (gitType === "gitee") {
       return new Gitee();
-    } else if (gitType === 'gitlab') {
+    } else if (gitType === "gitlab") {
       return new Gitlab();
     }
   }

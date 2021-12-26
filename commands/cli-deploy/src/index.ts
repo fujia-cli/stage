@@ -23,14 +23,12 @@ export class DeployCommand extends CliCommand {
     this.branch = "main";
   }
 
-  init() {
-    log.verbose("[cli-deploy]", `init`);
-  }
+  init() {}
 
   async exec() {
     try {
     } catch (err: any) {
-      log.error("[cli-deploy]", `err?.message`);
+      log.error("", `err?.message`);
       throw err;
     }
   }
@@ -51,11 +49,11 @@ export class DeployCommand extends CliCommand {
     const branch = await this.git.branch();
     if (!["main", "master"].includes(branch.current)) {
       throw new Error(
-        `the current git branch is not main or master, please run the command: "git checkout main", then try again!`
+        `the current git branch is not main or master, please run the command: 'git checkout main', then try again!`
       );
     }
     this.branch = branch.current;
-    log.success("[cli-release]", `current git branch: ${branch.current}`);
+    log.success("", `current git branch: ${branch.current}`);
   }
 
   async checkNotCommitted() {
@@ -72,21 +70,21 @@ export class DeployCommand extends CliCommand {
       throw new Error("the git status is not empty, please handle manually!");
     }
 
-    log.success("[cli-release]", "the git status is empty");
+    log.success("", "the git status is empty");
   }
 
   async checkStash() {
-    log.info("[cli-git]", "check stash records");
+    log.info("", "check stash records");
 
     const stashList = await this.git.stashList();
 
     if (stashList.all.length > 0) {
       await this.git.stash(["pop"]);
-      log.success("[cli-git]", "stash pop successful");
+      log.success("", "stash pop successful");
     }
 
     await this.git.push("origin", this.branch);
-    log.success("cli-release", "execute push operations successful before publish");
+    log.success("", "execute push operations successful before publish");
   }
 }
 
