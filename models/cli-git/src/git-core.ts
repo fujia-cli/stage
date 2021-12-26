@@ -35,10 +35,10 @@ import {
   GIT_IGNORE_FILE,
   IGNORE_FILE_CONTENT,
   REPO_OWNER_USER,
-  REPO_OWNER_ORG,
+  // REPO_OWNER_ORG,
   VERSION_RELEASE,
   VERSION_FEATURE,
-  GIT_OWNER_TYPE,
+  // GIT_OWNER_TYPE,
   VERSION_MAP_REG,
 } from "./constants";
 import { GitPlatformType, BranchType, GitServer } from "./interface";
@@ -48,17 +48,17 @@ class GitCore {
   version: string;
   sourceDir: string;
   git: SimpleGit;
-  gitServer: Github | Gitlab | Gitee | undefined;
   homePath: string;
-  user: unknown;
-  orgs: unknown;
-  owner: string | undefined;
-  loginName: string | undefined;
-  repo: string | undefined;
+  gitServer?: Github | Gitlab | Gitee; // instance of GitServer
+  user?: unknown; // user information
+  orgs: unknown; // the list of organizations that the user own
+  owner?: string; // the type of remote repository
+  loginName?: string; // the login name of remote repository
+  repo?: string; // the information of remote repository
+  branch?: string; // local develop branch
   refreshRepo: boolean;
   refreshToken: boolean;
   refreshOwner: boolean;
-  branch: string | undefined;
   remote: string;
   token: string;
   gitType: GitPlatformType;
@@ -81,17 +81,10 @@ class GitCore {
       // instance of SimpleGit
       baseDir: this.sourceDir,
     });
-    this.gitServer = undefined; // instance of GitServer
     this.homePath = process.env[NewEnvVariables.STAGE_CLI_HOME] || ""; // directory of local caches
-    this.user = undefined; // user information
-    this.orgs = undefined; // the list of organizations that the user own
-    this.owner = undefined; // the type of remote repository
-    this.loginName = undefined; // the login name of remote repository
-    this.repo = undefined; // the information of remote repository
     this.refreshRepo = refreshRepo; // force to update the remote Git repository
     this.refreshToken = refreshToken; // force to update the token of remote repository
     this.refreshOwner = refreshOwner; // force to update the type of remote repository
-    this.branch = undefined; // local develop branch
     this.remote = ""; // the url of repository, such as: git@github.com:${loginName}/${projectName}.git
     this.token = "";
     this.gitType = "github";

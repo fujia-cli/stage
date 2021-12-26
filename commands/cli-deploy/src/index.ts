@@ -8,22 +8,60 @@ import simpleGit, { SimpleGit } from "simple-git";
 import {
   inquireAppCategory,
   inquireServerInfo,
-  DatabaseType,
   inquireDatabaseType,
-  DeployType,
   inquireDeployType,
 } from "./inquirer-prompt";
+import { DatabaseType, DeployType, AppCategory, ServerInfo } from "./interface";
+import {
+  WEB,
+  DATABASE,
+  DOCKER_NGINX,
+  APP,
+  ELECTRON,
+  LOCAL_DOCKER,
+  GITLAB_DOCKER,
+  PM2,
+  MONGODB,
+  MYSQL,
+} from "./constants";
 
 export class DeployCommand extends CliCommand {
   git: SimpleGit;
   branch: string;
+  appCategory: AppCategory;
+  databaseType: DatabaseType;
+  serverInfo?: ServerInfo;
   constructor(args: any[]) {
     super(args);
     this.git = simpleGit();
     this.branch = "main";
+    this.appCategory = "web";
+    this.databaseType = "mongodb";
+    this.serverInfo = undefined;
   }
 
-  init() {}
+  async init() {
+    await this.prepare();
+
+    this.appCategory = (await inquireAppCategory()).appCategory;
+
+    if (this.appCategory === "web") {
+      const deployType = (await inquireDeployType()).deployType;
+
+      if ([LOCAL_DOCKER, GITLAB_DOCKER].includes(deployType)) {
+        this.checkDockerEnv();
+      }
+    } else if (this.appCategory === "database") {
+      this.checkDockerEnv();
+      this.databaseType = (await inquireDatabaseType()).databaseType;
+    } else if (this.appCategory === "docker-nginx") {
+      this.checkDockerEnv();
+    }
+
+    if ([WEB, DATABASE, DOCKER_NGINX].includes(this.appCategory)) {
+      this.serverInfo = await inquireServerInfo();
+    }
+  }
 
   async exec() {
     try {
@@ -38,6 +76,19 @@ export class DeployCommand extends CliCommand {
     await this.checkNotCommitted();
     await this.checkStash();
   }
+
+  checkDockerEnv() {
+    log.info(
+      "",
+      "please make sure the docker environment is configured on the local host and the remote server"
+    );
+  }
+
+  checkDockerFile() {}
+
+  checkGitlabEnv() {}
+
+  checkGitlabCiFile() {}
 
   async checkMainBranch() {
     const isRepo = await this.git.checkIsRepo();

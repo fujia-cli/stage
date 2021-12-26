@@ -1,31 +1,15 @@
 import inquirer from "inquirer";
 
-import { userNameRe, ip4Re, ip6Re } from "./constants";
+import {
+  APP_CATEGORIES,
+  DEPLOY_TYPES,
+  DATABASE_TYPES,
+  userNameRe,
+  ip4Re,
+  ip6Re,
+} from "./constants";
+import { AppCategory, ServerInfo, DatabaseType, DeployType } from "./interface";
 
-export type AppCategory = "web" | "app" | "electron" | "database" | "docker-nginx";
-
-const APP_CATEGORIES = [
-  {
-    name: "web",
-    value: "web",
-  },
-  // {
-  //   name: "app",
-  //   value: "app",
-  // },
-  // {
-  //   name: "electron",
-  //   value: "electron",
-  // },
-  {
-    name: "database",
-    value: "database",
-  },
-  {
-    name: "docker-nginx",
-    value: "docker-nginx",
-  },
-];
 export const inquireAppCategory = async () =>
   await inquirer.prompt<{
     appCategory: AppCategory;
@@ -36,11 +20,6 @@ export const inquireAppCategory = async () =>
     choices: APP_CATEGORIES,
   });
 
-export interface ServerInfo {
-  userName: string;
-  sshPort: number;
-  serverIP: string;
-}
 export const inquireServerInfo = async () =>
   await inquirer.prompt<ServerInfo>([
     {
@@ -99,17 +78,6 @@ export const inquireServerInfo = async () =>
     },
   ]);
 
-export type DatabaseType = "mongodb" | "mysql";
-const DATABASE_TYPES = [
-  {
-    name: "mongodb",
-    value: "mongodb",
-  },
-  {
-    name: "mysql",
-    value: "mysql",
-  },
-];
 export const inquireDatabaseType = async () =>
   await inquirer.prompt<{
     databaseType: DatabaseType;
@@ -120,21 +88,6 @@ export const inquireDatabaseType = async () =>
     choices: DATABASE_TYPES,
   });
 
-export type DeployType = "pm2" | "local+docker" | "local+docker";
-const DEPLOY_TYPES = [
-  {
-    name: "local+docker",
-    value: "local+docker",
-  },
-  {
-    name: "local+docker",
-    value: "local+docker",
-  },
-  {
-    name: "pm2",
-    value: "pm2",
-  },
-];
 export const inquireDeployType = async () =>
   await inquirer.prompt<{
     deployType: DeployType;

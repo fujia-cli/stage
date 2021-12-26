@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-11 21:10:04
- * @LastEditTime: 2021-12-26 09:10:20
+ * @LastEditTime: 2021-12-26 10:12:17
  * @LastEditors: fujia(as default)
  * @Description: A package to achieve deploy flows for stage cli.
  * @FilePath: /stage/commands/cli-publish/src/index.ts
@@ -16,11 +16,10 @@ import CliGit from "@fujia/cli-git";
 import { PkgInfo, PublishCmdOptions } from "./interface";
 
 export class PublishCommand extends CliCommand {
-  pkgInfo: PkgInfo | undefined;
-  options: PublishCmdOptions | undefined;
+  pkgInfo?: PkgInfo;
+  options?: PublishCmdOptions;
   constructor(args: any[]) {
     super(args);
-    this.pkgInfo = undefined;
   }
 
   init() {

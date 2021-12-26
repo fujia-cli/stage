@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-07 09:42:37
- * @LastEditTime: 2021-12-25 23:31:26
+ * @LastEditTime: 2021-12-26 10:12:56
  * @LastEditors: fujia(as default)
  * @Description:
  * @FilePath: /stage/models/cli-command/src/index.ts
@@ -11,7 +11,7 @@ import { StageCliCmd } from "@fujia/cli-utils";
 
 class CliCommand {
   protected argv: any[];
-  protected cmd: StageCliCmd | null;
+  protected cmd?: StageCliCmd;
   runner: Promise<unknown>;
   constructor(args: any[]) {
     if (!args || args.length < 1) {
@@ -20,7 +20,6 @@ class CliCommand {
 
     this.argv = args;
     this.runner = this.genRunner();
-    this.cmd = null;
   }
 
   init() {

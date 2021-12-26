@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 10:54:19
- * @LastEditTime: 2021-12-26 09:10:21
+ * @LastEditTime: 2021-12-26 10:11:44
  * @LastEditors: fujia(as default)
  * @Description: To initialize a project
  * @FilePath: /stage/commands/cli-init/src/index.ts
@@ -44,10 +44,10 @@ export class CliInit extends CliCommand {
   force: boolean;
   template: Array<ProjectTemplate | ComponentTemplate>;
   isProjectType: boolean;
-  projectInfo: ProjectInfo | undefined;
-  componentInfo: ComponentInfo | undefined;
-  templateInfo: ProjectTemplate | ComponentTemplate | undefined;
-  templatePkg: CliPackage | undefined;
+  projectInfo?: ProjectInfo;
+  componentInfo?: ComponentInfo;
+  templateInfo?: ProjectTemplate | ComponentTemplate;
+  templatePkg?: CliPackage;
   constructor(args: any[]) {
     super(args);
     this.projectName = "";
