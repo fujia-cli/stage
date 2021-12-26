@@ -23,6 +23,7 @@ export const inquireAppCategory = async () =>
 		appCategory: AppCategory;
 	}>({
 		type: 'list',
+		name: 'appCategory',
 		message: 'please select the app category:',
 		default: 0,
 		choices: APP_CATEGORIES,
@@ -50,7 +51,7 @@ export const inquireServerInfo = async () =>
 		},
 		{
 			type: 'input',
-			name: '',
+			name: 'sshPort',
 			message: 'please input the ssh login port:',
 			default: '22',
 			validate(val: string) {
@@ -229,6 +230,7 @@ export const inquireDatabaseType = async () =>
 		databaseType: DatabaseType;
 	}>({
 		type: 'list',
+		name: 'databaseType',
 		message: 'please the database type:',
 		default: 0,
 		choices: DATABASE_TYPES,
@@ -239,6 +241,7 @@ export const inquireDeployType = async () =>
 		deployType: DeployType;
 	}>({
 		type: 'list',
+		name: 'deployType',
 		message: 'please select the deploy type:',
 		default: 0,
 		choices: DEPLOY_TYPES,
