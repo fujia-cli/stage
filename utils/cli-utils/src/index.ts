@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-09 21:31:09
- * @LastEditTime: 2021-12-22 16:20:29
+ * @LastEditTime: 2021-12-26 13:48:20
  * @LastEditors: fujia(as default)
  * @Description: An awesome utilities for stage-cli
  * @FilePath: /stage/utils/cli-utils/src/index.ts
@@ -16,138 +16,179 @@ export { NewEnvVariables };
 export type { StageCliCmd } from './interface';
 
 export function spinnerInstance(message = 'loading...', spinnerString = '|/-\\') {
-  const spinner = new Spinner(`${message} %s`);
+	const spinner = new Spinner(`${message} %s`);
 
-  spinner.setSpinnerString(spinnerString);
-  spinner.start();
+	spinner.setSpinnerString(spinnerString);
+	spinner.start();
 
-  return spinner;
+	return spinner;
 }
 
-export const sleep = (ms = 1000) => new Promise(resolve => setTimeout(resolve, ms));
+export const sleep = (ms = 1000) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const isWin32 = process.platform === 'win32';
 
-export const spawn = (command: string, args: readonly string[], options: CommonSpawnOptions): ChildProcess => {
-  // NOTE: In window OS, it need to execute command by cmd
-  const cmd = isWin32 ? 'cmd' : command;
-  const cmdArgs = isWin32 ? ['/c'].concat(command, args) : args;
+export const spawn = (
+	command: string,
+	args: readonly string[],
+	options: CommonSpawnOptions,
+): ChildProcess => {
+	// NOTE: In window OS, it need to execute command by cmd
+	const cmd = isWin32 ? 'cmd' : command;
+	const cmdArgs = isWin32 ? ['/c'].concat(command, args) : args;
 
-  return cp.spawn(cmd, cmdArgs, options || {});
+	return cp.spawn(cmd, cmdArgs, options || {});
 };
 
 export const spawnAsync = (
-  command: string,
-  args: readonly string[],
-  options: CommonSpawnOptions
+	command: string,
+	args: readonly string[],
+	options: CommonSpawnOptions,
 ): Promise<number | null> => {
-  return new Promise((resolve, reject) => {
-    const cp = spawn(command, args, options);
+	return new Promise((resolve, reject) => {
+		const cp = spawn(command, args, options);
 
-    cp.on('error', err => {
-      reject(err);
-    });
+		cp.on('error', (err) => {
+			reject(err);
+		});
 
-    cp.on('exit', chunk => {
-      resolve(chunk);
-    });
-  })
+		cp.on('exit', (chunk) => {
+			resolve(chunk);
+		});
+	});
 };
 
-export const readFile = (path: string, options : {
-  toJson?: boolean
-} = {}) => {
-  if (fs.existsSync(path)) {
-    const buffer = fs.readFileSync(path);
+export const readFile = (
+	path: string,
+	options: {
+		toJson?: boolean;
+	} = {},
+) => {
+	if (fs.existsSync(path)) {
+		const buffer = fs.readFileSync(path);
 
-    if (buffer) {
-      if (options.toJson) {
-        return buffer.toJSON();
-      }
+		if (buffer) {
+			if (options.toJson) {
+				return buffer.toJSON();
+			}
 
-      return buffer.toString();
-    }
-  }
+			return buffer.toString();
+		}
+	}
 
-  return null;
+	return null;
 };
 
 export const writeFile = (
-  path: string,
-  data: string | NodeJS.ArrayBufferView,
-  options: {
-    rewrite?: boolean
-  } = {
-    rewrite: true,
-  }
+	path: string,
+	data: string | NodeJS.ArrayBufferView,
+	options: {
+		rewrite?: boolean;
+	} = {
+		rewrite: true,
+	},
 ) => {
-  if (fs.existsSync(path)) {
-    if (options.rewrite) {
-      fs.writeFileSync(path, data);
+	if (fs.existsSync(path)) {
+		if (options.rewrite) {
+			fs.writeFileSync(path, data);
 
-      return true;
-    }
+			return true;
+		}
 
-    return false;
-  }
+		return false;
+	}
 
-  fs.writeFileSync(path, data);
-  return true;
+	fs.writeFileSync(path, data);
+	return true;
 };
 
-export const isPlainObject = (val: unknown) => Object.prototype.toString.call(val) === '[object Object]';
+export const isPlainObject = (val: unknown) =>
+	Object.prototype.toString.call(val) === '[object Object]';
+
+export const isPrimitive = (val: unknown): boolean =>
+	typeof val === 'string' ||
+	typeof val === 'number' ||
+	typeof val === 'symbol' ||
+	typeof val === 'boolean';
 
 export const spreadObjToString = (val: any, prefix?: string) => {
-  if (!isPlainObject(val)) return prefix;
+	if (!isPlainObject(val)) return prefix;
 
-  let str = prefix ? `${prefix}: ` : '';
-  const keys = Object.keys(val);
-  keys.forEach(k => {
-    str += `\n\t${k}: ${val[k]}`
-  });
+	let str = prefix ? `${prefix}: ` : '';
+	const keys = Object.keys(val);
+	keys.forEach((k) => {
+		str += `\n\t${k}: ${val[k]}`;
+	});
 
-  return str;
+	return str;
 };
 
 export const printErrorStackInDebug = (err: any) => {
-  if (process.env[NewEnvVariables.LOG_LEVEL] === 'verbose') {
-    console.error(err);
-  }
+	if (process.env[NewEnvVariables.LOG_LEVEL] === 'verbose') {
+		console.error(err);
+	}
 };
 
 export const getCurDirName = (filePath?: string) => {
-  const curPath = filePath ? filePath : process.cwd();
+	const curPath = filePath ? filePath : process.cwd();
 
-  let dirName = '';
-  const formatPath = curPath.replace('\\', '/');
-  const pathList = formatPath.split('/');
+	let dirName = '';
+	const formatPath = curPath.replace('\\', '/');
+	const pathList = formatPath.split('/');
 
-  for (let i = pathList.length - 1; i >= 0; i--) {
-    if (pathList[i]) {
-      dirName = pathList[i];
-      break;
-    }
-  }
+	for (let i = pathList.length - 1; i >= 0; i--) {
+		if (pathList[i]) {
+			dirName = pathList[i];
+			break;
+		}
+	}
 
-  return dirName;
+	return dirName;
 };
 
-export const readDotFileToObj = (filePath: string) => {
-  if (!fs.existsSync(filePath)) throw new Error(`[cli-utils]/readDotFileToObj: the path of ${filePath} is not exist`);
+export const readDotFileToObj = <T>(filePath: string) => {
+	if (!fs.existsSync(filePath))
+		throw new Error(`[cli-utils]/readDotFileToObj: the path of ${filePath} is not exist`);
 
-  const dotConfig: Record<string, string> = {};
-  const fileToStr = readFile(filePath) as string;
+	const dotConfig: Record<string, string> = {};
+	const fileToStr = readFile(filePath) as string;
 
-  const configList = fileToStr.split('\n')
-    .filter(_ => _)
-    .map(c => c.split('='));
+	const configList = fileToStr
+		.split('\n')
+		.filter((_) => _)
+		.map((c) => c.split('='));
 
-  configList.forEach(c => {
-    if (c[0] && c[1]) {
-      dotConfig[c[0]] = c[1]
-    }
-  });
+	configList.forEach((c) => {
+		if (c[0] && c[1]) {
+			dotConfig[c[0]] = c[1];
+		}
+	});
 
-  return dotConfig;
+	return dotConfig as Record<keyof T, string>;
 };
 
+export const writeSimpleObjToDotFile = <T extends Record<string, any>>(
+	filePath: string,
+	obj: T,
+) => {
+	if (!isPlainObject(obj))
+		throw new Error(
+			'[cli-utils]/writeSimpleObjToDotFile: this method param should be a plain object',
+		);
+
+	const keys = Object.keys(obj).filter((i) => isPrimitive(obj[i]));
+
+	let content = '';
+
+	for (let i = 0; i < keys.length; i++) {
+		const curKey = keys[i];
+		content += `${curKey}=${obj[curKey]}\n`;
+	}
+
+	if (!!content) {
+		return writeFile(filePath, content);
+	}
+
+	console.log('the content is empty string');
+	return false;
+};
