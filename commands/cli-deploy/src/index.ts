@@ -72,6 +72,10 @@ export class DeployCommand extends CliCommand {
 
 		this.appCategory = (await inquireAppCategory()).appCategory;
 
+		if ([WEB, DATABASE, DOCKER_NGINX].includes(this.appCategory)) {
+			await this.getRemoteServerInfo();
+		}
+
 		if (this.appCategory === 'web') {
 			this.deployType = (await inquireDeployType()).deployType;
 			const isDockerEnv = [LOCAL_DOCKER, GITLAB_DOCKER].includes(this.deployType);
@@ -141,7 +145,7 @@ export class DeployCommand extends CliCommand {
 			);
 		}
 
-		await this.getRemoteServerInfo();
+		// await this.getContainerMirrorServiceInfo();
 	}
 
 	checkGitlabCiYml() {
@@ -246,14 +250,18 @@ export class DeployCommand extends CliCommand {
 	async deployWebByPm2() {}
 
 	async deployWebByDocker() {
-		const { userName, userPwd, repoName, repoZone, repoNamespace, mirrorName, mirrorVersion } =
-			this.cmsInfo!;
-		const testFile = path.resolve(__dirname, '/scripts/test.sh');
+		// const { userName, userPwd, repoName, repoZone, repoNamespace, mirrorName, mirrorVersion } =
+		// 	this.cmsInfo!;
+		const testFile = path.resolve(__dirname, 'scripts/test.sh');
+		console.log(testFile);
 		const testContent = readFile(testFile) as string;
-		await spawnAsync('sh', ['-e', testContent], {
-			stdio: 'inherit',
-			shell: true,
-		});
+		console.log('[cli-deploy]', testContent);
+		if (testContent) {
+			await spawnAsync('sh', [testContent], {
+				stdio: 'inherit',
+				shell: true,
+			});
+		}
 	}
 
 	async deployWebByGitlabAndDocker() {}
