@@ -29,13 +29,10 @@
     "url": "https://github.com/fujia-cli/stage/issues"
   },
   "devDependencies": {
-    "@types/semver": "^7.3.9",
     "rimraf": "^3.0.2"
   },
   "dependencies": {
     "@fujia/cli-log": "file:../../utils/cli-log",
-    "@fujia/cli-utils": "file:../../utils/cli-utils",
-    "colors": "^1.4.0",
-    "semver": "^7.3.5"
+    "@fujia/cli-utils": "file:../../utils/cli-utils"
   }
 }
