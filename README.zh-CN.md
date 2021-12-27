@@ -1,4 +1,24 @@
-# stage
+<div align="center">
+  <a href="https://github.com/fujia-cli/stage" target="_blank">
+    <img alt="stage logo" width="200" src="https://github.com/fujia-blogs/articles/blob/main/stage-ci/assets/stage.svg"/>
+  </a>
+</div>
+
+<div align="center">
+  <h1>@fujia/stage</h1>
+</div>
+
+<div align="center">
+
+一套使应用开发更加简单的脚手架工具。
+
+</div>
+
+<div align="center">
+
+[English](./README.md) | 简体中文
+
+</div>
 
 ## 介绍
 
@@ -11,7 +31,9 @@ stage是一款开源的，旨在协助个人开发者或自由职业者快速开
 1，使用下面命令安装
 
 ```sh
+
 npm install -g @fujia/core-cli
+
 ```
 
 
