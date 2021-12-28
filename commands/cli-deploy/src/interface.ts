@@ -1,3 +1,5 @@
+import { DEPLOY_SCRIPTS_PKG_INFO } from './constants';
+
 export type AppCategory = 'web' | 'app' | 'electron' | 'database' | 'docker-nginx';
 
 export type DatabaseType = 'mongodb' | 'mysql';
@@ -11,7 +13,7 @@ export interface ServerInfo {
 }
 
 export interface ContainerMirrorServiceInfo {
-	userName: string;
+	owner: string;
 	userPwd: string;
 	repoName: string;
 	repoZone: string;
@@ -19,3 +21,5 @@ export interface ContainerMirrorServiceInfo {
 	mirrorName: string;
 	mirrorVersion: string;
 }
+
+export type DeployScriptTemplate = typeof DEPLOY_SCRIPTS_PKG_INFO;

@@ -98,15 +98,15 @@ export const inquireContainerMirrorServiceInfo = async () => {
 	return await inquirer.prompt<ContainerMirrorServiceInfo>([
 		{
 			type: 'input',
-			name: 'userName',
-			message: 'please input the mirror service username:',
+			name: 'owner',
+			message: 'please input the mirror service owner:',
 			default: '',
 			validate(val: string) {
 				const done = (this as any).async();
 
 				setTimeout(function () {
 					if (!userNameRe.test(val)) {
-						done(`the ${val} is not a valid username, please re-input!`);
+						done(`the ${val} is not a valid owner, please re-input!`);
 						return false;
 					}
 

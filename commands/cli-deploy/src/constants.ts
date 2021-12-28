@@ -11,6 +11,16 @@ export const C_M_S_INFO_FILE = '.cms_info'; // container mirror service informat
 export const DOCKER_FILE = 'Dockerfile';
 export const DOCKER_IGNORE_FILE = '.dockerignore';
 export const GITLAB_CI_YAML = '.gitlab-ci.yml';
+export const STAGE_CLI_TEMPLATES_DIR = 'templates';
+
+export const DEPLOY_SCRIPTS_PKG_INFO = {
+	_id: `STAGE_${Date.now()}`,
+	name: 'deploy-scripts-template',
+	version: 'latest',
+	npmName: '@fujia/deploy-scripts-template',
+	installCommand: '',
+	startCommand: 'string',
+};
 
 /* app categories */
 export const WEB = 'web';

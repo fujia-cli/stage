@@ -1,6 +1,7 @@
 import path from 'path';
 import CliCommand from '@fujia/cli-command';
 import log from '@fujia/cli-log';
+import CliPackage from '@fujia/cli-package';
 import fse from 'fs-extra';
 import { pathExistSync } from '@fujia/check-path';
 import simpleGit, { SimpleGit } from 'simple-git';
@@ -12,6 +13,8 @@ import {
 	readDotFileToObj,
 	spawnAsync,
 	readFile,
+	spinnerInstance,
+	sleep,
 } from '@fujia/cli-utils';
 
 import {
@@ -27,6 +30,7 @@ import {
 	AppCategory,
 	ServerInfo,
 	ContainerMirrorServiceInfo,
+	DeployScriptTemplate,
 } from './interface';
 import {
 	WEB,
@@ -46,6 +50,8 @@ import {
 	DOCKER_IGNORE_FILE,
 	GITLAB_CI_YAML,
 	EJS_IGNORE_FILES,
+	STAGE_CLI_TEMPLATES_DIR,
+	DEPLOY_SCRIPTS_PKG_INFO,
 } from './constants';
 
 export class DeployCommand extends CliCommand {
@@ -57,6 +63,8 @@ export class DeployCommand extends CliCommand {
 	cmsInfo?: ContainerMirrorServiceInfo;
 	deployType: DeployType;
 	localDeployDir?: string;
+	templateInfo?: DeployScriptTemplate;
+	templatePkg?: CliPackage;
 	constructor(args: any[]) {
 		super(args);
 		this.git = simpleGit();
@@ -146,6 +154,7 @@ export class DeployCommand extends CliCommand {
 		}
 
 		// await this.getContainerMirrorServiceInfo();
+		await this.downloadScriptTemplate();
 	}
 
 	checkGitlabCiYml() {
@@ -236,10 +245,12 @@ export class DeployCommand extends CliCommand {
 	async startDeployWeb() {
 		if (this.deployType === PM2) {
 			await this.deployWebByPm2();
-		} else if (this.deployType === LOCAL_DOCKER) {
-			await this.deployWebByDocker();
-		} else if (this.deployType === GITLAB_DOCKER) {
-			await this.deployWebByGitlabAndDocker();
+		} else {
+			if (this.deployType === LOCAL_DOCKER) {
+				await this.deployWebByDocker();
+			} else if (this.deployType === GITLAB_DOCKER) {
+				await this.deployWebByGitlabAndDocker();
+			}
 		}
 	}
 
@@ -252,16 +263,33 @@ export class DeployCommand extends CliCommand {
 	async deployWebByDocker() {
 		// const { userName, userPwd, repoName, repoZone, repoNamespace, mirrorName, mirrorVersion } =
 		// 	this.cmsInfo!;
-		const testFile = path.resolve(__dirname, 'scripts/test.sh');
-		console.log(testFile);
-		const testContent = readFile(testFile) as string;
-		console.log('[cli-deploy]', testContent);
-		if (testContent) {
-			await spawnAsync('sh', [testContent], {
-				stdio: 'inherit',
-				shell: true,
-			});
+		// const { userName, sshPort, serverIP } = this.serverInfo!;
+		const dockerScriptDir = path.resolve(this.localDeployDir!, 'docker_scripts');
+
+		if (!pathExistSync(dockerScriptDir)) {
+			fse.ensureDirSync(dockerScriptDir);
 		}
+		await this.installScriptTemplate(dockerScriptDir);
+
+		// const deployBuildDockerFile = path.resolve(this.localDeployDir!);
+
+		// if (!pathExistSync(deployBuildDockerFile)) throw new Error(`the ${deployBuildDockerFile} file is not existed`)
+
+		await this.ejsRender(
+			{
+				...this.cmsInfo,
+				...this.serverInfo,
+			},
+			dockerScriptDir,
+		);
+		// const testContent = readFile(testFile) as string;
+
+		// if (testContent) {
+		// 	await spawnAsync('sh', [testContent], {
+		// 		stdio: 'inherit',
+		// 		shell: true,
+		// 	});
+		// }
 	}
 
 	async deployWebByGitlabAndDocker() {}
@@ -313,6 +341,93 @@ export class DeployCommand extends CliCommand {
 		if (!this.cmsInfo) {
 			throw new Error('the container mirror service information is not exist');
 		}
+	}
+
+	async downloadScriptTemplate() {
+		const homeDir = process.env[NewEnvVariables.STAGE_CLI_HOME]!;
+		const localPath = path.resolve(homeDir, '.stage-cli', STAGE_CLI_TEMPLATES_DIR);
+		const storeDir = path.resolve(localPath, 'node_modules');
+		const { npmName, version } = DEPLOY_SCRIPTS_PKG_INFO;
+
+		const templatePkg = new CliPackage({
+			localPath,
+			storeDir,
+			name: npmName,
+			version,
+		});
+		log.verbose(
+			'[cli-init]',
+			`template downloading: {
+      localPath: ${localPath},
+      storeDir: ${storeDir},
+      name: ${npmName},
+      version: ${version},
+    }`,
+		);
+
+		if (!(await templatePkg.exist())) {
+			const spinner = spinnerInstance('template downloading...');
+			// NOTE: if install's speed are quickly, hold on one second!
+			await sleep();
+			try {
+				await templatePkg.install();
+				spinner.stop(true);
+				log.success('', 'Downloaded template successful!');
+				this.templatePkg = templatePkg;
+			} catch (error) {
+				spinner.stop(true);
+				throw error;
+			}
+			return;
+		}
+
+		const spinner = spinnerInstance('template updating...');
+		// NOTE: if install's speed are quickly, hold on one second!
+		await sleep();
+		try {
+			await templatePkg.update();
+			spinner.stop(true);
+			log.success('', 'Updated template successful!');
+			this.templatePkg = templatePkg;
+		} catch (error) {
+			spinner.stop(true);
+			throw error;
+		}
+	}
+
+	async installScriptTemplate(destDir: string, fileName?: string) {
+		if (!this.templateInfo) throw new Error("The info of template isn't exist.");
+
+		// NOTE: copy template code to current directory
+		const cacheFilePath = this.templatePkg?.cacheFilePath;
+
+		if (!cacheFilePath) {
+			log.warn('', 'The cached file path is not exist!');
+			return;
+		}
+
+		const templatePath = path.resolve(cacheFilePath, 'template');
+		fse.ensureDirSync(templatePath);
+
+		const spinner = spinnerInstance('template installing...');
+		await sleep();
+
+		try {
+			if (destDir) {
+				// const sourceDir = fileName? path.resolve(templatePath, 'fileName') : templatePath;
+				fse.copySync(templatePath, destDir);
+				return;
+			}
+
+			throw new Error('the destDir param is required');
+		} catch (err) {
+			throw err;
+		} finally {
+			spinner.stop(true);
+			log.success('', 'template installed successful!');
+		}
+
+		// await this.ejsRender();
 	}
 
 	ejsRender(data = {}, destDir?: string, ignoreFiles = EJS_IGNORE_FILES) {
