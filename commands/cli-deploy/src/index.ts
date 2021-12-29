@@ -153,7 +153,7 @@ export class DeployCommand extends CliCommand {
 			);
 		}
 
-		// await this.getContainerMirrorServiceInfo();
+		await this.getContainerMirrorServiceInfo();
 		await this.downloadScriptTemplate();
 	}
 
@@ -234,8 +234,9 @@ export class DeployCommand extends CliCommand {
 			log.success('', 'stash pop successful');
 		}
 
-		await this.git.push('origin', this.branch);
-		log.success('', 'execute push operations successful before publish');
+		// TODO: the step if need?
+		// await this.git.push('origin', this.branch);
+		// log.success('', 'execute push operations successful before publish');
 	}
 
 	async startDeployApp() {}
@@ -282,14 +283,19 @@ export class DeployCommand extends CliCommand {
 			},
 			dockerScriptDir,
 		);
-		// const testContent = readFile(testFile) as string;
+		const buildDockerScriptFile = path.resolve(dockerScriptDir, 'build-docker.sh');
+		// const buildScriptContent = readFile(buildDockerScriptFile) as string;
 
-		// if (testContent) {
-		// 	await spawnAsync('sh', [testContent], {
-		// 		stdio: 'inherit',
-		// 		shell: true,
-		// 	});
-		// }
+		if (pathExistSync(buildDockerScriptFile)) {
+			await spawnAsync('chmod', ['+x', buildDockerScriptFile], {
+				stdio: 'inherit',
+				shell: true,
+			});
+			await spawnAsync('sh', [buildDockerScriptFile], {
+				stdio: 'inherit',
+				shell: true,
+			});
+		}
 	}
 
 	async deployWebByGitlabAndDocker() {}
@@ -344,8 +350,8 @@ export class DeployCommand extends CliCommand {
 	}
 
 	async downloadScriptTemplate() {
-		const homeDir = process.env[NewEnvVariables.STAGE_CLI_HOME]!;
-		const localPath = path.resolve(homeDir, '.stage-cli', STAGE_CLI_TEMPLATES_DIR);
+		const stageDir = process.env[NewEnvVariables.STAGE_CLI_HOME]!;
+		const localPath = path.resolve(stageDir, STAGE_CLI_TEMPLATES_DIR);
 		const storeDir = path.resolve(localPath, 'node_modules');
 		const { npmName, version } = DEPLOY_SCRIPTS_PKG_INFO;
 
@@ -396,8 +402,6 @@ export class DeployCommand extends CliCommand {
 	}
 
 	async installScriptTemplate(destDir: string, fileName?: string) {
-		if (!this.templateInfo) throw new Error("The info of template isn't exist.");
-
 		// NOTE: copy template code to current directory
 		const cacheFilePath = this.templatePkg?.cacheFilePath;
 

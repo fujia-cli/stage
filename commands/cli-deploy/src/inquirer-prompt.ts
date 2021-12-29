@@ -105,8 +105,8 @@ export const inquireContainerMirrorServiceInfo = async () => {
 				const done = (this as any).async();
 
 				setTimeout(function () {
-					if (!userNameRe.test(val)) {
-						done(`the ${val} is not a valid owner, please re-input!`);
+					if (!val) {
+						done('the owner can not be empty, please re-input!');
 						return false;
 					}
 
