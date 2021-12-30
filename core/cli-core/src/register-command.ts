@@ -12,7 +12,7 @@ export default function registerCommand() {
 	program
 		.name(getCliName())
 		.usage('<command> [options]')
-		.version(pkg.version)
+		.version(pkg.version, '-v, --version')
 		.option('-d, --debug', 'enable debug model', false)
 		.option('-lp, --localPath <localPath>', 'specify the local debug file path', '');
 
@@ -46,13 +46,21 @@ export default function registerCommand() {
 	program
 		.command('service')
 		.description('deploy a service to remote server')
-		.option('-d, --deploy', 'deploy the service', false)
-		.option('-u, --update', 'update the service', false)
+		.addArgument(
+			new commander.Argument('<serviceType>', 'specify the type of service option').choices([
+				'deploy',
+				'update',
+			]),
+		)
+		.addArgument(new commander.Argument('[serviceName]', 'specify the name of service'))
 		.action(exec);
 
 	// NOTE: register component command
 	program
-		.command('component <componentType> [destination]')
+		.command('component [options] [destination]', {
+			hidden: true,
+		})
+		.requiredOption('-t, --template <templateType>', 'select a component template')
 		.description('create a component template for ui-puzzles UI library')
 		.action(exec);
 

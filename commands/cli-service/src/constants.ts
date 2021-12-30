@@ -5,13 +5,15 @@ export const ip4Re = /^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01
 
 export const ip6Re = /^([\da-fA-F]{1,4}:){7}[\da-fA-F]{1,4}$/;
 
-export const LOCAL_DEPLOY_PATH = 'deploy';
-export const SERVER_INFO_FILE = '.server_info';
-export const C_M_S_INFO_FILE = '.cms_info'; // container mirror service information file
+export const CLI_SERVICE_PATH = 'service';
+export const SERVER_INFO_FILE = 'server-info.json';
+export const C_M_S_INFO_FILE = 'cms-info.json'; // container mirror service information file
 export const DOCKER_FILE = 'Dockerfile';
 export const DOCKER_IGNORE_FILE = '.dockerignore';
-export const GITLAB_CI_YAML = '.gitlab-ci.yml';
+// export const GITLAB_CI_YAML = '.gitlab-ci.yml';
 export const STAGE_CLI_TEMPLATES_DIR = 'templates';
+
+export const UPGRADE_VERSION_CHOICES = ['patch', 'minor', 'major', 'prerelease'];
 
 export const DEPLOY_SCRIPTS_PKG_INFO = {
 	_id: `STAGE_${Date.now()}`,
@@ -26,8 +28,6 @@ export const DEPLOY_SCRIPTS_PKG_INFO = {
 export const WEB = 'web';
 export const DATABASE = 'database';
 export const DOCKER_NGINX = 'docker-nginx';
-export const APP = 'app';
-export const ELECTRON = 'electron';
 
 /* deploy types */
 export const LOCAL_DOCKER = 'local+docker';
@@ -43,14 +43,6 @@ export const APP_CATEGORIES = [
 		name: WEB,
 		value: WEB,
 	},
-	// {
-	//   name: APP,
-	//   value: APP,
-	// },
-	// {
-	//   name: ELECTRON,
-	//   value: ELECTRON,
-	// },
 	{
 		name: DATABASE,
 		value: DATABASE,
@@ -66,10 +58,10 @@ export const DEPLOY_TYPES = [
 		name: LOCAL_DOCKER,
 		value: LOCAL_DOCKER,
 	},
-	{
-		name: GITLAB_DOCKER,
-		value: GITLAB_DOCKER,
-	},
+	// {
+	// 	name: GITLAB_DOCKER,
+	// 	value: GITLAB_DOCKER,
+	// },
 	{
 		name: PM2,
 		value: PM2,
