@@ -7,6 +7,7 @@ export const ip6Re = /^([\da-fA-F]{1,4}:){7}[\da-fA-F]{1,4}$/;
 
 export const CLI_SERVICE_PATH = 'service';
 export const SERVER_INFO_FILE = 'server-info.json';
+export const SERVER_LIST_FILE = 'server-list.json';
 export const C_M_S_INFO_FILE = 'cms-info.json'; // container mirror service information file
 export const DOCKER_FILE = 'Dockerfile';
 export const DOCKER_IGNORE_FILE = '.dockerignore';
@@ -15,14 +16,8 @@ export const STAGE_CLI_TEMPLATES_DIR = 'templates';
 
 export const UPGRADE_VERSION_CHOICES = ['patch', 'minor', 'major', 'prerelease'];
 
-export const DEPLOY_SCRIPTS_PKG_INFO = {
-	_id: `STAGE_${Date.now()}`,
-	name: 'deploy-scripts-template',
-	version: 'latest',
-	npmName: '@fujia/deploy-scripts-template',
-	installCommand: '',
-	startCommand: 'string',
-};
+export const SERVICE_UPDATE = 'update';
+export const SERVICE_DEPLOY = 'deploy';
 
 /* app categories */
 export const WEB = 'web';

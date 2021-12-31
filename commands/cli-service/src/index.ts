@@ -27,6 +27,8 @@ import {
 	inquireContainerMirrorServiceInfo,
 	inquireSelectMirrorName,
 	inquireUpgradeMirrorVersion,
+	inquireServiceName,
+	inquireSelectServiceName,
 } from './inquirer-prompt';
 import {
 	DatabaseType,
@@ -36,8 +38,8 @@ import {
 	ServerInfoJson,
 	ContainerMirrorServiceInfo,
 	MirrorInfoJson,
-	DeployScriptTemplate,
 	UpgradeVersionType,
+	ServiceType,
 } from './interface';
 import {
 	WEB,
@@ -50,13 +52,15 @@ import {
 	MYSQL,
 	CLI_SERVICE_PATH,
 	SERVER_INFO_FILE,
+	SERVER_LIST_FILE,
 	C_M_S_INFO_FILE,
 	DOCKER_FILE,
 	DOCKER_IGNORE_FILE,
+	SERVICE_UPDATE,
+	SERVICE_DEPLOY,
 	// GITLAB_CI_YAML,
 	EJS_IGNORE_FILES,
 	STAGE_CLI_TEMPLATES_DIR,
-	DEPLOY_SCRIPTS_PKG_INFO,
 } from './constants';
 import {
 	genBuildImageCmd,
@@ -69,62 +73,55 @@ import {
 export class ServiceCommand extends CliCommand {
 	git: SimpleGit;
 	branch: string;
-	appCategory: AppCategory;
 	databaseType: DatabaseType;
 	serverInfo?: ServerInfo;
 	cmsInfo?: ContainerMirrorServiceInfo;
 	deployType: DeployType;
 	cliServiceDir?: string;
-	templateInfo?: DeployScriptTemplate;
 	templatePkg?: CliPackage;
 	upgradeMirrorVersion?: string;
+	serviceType?: ServiceType;
+	serviceName?: string;
 	constructor(args: any[]) {
 		super(args);
 		this.git = simpleGit();
 		this.branch = 'main';
-		this.appCategory = 'web';
 		this.databaseType = 'mongodb';
 		this.deployType = 'local+docker';
 		this.serverInfo = undefined;
 	}
 
 	async init() {
+		this.serviceType = this.argv[0];
+		this.serviceName = this.argv[1];
+
+		log.verbose(
+			'[cli-service]',
+			`
+        serviceType: ${this.serviceType}
+        serviceName: ${this.serviceName}
+      `,
+		);
+
 		await this.prepare();
-
-		this.appCategory = (await inquireAppCategory()).appCategory;
-
 		await this.getRemoteServerInfo();
+		this.deployType = (await inquireDeployType()).deployType;
 
-		if (this.appCategory === 'web') {
-			this.deployType = (await inquireDeployType()).deployType;
-			const isDockerEnv = [LOCAL_DOCKER, GITLAB_DOCKER].includes(this.deployType);
-
-			if (isDockerEnv) {
-				await this.checkDockerEnv();
-			}
-		} else if (this.appCategory === 'database') {
-			await this.checkDockerEnv();
-
-			this.databaseType = (await inquireDatabaseType()).databaseType;
-		} else if (this.appCategory === 'docker-nginx') {
-			await this.checkDockerEnv();
+		if (this.deployType === 'local+docker') {
+			this.checkDockerEnv();
+			await this.getContainerMirrorServiceInfo();
+			await this.upgradeVersion();
+			await this.buildDockerImage();
+			await this.pushImageToCloudMirrorRepo();
+			await this.pullImageToServer();
 		}
 	}
 
 	async exec() {
 		try {
-			switch (this.appCategory) {
-				case 'web':
-					await this.startDeployWeb();
-					break;
-				case 'database':
-					await this.startDeployDatabase();
-					break;
-				case 'docker-nginx':
-					await this.startDeployNginx();
-					break;
-				default:
-					throw new Error(`the ${this.appCategory} is not valid app category`);
+			if (this.deployType === 'pm2') {
+			} else if (this.deployType === 'local+docker' && this.serviceType === 'update') {
+				this.updateServiceByImage();
 			}
 		} catch (err: any) {
 			log.error('', `err?.message`);
@@ -139,51 +136,132 @@ export class ServiceCommand extends CliCommand {
 		await this.checkStash();
 	}
 
-	async startDeployWeb() {
-		if (this.deployType === PM2) {
-			await this.deployWebByPM2();
-		} else if (this.deployType === LOCAL_DOCKER) {
-			await this.deployWebByDocker();
-		}
-	}
-
-	async startDeployDatabase() {}
-
-	async startDeployNginx() {}
-
-	async deployWebByPM2() {}
-
-	async deployWebByDocker() {
-		// const { userName, userPwd, repoName, repoZone, repoNamespace, mirrorName, mirrorVersion } =
-		// 	this.cmsInfo!;
-		// const { userName, sshPort, serverIP } = this.serverInfo!;
-	}
-
 	async buildDockerImage() {
 		const { repoZone, repoNamespace, mirrorName } = this.cmsInfo!;
 		const cmdCode = genBuildImageCmd({
 			mirrorName,
 			repoZone,
 			repoNamespace,
+			mirrorVersion: this.upgradeMirrorVersion,
 		});
 
-		await spawnAsync('sh', [cmdCode], {
+		const execCode = await spawnAsync(cmdCode, [], {
 			stdio: 'inherit',
 			shell: true,
 		});
 
-		log.success('', `docker build the image ${mirrorName} successfully`);
+		log.verbose(
+			'[cli-service]',
+			`exec the build docker image command and the exec code ${execCode}`,
+		);
+
+		if (execCode === 0) {
+			log.success(
+				'',
+				`docker build the image ${mirrorName}:${this.upgradeMirrorVersion} successfully`,
+			);
+		}
 	}
 
-	async pushImageToCloudMirrorRepo() {}
+	async pushImageToCloudMirrorRepo() {
+		const { repoZone, repoNamespace, mirrorName, owner, userPwd } = this.cmsInfo!;
+		const cmdCode = genPushImageCmd({
+			owner,
+			userPwd,
+			mirrorName,
+			repoZone,
+			repoNamespace,
+			mirrorVersion: this.upgradeMirrorVersion,
+		});
 
-	async pullImageToServer() {}
+		const execCode = await spawnAsync(cmdCode, [], {
+			stdio: 'inherit',
+			shell: true,
+		});
+
+		log.verbose(
+			'[cli-service]',
+			`exec the command of push image to free mirror repository and the exec code ${execCode}`,
+		);
+
+		if (execCode === 0) {
+			log.success(
+				'',
+				`push the image ${mirrorName}:${this.upgradeMirrorVersion} to ${repoZone} successfully`,
+			);
+		}
+	}
+
+	async pullImageToServer() {
+		const { repoZone, repoNamespace, mirrorName, owner, userPwd } = this.cmsInfo!;
+		const { sshPort, userName, serverIP } = this.serverInfo!;
+		const cmdCode = genPullImageToServerCmd({
+			sshPort,
+			userName,
+			serverIP,
+			owner,
+			userPwd,
+			mirrorName,
+			repoZone,
+			repoNamespace,
+			mirrorVersion: this.upgradeMirrorVersion,
+		});
+
+		const execCode = await spawnAsync(cmdCode, [], {
+			stdio: 'inherit',
+			shell: true,
+		});
+
+		log.verbose(
+			'[cli-service]',
+			`exec the command of pull image to the server(ip: ${serverIP}) and the exec code ${execCode}`,
+		);
+
+		if (execCode === 0) {
+			log.success(
+				'',
+				`pull the image ${mirrorName}:${this.upgradeMirrorVersion} to ${serverIP} successfully`,
+			);
+		}
+	}
 
 	async deployServiceByImage() {}
 
-	async updateServiceByImage() {}
+	async updateServiceByImage() {
+		const { repoZone, repoNamespace, mirrorName } = this.cmsInfo!;
+		const { sshPort, userName, serverIP } = this.serverInfo!;
 
-	// async deployWebByGitlabAndDocker() {}
+		if (!this.serviceName) {
+			await this.getServiceName();
+		}
+
+		if (!this.serviceName) throw new Error('the service name is not exist');
+
+		const cmdCode = genUpdateServiceCmd({
+			sshPort,
+			userName,
+			serverIP,
+			mirrorName,
+			repoZone,
+			repoNamespace,
+			serviceName: this.serviceName,
+		});
+
+		const execCode = await spawnAsync(cmdCode, [], {
+			stdio: 'inherit',
+			shell: true,
+		});
+
+		log.verbose(
+			'[cli-service]',
+			`exec the command of update the ${this.serviceName} service and the exec code ${execCode}`,
+		);
+
+		if (execCode === 0) {
+			log.success('', `update the ${this.serviceName} service successfully`);
+		}
+	}
+
 	async getRemoteServerInfo() {
 		const localServerInfoFile = path.resolve(this.cliServiceDir!, SERVER_INFO_FILE);
 
@@ -268,6 +346,60 @@ export class ServiceCommand extends CliCommand {
 		}
 	}
 
+	async getServiceName() {
+		const localServiceListFile = path.resolve(this.cliServiceDir!, SERVER_LIST_FILE);
+
+		if (!pathExistSync(localServiceListFile)) {
+			this.serviceName = (await inquireServiceName()).serviceName;
+
+			const serviceObj = {
+				nameList: [this.serviceName],
+			};
+
+			await fse.writeJSON(localServiceListFile, serviceObj);
+
+			log.success(
+				'',
+				`write container mirror service information to ${localServiceListFile} successfully`,
+			);
+
+			return;
+		}
+
+		const serviceList = await fse.readJson(localServiceListFile);
+		const { nameList } = serviceList;
+
+		const selectName = (await inquireSelectServiceName(nameList)).serviceName;
+
+		if (selectName === 're-input') {
+			this.serviceName = (await inquireServiceName()).serviceName;
+
+			const newServiceObj = {
+				nameList: [this.serviceName, ...nameList],
+			};
+
+			await fse.writeJSON(localServiceListFile, newServiceObj);
+
+			log.success('', `adds the service name to ${localServiceListFile} successfully`);
+		}
+	}
+
+	checkDockerEnv() {
+		log.info(
+			'',
+			'please make sure the docker environment is configured on the local host and the remote server',
+		);
+		const cwdPath = process.cwd();
+		const dockerFilePath = path.resolve(cwdPath, DOCKER_FILE);
+		const dockerIgnoreFilePath = path.resolve(cwdPath, DOCKER_IGNORE_FILE);
+
+		if (!pathExistSync(dockerFilePath) || !pathExistSync(dockerIgnoreFilePath)) {
+			throw new Error(
+				`there are not a ${DOCKER_FILE} or ${DOCKER_IGNORE_FILE} file in the project root directory`,
+			);
+		}
+	}
+
 	async upgradeVersion() {
 		this.upgradeMirrorVersion = (await inquireUpgradeMirrorVersion()).mirrorVersion;
 		log.verbose(
@@ -282,30 +414,8 @@ export class ServiceCommand extends CliCommand {
 			});
 
 			await this.git.push('origin', this.branch);
-			log.success('', `upgraded version successful and push to ${this.branch} branch`);
+			log.success('', `upgraded version successfully and push to ${this.branch} branch`);
 		}
-	}
-
-	async checkDockerEnv() {
-		log.info(
-			'',
-			'please make sure the docker environment is configured on the local host and the remote server',
-		);
-		const cwdPath = process.cwd();
-		const dockerFilePath = path.resolve(cwdPath, DOCKER_FILE);
-		const dockerIgnoreFilePath = path.resolve(cwdPath, DOCKER_IGNORE_FILE);
-
-		if (!pathExistSync(dockerFilePath) || !pathExistSync(dockerIgnoreFilePath)) {
-			throw new Error(
-				`there are not a ${DOCKER_FILE} or ${DOCKER_IGNORE_FILE} file in the project root directory`,
-			);
-		}
-
-		await this.getContainerMirrorServiceInfo();
-		await this.upgradeVersion();
-		await this.buildDockerImage();
-		// await this.pushImageToCloudMirrorRepo();
-		// await this.pullImageToServer();
 	}
 
 	async checkCliServicePath() {
@@ -316,7 +426,7 @@ export class ServiceCommand extends CliCommand {
 			log.info('', `the local deploy directory is existed: ${cliServiceDir}`);
 		} else {
 			fse.mkdirSync(cliServiceDir);
-			log.success('', `creates the local deploy directory(${cliServiceDir}) successful`);
+			log.success('', `creates the local deploy directory(${cliServiceDir}) successfully`);
 		}
 
 		this.cliServiceDir = cliServiceDir;
@@ -367,12 +477,12 @@ export class ServiceCommand extends CliCommand {
 
 		if (stashList.all.length > 0) {
 			await this.git.stash(['pop']);
-			log.success('', 'stash pop successful');
+			log.success('', 'stash pop successfully');
 		}
 
 		// TODO: the step if need?
 		// await this.git.push('origin', this.branch);
-		// log.success('', 'execute push operations successful before publish');
+		// log.success('', 'execute push operations successfully before publish');
 	}
 }
 

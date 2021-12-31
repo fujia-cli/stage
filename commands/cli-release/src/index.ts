@@ -119,7 +119,7 @@ export class ReleaseCommand extends CliCommand {
 			});
 			log.success(
 				'[cli-release]',
-				`run "npx nrm use npm" successful and current npm registry:  https://registry.npmjs.org/`,
+				`run "npx nrm use npm" successfully and current npm registry:  https://registry.npmjs.org/`,
 			);
 		}
 	}
@@ -167,11 +167,11 @@ export class ReleaseCommand extends CliCommand {
 
 		if (stashList.all.length > 0) {
 			await this.git.stash(['pop']);
-			log.success('[cli-git]', 'stash pop successful');
+			log.success('[cli-git]', 'stash pop successfully');
 		}
 
 		await this.git.push('origin', this.branch);
-		log.success('cli-release', 'execute push operations successful before publish');
+		log.success('cli-release', 'execute push operations successfully before publish');
 	}
 
 	async upgradeVersion() {
@@ -183,7 +183,7 @@ export class ReleaseCommand extends CliCommand {
 				stdio: 'inherit',
 			});
 			await this.git.push('origin', this.branch);
-			log.success('cli-release', `upgraded version successful and push to ${this.branch} branch`);
+			log.success('cli-release', `upgraded version successfully and push to ${this.branch} branch`);
 		}
 	}
 

@@ -84,7 +84,7 @@ async function checkUserHome() {
 }
 
 function checkPkgVersion() {
-	log.info('current version:', pkg.version);
+	log.info('', `Thanks to use @fujia/stage(version: ${pkg.version})🏖`);
 }
 
 export default core;

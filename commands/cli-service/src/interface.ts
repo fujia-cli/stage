@@ -1,5 +1,3 @@
-import { DEPLOY_SCRIPTS_PKG_INFO } from './constants';
-
 export type AppCategory = 'web' | 'app' | 'electron' | 'database' | 'docker-nginx';
 
 export type DatabaseType = 'mongodb' | 'mysql';
@@ -7,6 +5,8 @@ export type DatabaseType = 'mongodb' | 'mysql';
 export type DeployType = 'pm2' | 'local+docker';
 
 export type UpgradeVersionType = 'major' | 'minor' | 'patch' | 'prerelease';
+
+export type ServiceType = 'update' | 'deploy';
 
 export interface ServerInfo {
 	userName: string;
@@ -33,13 +33,18 @@ export interface MirrorInfoJson {
 	mirrorInfoList: ContainerMirrorServiceInfo[];
 }
 
-export type DeployScriptTemplate = typeof DEPLOY_SCRIPTS_PKG_INFO;
-
 export type BuildImageCmdOptions = Omit<ContainerMirrorServiceInfo, 'owner' | 'userPwd'>;
 
 export type PullImageCmdOptions = ServerInfo & ContainerMirrorServiceInfo;
 
-export type UpdateServiceCmdOptions = ServerInfo & BuildImageCmdOptions;
+export type UpdateServiceCmdOptions = ServerInfo &
+	BuildImageCmdOptions & {
+		serviceName: string;
+	};
+
+export type DeployServiceCmdOptions = {
+	serviceName: string;
+};
 
 export type DeployViaPM2CmdOptions = ServerInfo & {
 	appDir: string;

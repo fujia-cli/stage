@@ -302,3 +302,37 @@ export const inquireDeployType = async () =>
 		default: 0,
 		choices: DEPLOY_TYPES,
 	});
+
+export const inquireServiceName = async () =>
+	await inquirer.prompt<{
+		serviceName: string;
+	}>([
+		{
+			type: 'input',
+			name: 'serviceName',
+			message: 'please input the service name:',
+			default: '',
+			validate(name) {
+				const done = (this as any).async();
+
+				setTimeout(function () {
+					if (!name) {
+						done('the service name can not be empty, please re-input!');
+						return false;
+					}
+
+					done(null, true);
+				}, 300);
+			},
+		},
+	]);
+
+export const inquireSelectServiceName = async (serviceNameList: string[]) =>
+	await inquirer.prompt<{
+		serviceName: string;
+	}>({
+		type: 'list',
+		name: 'serviceName',
+		message: 'please select a service name or re-input:',
+		choices: genChoices(serviceNameList),
+	});

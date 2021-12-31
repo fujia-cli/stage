@@ -4,6 +4,7 @@ import {
 	PullImageCmdOptions,
 	UpdateServiceCmdOptions,
 	DeployViaPM2CmdOptions,
+	DeployServiceCmdOptions,
 } from './interface';
 
 export const formatMirrorName = (name: string) => name.replace(/(\.|\@|\_|\/)/g, '-');
@@ -30,9 +31,11 @@ export const genPushImageCmd = (options: ContainerMirrorServiceInfo) => {
     # 1. use free container mirror service and login private repository，recommended:
     #       - aliyun(https://help.aliyun.com/document_detail/257112.html?spm=5176.166170.J_5253785160.5.93cf5164mGxRDG)
     #       - tencent(https://console.cloud.tencent.com/tcr)
-    docker login --username=${owner} --password=${userPwd} ${repoZone}
+    docker login --username=${owner} --password-stdin=${userPwd} ${repoZone}
 
     # 2. push to your private repository
+    docker push ${repoZone}/${repoNamespace}/${mirrorName}:${mirrorVersion}
+
     docker push ${repoZone}/${repoNamespace}/${mirrorName}:latest
   `;
 };
@@ -52,7 +55,9 @@ export const genPullImageToServerCmd = (options: PullImageCmdOptions) => {
 	return `
     # if you are using docker swarm, please make sure the follow ip address is the master node
     ssh -tt -p ${sshPort} ${userName}@${serverIP} << EOF
-    docker login --username=${owner} --password=${userPwd} ${repoZone}
+    docker login --username=${owner} --password-stdin=${userPwd} ${repoZone}
+
+    docker pull ${repoZone}/${repoNamespace}/${mirrorName}:latest
 
     docker pull ${repoZone}/${repoNamespace}/${mirrorName}:${mirrorVersion}
 
@@ -61,19 +66,22 @@ export const genPullImageToServerCmd = (options: PullImageCmdOptions) => {
   `;
 };
 
-export const genDeployServiceCmd = (options = {}) => `
-  docker stack deploy -c stack.yml fujia-site
-`;
+export const genDeployServiceCmd = (options: DeployServiceCmdOptions) => {
+	const { serviceName } = options;
+
+	return `
+    docker stack deploy -c stack.yml ${serviceName}
+  `;
+};
 
 export const genUpdateServiceCmd = (options: UpdateServiceCmdOptions) => {
-	const { sshPort, userName, serverIP, mirrorName, mirrorVersion, repoZone, repoNamespace } =
-		options;
+	const { sshPort, userName, serverIP, mirrorName, repoZone, repoNamespace, serviceName } = options;
 
 	return `
     # if you are using docker swarm, please make sure the follow ip address is the master node
     ssh -tt -p ${sshPort} ${userName}@${serverIP} << EOF
 
-    docker service update --image ${repoZone}/${repoNamespace}/${mirrorName}:${mirrorVersion} fujia-site_web
+    docker service update --image ${repoZone}/${repoNamespace}/${mirrorName}:latest ${serviceName}
     exit
     EOF
   `;
