@@ -26,6 +26,7 @@ import {
 	inquireDeployType,
 	inquireContainerMirrorServiceInfo,
 	inquireSelectMirrorName,
+	inquireUpgradeMirrorVersion,
 } from './inquirer-prompt';
 import {
 	DatabaseType,
@@ -76,6 +77,7 @@ export class ServiceCommand extends CliCommand {
 	cliServiceDir?: string;
 	templateInfo?: DeployScriptTemplate;
 	templatePkg?: CliPackage;
+	upgradeMirrorVersion?: string;
 	constructor(args: any[]) {
 		super(args);
 		this.git = simpleGit();
@@ -158,11 +160,9 @@ export class ServiceCommand extends CliCommand {
 	}
 
 	async buildDockerImage() {
-		const { repoName, repoZone, repoNamespace, mirrorName, mirrorVersion } = this.cmsInfo!;
+		const { repoZone, repoNamespace, mirrorName } = this.cmsInfo!;
 		const cmdCode = genBuildImageCmd({
-			repoName,
 			mirrorName,
-			mirrorVersion,
 			repoZone,
 			repoNamespace,
 		});
@@ -269,16 +269,16 @@ export class ServiceCommand extends CliCommand {
 	}
 
 	async upgradeVersion() {
-		const { mirrorVersion } = this.cmsInfo!;
-
+		this.upgradeMirrorVersion = (await inquireUpgradeMirrorVersion()).mirrorVersion;
 		log.verbose(
 			'[cli-service]',
-			`upgrade version to ${mirrorVersion} before building docker image`,
+			`upgrade version to ${this.upgradeMirrorVersion} before building docker image`,
 		);
 
-		if (semver.valid(mirrorVersion)) {
-			await spawnAsync('npm', ['version', mirrorVersion], {
+		if (semver.valid(this.upgradeMirrorVersion)) {
+			await spawnAsync('npm', ['version', this.upgradeMirrorVersion], {
 				stdio: 'inherit',
+				shell: true,
 			});
 
 			await this.git.push('origin', this.branch);

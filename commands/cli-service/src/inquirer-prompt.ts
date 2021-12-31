@@ -125,6 +125,14 @@ export const inquireSelectServerIp = async (ipList: string[]) =>
 		choices: genChoices(ipList),
 	});
 
+export const getCwdProjectPackageJson = () => {
+	const cwdPath = process.cwd();
+	const pkgJsonPath = path.resolve(cwdPath, 'package.json');
+	const pkgDetail = fse.readJSONSync(pkgJsonPath);
+
+	return pkgDetail;
+};
+
 const genMirrorVersionChoices = (version: string) =>
 	UPGRADE_VERSION_CHOICES.map((t) => {
 		const curVersion = semver.inc(version, t as UpgradeVersionType);
@@ -134,12 +142,22 @@ const genMirrorVersionChoices = (version: string) =>
 			value: curVersion,
 		};
 	});
-export const inquireContainerMirrorServiceInfo = async () => {
-	const cwdPath = process.cwd();
-	const pkgJsonPath = path.resolve(cwdPath, 'package.json');
-	const pkgDetail = fse.readJSONSync(pkgJsonPath);
+export const inquireUpgradeMirrorVersion = async () => {
+	const { version } = getCwdProjectPackageJson();
 
-	const { name, version } = pkgDetail;
+	return await inquirer.prompt<{
+		mirrorVersion: string;
+	}>({
+		type: 'list',
+		name: 'mirrorVersion',
+		message: 'please select build mirror version:',
+		default: 0,
+		choices: genMirrorVersionChoices(version),
+	});
+};
+
+export const inquireContainerMirrorServiceInfo = async () => {
+	const { name } = getCwdProjectPackageJson();
 
 	return await inquirer.prompt<ContainerMirrorServiceInfo>([
 		{
@@ -180,15 +198,15 @@ export const inquireContainerMirrorServiceInfo = async () => {
 		},
 		{
 			type: 'input',
-			name: 'repoName',
-			message: 'please input the mirror service repo name:',
-			default: '',
+			name: 'mirrorName',
+			message: 'please input build mirror name:',
+			default: name,
 			validate(val: string) {
 				const done = (this as any).async();
 
 				setTimeout(function () {
 					if (!val) {
-						done('the repo name can not be empty, please re-input!');
+						done('the mirror name can not be empty, please re-input!');
 						return false;
 					}
 
@@ -196,6 +214,24 @@ export const inquireContainerMirrorServiceInfo = async () => {
 				}, 300);
 			},
 		},
+		// {
+		// 	type: 'input',
+		// 	name: 'repoName',
+		// 	message: 'please input the mirror service repo name:',
+		// 	default: '',
+		// 	validate(val: string) {
+		// 		const done = (this as any).async();
+
+		// 		setTimeout(function () {
+		// 			if (!val) {
+		// 				done('the repo name can not be empty, please re-input!');
+		// 				return false;
+		// 			}
+
+		// 			done(null, true);
+		// 		}, 300);
+		// 	},
+		// },
 		{
 			type: 'input',
 			name: 'repoZone',
@@ -231,31 +267,6 @@ export const inquireContainerMirrorServiceInfo = async () => {
 					done(null, true);
 				}, 300);
 			},
-		},
-		{
-			type: 'input',
-			name: 'mirrorName',
-			message: 'please input build mirror name:',
-			default: name,
-			validate(val: string) {
-				const done = (this as any).async();
-
-				setTimeout(function () {
-					if (!val) {
-						done('the mirror name can not be empty, please re-input!');
-						return false;
-					}
-
-					done(null, true);
-				}, 300);
-			},
-		},
-		{
-			type: 'list',
-			name: 'mirrorVersion',
-			message: 'please select build mirror version:',
-			default: 0,
-			choices: genMirrorVersionChoices(version),
 		},
 	]);
 };

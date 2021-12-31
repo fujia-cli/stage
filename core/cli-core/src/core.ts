@@ -1,13 +1,13 @@
 import path from 'path';
-import { access } from 'fs/promises';
 import semver from 'semver';
 import { red, yellow } from 'colors/safe';
 import { checkRoot } from '@fujia/root';
-import dotenv from 'dotenv';
 import log from '@fujia/cli-log';
 import { NewEnvVariables } from '@fujia/cli-utils';
 import { getLatestVersion } from '@fujia/get-pkg-info';
 import userHome from '@fujia/user-home';
+import { pathExistSync } from '@fujia/check-path';
+import fse from 'fs-extra';
 
 import registerCommand, { program } from './register-command';
 
@@ -38,7 +38,7 @@ async function prepare() {
 	checkPkgVersion();
 	checkRoot();
 	await checkUserHome();
-	await checkEnv();
+	await checkStageHome();
 	await checkVersionUpgrade();
 }
 
@@ -60,31 +60,18 @@ async function checkVersionUpgrade() {
 	}
 }
 
-async function checkEnv() {
-	try {
-		const dotenvPath = path.resolve(homeDir, '.env');
-		await access(dotenvPath);
-		dotenv.config({
-			path: dotenvPath,
-		});
-	} catch (err) {
-		createDefaultEnvConfig();
-	}
-}
+async function checkStageHome() {
+	const stageCliHome = path.resolve(homeDir, DEFAULT_CLI_HOME);
 
-function createDefaultEnvConfig() {
-	const stageCliHome = process.env[NewEnvVariables.STAGE_CLI_HOME];
-	const cliConfig: StageCliHome = {
-		home: homeDir,
-	};
-
-	if (stageCliHome) {
-		cliConfig['stageCliHome'] = path.join(homeDir, stageCliHome);
-	} else {
-		cliConfig['stageCliHome'] = path.join(homeDir, DEFAULT_CLI_HOME);
+	if (!pathExistSync(stageCliHome)) {
+		fse.ensureDirSync(stageCliHome);
 	}
-	// to inject the .env path into the PATH
-	process.env[NewEnvVariables.STAGE_CLI_HOME] = cliConfig.stageCliHome;
+
+	if (!pathExistSync(stageCliHome)) {
+		throw new Error(`the stage home directory(${stageCliHome}) is not exists`);
+	}
+
+	process.env[NewEnvVariables.STAGE_CLI_HOME] = stageCliHome;
 }
 
 async function checkUserHome() {

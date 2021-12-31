@@ -29,6 +29,7 @@
 		"access": "public"
 	},
 	"scripts": {
+		"tsc": "rimraf ./lib && tsc",
 		"test": "echo \"Error: run tests from root\" && exit 1"
 	},
 	"bugs": {
@@ -40,7 +41,6 @@
 		"@fujia/cli-log": "file:../../utils/cli-log",
 		"@fujia/cli-package": "file:../../models/cli-package",
 		"@fujia/cli-utils": "file:../../utils/cli-utils",
-		"@types/fs-extra": "^9.0.13",
 		"ejs": "^3.1.6",
 		"fs-extra": "^10.0.0",
 		"glob": "^7.2.0",
@@ -53,6 +53,7 @@
 		"@types/glob": "^7.2.0",
 		"@types/inquirer": "^8.1.3",
 		"@types/semver": "^7.3.9",
+		"@types/fs-extra": "^9.0.13",
 		"rimraf": "^3.0.2"
 	}
 }

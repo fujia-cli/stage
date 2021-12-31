@@ -22,11 +22,10 @@ export interface ServerInfoJson {
 export interface ContainerMirrorServiceInfo {
 	owner: string;
 	userPwd: string;
-	repoName: string;
 	repoZone: string;
 	repoNamespace: string;
-	mirrorName: string;
-	mirrorVersion: string;
+	mirrorName: string; // NOTE: the repo name equal to the mirror name in aliyun or tencent
+	mirrorVersion?: string;
 }
 
 export interface MirrorInfoJson {
