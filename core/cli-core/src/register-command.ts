@@ -40,7 +40,12 @@ export default function registerCommand() {
 		.action(exec);
 
 	// NOTE: register deploy command
-	program.command('deploy').description('deploy a native application').action(exec);
+	program
+		.command('deploy', {
+			hidden: true,
+		})
+		.description('deploy a native application')
+		.action(exec);
 
 	// NOTE: register docker command
 	program

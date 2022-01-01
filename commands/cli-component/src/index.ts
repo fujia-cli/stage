@@ -55,7 +55,7 @@ export class ComponentCommand extends CliCommand {
 			await this.downloadTemplate();
 			await this.installTemplate();
 		} catch (err: any) {
-			log.error('', `err?.message`);
+			log.error('', `${err?.message}`);
 			throw err;
 		}
 	}

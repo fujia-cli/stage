@@ -102,7 +102,7 @@ export class ServiceCommand extends CliCommand {
 					break;
 			}
 		} catch (err: any) {
-			log.error('', `err?.message`);
+			log.error('', `${err?.message}`);
 			throw err;
 		}
 	}

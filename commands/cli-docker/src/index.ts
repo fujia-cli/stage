@@ -99,7 +99,7 @@ export class ServiceCommand extends CliCommand {
 				await this.updateServiceByImage();
 			}
 		} catch (err: any) {
-			log.error('', `err?.message`);
+			log.error('', `${err?.message}`);
 			throw err;
 		}
 	}
