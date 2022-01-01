@@ -42,11 +42,10 @@ export type UpdateServiceCmdOptions = ServerInfo &
 		serviceName: string;
 	};
 
-export type DeployServiceCmdOptions = ServerInfo & {
-	stackName: string;
-	appDir?: string;
+export type DeployServiceCmdOptions = {
+	serviceName: string;
 };
 
 export type DeployViaPM2CmdOptions = ServerInfo & {
-	appDir?: string;
+	appDir: string;
 };

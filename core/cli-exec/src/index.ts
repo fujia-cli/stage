@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 15:48:52
- * @LastEditTime: 2021-12-30 13:35:19
+ * @LastEditTime: 2022-01-01 15:29:29
  * @LastEditors: fujia(as default)
  * @Description: An execute package of stage cli
  * @FilePath: /stage/core/cli-exec/src/index.ts
@@ -9,9 +9,9 @@
 import path from 'path';
 import CliPackage from '@fujia/cli-package';
 import log from '@fujia/cli-log';
-import { spawn, NewEnvVariables } from '@fujia/cli-utils';
+import { spawn, NewEnvVariables, spreadObjToString } from '@fujia/cli-utils';
 
-import { CMD_MAP_PACKAGE, CACHE_DIR } from './constants';
+import { CMD_MAP_PACKAGE, CACHE_DIR, WITH_SUB_CMD_LIST } from './constants';
 
 export type CmdList = keyof typeof CMD_MAP_PACKAGE;
 
@@ -21,8 +21,15 @@ async function exec(...args: any[]) {
 	let pkg: CliPackage | undefined;
 	const stageCliHome = process.env[NewEnvVariables.STAGE_CLI_HOME]!;
 	// NOTE: type is Command
+	// console.log(args);
 	const cmdObj = args[args.length - 1];
-	const cmdName = cmdObj.name() as CmdList;
+	let cmdName = cmdObj.name() as CmdList;
+	const parentCmd = cmdObj?.parent?.name();
+
+	if (parentCmd && WITH_SUB_CMD_LIST.includes(parentCmd)) {
+		cmdName = parentCmd;
+	}
+
 	const pkgName = CMD_MAP_PACKAGE[cmdName];
 	const packageVersion = 'latest';
 
@@ -72,19 +79,35 @@ async function exec(...args: any[]) {
 			// NOTE: expects call in the child process
 			// require(rootFile).default.call(null, Array.from(args));
 			const cmd = args[args.length - 1];
+			const curCmd = cmd.name();
 			const formatCmd = Object.create(null);
 			Object.keys(cmd).forEach((k) => {
 				if (cmd.hasOwnProperty(k) && !k.startsWith('_') && k !== 'parent') {
 					formatCmd[k] = cmd[k];
 				}
 			});
+
+			log.verbose('[cli-exec]', `${spreadObjToString(formatCmd)}`);
+
 			/**
 			 * NOTE: There are some changes in different versions, such as:
 			 * 1, to get one option value, in V8.3.0，you can get like this: cmd.opts().force, however
 			 *  in v6.x, just run cmd.force
 			 */
-			const { force, refreshRepo, refreshOwner, refreshToken } = cmd.opts();
-			log.verbose('[cli-exec]', `the commander options: ${cmd.opts()}`);
+			const {
+				force,
+				refreshRepo,
+				refreshOwner,
+				refreshToken,
+				build,
+				updateService,
+				access,
+				template,
+				stackName,
+				workDir,
+				serviceName,
+			} = cmd.opts();
+
 			formatCmd.force = force;
 
 			switch (cmdName) {
@@ -93,7 +116,22 @@ async function exec(...args: any[]) {
 					formatCmd.refreshOwner = refreshOwner;
 					formatCmd.refreshToken = refreshToken;
 					break;
-
+				case 'release':
+					formatCmd.access = access;
+					break;
+				case 'docker':
+					formatCmd.build = build;
+					formatCmd.updateService = updateService;
+					break;
+				case 'service':
+					formatCmd.stackName = stackName;
+					formatCmd.workDir = workDir;
+					formatCmd.serviceName = serviceName;
+					formatCmd.cmdName = curCmd;
+					break;
+				case 'component':
+					formatCmd.template = template;
+					break;
 				default:
 					break;
 			}

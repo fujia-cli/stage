@@ -8,9 +8,9 @@ export const ip6Re = /^([\da-fA-F]{1,4}:){7}[\da-fA-F]{1,4}$/;
 export const CLI_SERVICE_PATH = 'service';
 export const SERVER_INFO_FILE = 'server-info.json';
 export const SERVER_LIST_FILE = 'server-list.json';
-export const STACK_LIST_FILE = 'stack-list.json';
 export const C_M_S_INFO_FILE = 'cms-info.json'; // container mirror service information file
-export const DOCKER_STACK_FILE = 'stack.yml';
+export const DOCKER_FILE = 'Dockerfile';
+export const DOCKER_IGNORE_FILE = '.dockerignore';
 // export const GITLAB_CI_YAML = '.gitlab-ci.yml';
 export const STAGE_CLI_TEMPLATES_DIR = 'templates';
 

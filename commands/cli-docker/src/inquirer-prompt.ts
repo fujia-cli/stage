@@ -336,37 +336,3 @@ export const inquireSelectServiceName = async (serviceNameList: string[]) =>
 		message: 'please select a service name or re-input:',
 		choices: genChoices(serviceNameList),
 	});
-
-export const inquireStackName = async () =>
-	await inquirer.prompt<{
-		stackName: string;
-	}>([
-		{
-			type: 'input',
-			name: 'stackName',
-			message: 'please input the stack name:',
-			default: '',
-			validate(name) {
-				const done = (this as any).async();
-
-				setTimeout(function () {
-					if (!name) {
-						done('the stack name can not be empty, please re-input!');
-						return false;
-					}
-
-					done(null, true);
-				}, 300);
-			},
-		},
-	]);
-
-export const inquireSelectStackName = async (stackNameList: string[]) =>
-	await inquirer.prompt<{
-		stackName: string;
-	}>({
-		type: 'list',
-		name: 'stackName',
-		message: 'please select a stack name or re-input:',
-		choices: genChoices(stackNameList),
-	});

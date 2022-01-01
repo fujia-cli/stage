@@ -35,25 +35,37 @@ export default function registerCommand() {
 	// NOTE: register package command
 	program
 		.command('release')
-		.description('release a package to npm')
+		.description('release a npm package')
 		.option('-a, --access <publishAccess>', 'set publish access is true', 'public')
 		.action(exec);
 
 	// NOTE: register deploy command
 	program.command('deploy').description('deploy a native application').action(exec);
 
-	// NOTE: register service command
+	// NOTE: register docker command
 	program
-		.command('service')
-		.description('deploy a service to remote server')
-		.addArgument(
-			new commander.Argument('<serviceType>', 'specify the type of service option').choices([
-				'deploy',
-				'update',
-			]),
-		)
-		.addArgument(new commander.Argument('[serviceName]', 'specify the name of service'))
+		.command('docker')
+		.description('to build a docker image and update corresponding service')
+		.option('-b, --build', 'build a docker image', false)
+		.option('-u, --updateService [serviceName]', 'update a service')
 		.action(exec);
+
+	// NOTE: register service command
+	const service = new commander.Command('service');
+
+	service.description('deploy or update a service');
+
+	service
+		.command('deploy [stackName] [workDir]')
+		.description('deploy a service via docker image or PM2')
+		.action(exec);
+
+	service
+		.command('update [serviceName]')
+		.description('update a service via docker image')
+		.action(exec);
+
+	program.addCommand(service);
 
 	// NOTE: register component command
 	program
@@ -65,7 +77,7 @@ export default function registerCommand() {
 		.action(exec);
 
 	// NOTE: register clean command
-	program.command('clean [cacheFileName]').description('clean stage cli caches').action(exec);
+	program.command('clean [cacheFileName]').description('clean caches').action(exec);
 
 	// NOTE: enable debug model
 	program.on('option:debug', function (this: StageCliCmd) {

@@ -1,16 +1,15 @@
 {
-	"name": "@fujia/cli-service",
+	"name": "@fujia/cli-docker",
 	"version": "1.1.5-alpha.0",
-	"description": "A npm package to make deploying a service simple.",
+	"description": "A npm package to make build a docker image and update corresponding service simple",
 	"keywords": [
-		"web",
-		"stage",
-		"package",
-		"service",
-		"deploy"
+		"docker",
+		"update",
+		"serivce",
+		"stage"
 	],
 	"author": "fujia <fujia.site@outlook.com>",
-	"homepage": "https://github.com/fujia-cli/stage/tree/main/commands/cli-service#readme",
+	"homepage": "https://github.com/fujia-cli/stage/tree/main/commands/cli-docker#readme",
 	"license": "MIT",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
