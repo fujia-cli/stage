@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-09 21:31:09
- * @LastEditTime: 2021-12-26 13:48:20
+ * @LastEditTime: 2022-01-01 21:04:19
  * @LastEditors: fujia(as default)
  * @Description: An awesome utilities for stage-cli
  * @FilePath: /stage/utils/cli-utils/src/index.ts
@@ -11,7 +11,7 @@ import fs from 'fs';
 import { Spinner } from 'cli-spinner';
 import { NewEnvVariables } from './constants';
 
-export { NewEnvVariables };
+export { NewEnvVariables, STAGE_CLI_TEMPLATES_DIR, EJS_IGNORE_FILES } from './constants';
 
 export type { StageCliCmd } from './interface';
 
@@ -191,4 +191,28 @@ export const writeSimpleObjToDotFile = <T extends Record<string, any>>(
 
 	console.log('the content is empty string');
 	return false;
+};
+
+export const genInquirerChoices = (
+	strArr: string[],
+	extra = [
+		{
+			name: 're-input',
+			value: 're-input',
+		},
+	],
+	max = 6,
+) => {
+	const formatChoices = strArr
+		.map((i) => ({
+			name: i,
+			value: i,
+		}))
+		.slice(0, max);
+
+	if (extra.length > 0) {
+		return [...formatChoices, ...extra];
+	}
+
+	return formatChoices;
 };

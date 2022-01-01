@@ -69,7 +69,7 @@ export default function registerCommand() {
 
 	// NOTE: register component command
 	program
-		.command('component [options] [destination]', {
+		.command('component <componentName> [destination]', {
 			hidden: true,
 		})
 		.requiredOption('-t, --template <templateType>', 'select a component template')

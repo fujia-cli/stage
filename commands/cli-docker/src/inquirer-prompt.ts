@@ -2,6 +2,7 @@ import path from 'path';
 import inquirer from 'inquirer';
 import fse from 'fs-extra';
 import semver from 'semver';
+import { genInquirerChoices } from '@fujia/cli-utils';
 
 import {
 	APP_CATEGORIES,
@@ -91,29 +92,29 @@ export const inquireServerInfo = async () =>
 		},
 	]);
 
-const genChoices = (
-	strArr: string[],
-	extra = [
-		{
-			name: 're-input',
-			value: 're-input',
-		},
-	],
-	max = 6,
-) => {
-	const formatChoices = strArr
-		.map((i) => ({
-			name: i,
-			value: i,
-		}))
-		.slice(0, max);
+// const genChoices = (
+// 	strArr: string[],
+// 	extra = [
+// 		{
+// 			name: 're-input',
+// 			value: 're-input',
+// 		},
+// 	],
+// 	max = 6,
+// ) => {
+// 	const formatChoices = strArr
+// 		.map((i) => ({
+// 			name: i,
+// 			value: i,
+// 		}))
+// 		.slice(0, max);
 
-	if (extra.length > 0) {
-		return [...formatChoices, ...extra];
-	}
+// 	if (extra.length > 0) {
+// 		return [...formatChoices, ...extra];
+// 	}
 
-	return formatChoices;
-};
+// 	return formatChoices;
+// };
 export const inquireSelectServerIp = async (ipList: string[]) =>
 	inquirer.prompt<{
 		serverIp: string;
@@ -122,7 +123,7 @@ export const inquireSelectServerIp = async (ipList: string[]) =>
 		name: 'serverIp',
 		message: 'please select a server info by IP or re-input:',
 		default: 0,
-		choices: genChoices(ipList),
+		choices: genInquirerChoices(ipList),
 	});
 
 export const getCwdProjectPackageJson = () => {
@@ -278,7 +279,7 @@ export const inquireSelectMirrorName = async (mirrorNameList: string[]) =>
 		type: 'list',
 		name: 'mirrorName',
 		message: 'please select a mirror service by mirror name or re-input:',
-		choices: genChoices(mirrorNameList),
+		choices: genInquirerChoices(mirrorNameList),
 	});
 
 export const inquireDatabaseType = async () =>
@@ -334,5 +335,5 @@ export const inquireSelectServiceName = async (serviceNameList: string[]) =>
 		type: 'list',
 		name: 'serviceName',
 		message: 'please select a service name or re-input:',
-		choices: genChoices(serviceNameList),
+		choices: genInquirerChoices(serviceNameList),
 	});

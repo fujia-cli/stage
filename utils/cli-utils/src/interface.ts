@@ -11,4 +11,5 @@ export interface StageCliCmd extends Command {
 	build?: boolean; // enable build a docker image
 	updateService?: boolean | string; // update a corresponding service
 	cmdName?: string; // exec command name
+	template?: string; // specify the component template type
 }
