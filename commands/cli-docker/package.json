@@ -1,6 +1,6 @@
 {
 	"name": "@fujia/cli-docker",
-	"version": "1.1.5-alpha.0",
+	"version": "1.1.5",
 	"description": "A npm package to make build a docker image and update corresponding service simple",
 	"keywords": [
 		"docker",
@@ -46,9 +46,9 @@
 		"simple-git": "^2.48.0"
 	},
 	"devDependencies": {
+		"@types/fs-extra": "^9.0.13",
 		"@types/inquirer": "^8.1.3",
 		"@types/semver": "^7.3.9",
-		"@types/fs-extra": "^9.0.13",
 		"rimraf": "^3.0.2"
 	}
 }
