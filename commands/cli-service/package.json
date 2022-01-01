@@ -39,16 +39,12 @@
 		"@fujia/check-path": "^1.1.0",
 		"@fujia/cli-command": "file:../../models/cli-command",
 		"@fujia/cli-log": "file:../../utils/cli-log",
-		"@fujia/cli-package": "file:../../models/cli-package",
 		"@fujia/cli-utils": "file:../../utils/cli-utils",
 		"fs-extra": "^10.0.0",
-		"inquirer": "^8.2.0",
-		"semver": "^7.3.5",
-		"simple-git": "^2.48.0"
+		"inquirer": "^8.2.0"
 	},
 	"devDependencies": {
 		"@types/inquirer": "^8.1.3",
-		"@types/semver": "^7.3.9",
 		"@types/fs-extra": "^9.0.13",
 		"rimraf": "^3.0.2"
 	}

@@ -3,34 +3,13 @@ import inquirer from 'inquirer';
 import fse from 'fs-extra';
 import semver from 'semver';
 
+import { userNameRe, ip4Re, ip6Re, UPGRADE_VERSION_CHOICES, DEPLOY_TYPES } from './constants';
 import {
-	APP_CATEGORIES,
-	DEPLOY_TYPES,
-	DATABASE_TYPES,
-	userNameRe,
-	ip4Re,
-	ip6Re,
-	UPGRADE_VERSION_CHOICES,
-} from './constants';
-import {
-	AppCategory,
 	ServerInfo,
 	ContainerMirrorServiceInfo,
-	DatabaseType,
 	DeployType,
 	UpgradeVersionType,
 } from './interface';
-
-export const inquireAppCategory = async () =>
-	await inquirer.prompt<{
-		appCategory: AppCategory;
-	}>({
-		type: 'list',
-		name: 'appCategory',
-		message: 'please select the app category:',
-		default: 0,
-		choices: APP_CATEGORIES,
-	});
 
 export const inquireServerInfo = async () =>
 	await inquirer.prompt<ServerInfo>([
@@ -214,24 +193,6 @@ export const inquireContainerMirrorServiceInfo = async () => {
 				}, 300);
 			},
 		},
-		// {
-		// 	type: 'input',
-		// 	name: 'repoName',
-		// 	message: 'please input the mirror service repo name:',
-		// 	default: '',
-		// 	validate(val: string) {
-		// 		const done = (this as any).async();
-
-		// 		setTimeout(function () {
-		// 			if (!val) {
-		// 				done('the repo name can not be empty, please re-input!');
-		// 				return false;
-		// 			}
-
-		// 			done(null, true);
-		// 		}, 300);
-		// 	},
-		// },
 		{
 			type: 'input',
 			name: 'repoZone',
@@ -279,17 +240,6 @@ export const inquireSelectMirrorName = async (mirrorNameList: string[]) =>
 		name: 'mirrorName',
 		message: 'please select a mirror service by mirror name or re-input:',
 		choices: genChoices(mirrorNameList),
-	});
-
-export const inquireDatabaseType = async () =>
-	await inquirer.prompt<{
-		databaseType: DatabaseType;
-	}>({
-		type: 'list',
-		name: 'databaseType',
-		message: 'please the database type:',
-		default: 0,
-		choices: DATABASE_TYPES,
 	});
 
 export const inquireDeployType = async () =>
