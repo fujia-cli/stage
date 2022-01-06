@@ -22,17 +22,16 @@ English | [简体中文](./README.zh-CN.md)
 
 ## Installion
 
+```sh
+npm install -g @fujia/cli-core
+```
 
 ## Usage
 
-
 ## Features
-
 
 ## Questions
 
-
 ## Plans
-
 
 ## Supporting Stage
