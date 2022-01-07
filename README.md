@@ -28,6 +28,11 @@ npm install -g @fujia/cli-core
 
 ## Usage
 
+```sh
+# view help information
+stage -h
+```
+
 ## Features
 
 ## Questions
