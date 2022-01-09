@@ -7,10 +7,10 @@ export const TEMPLATE_TYPES = [
 		name: 'custom',
 		value: 'custom',
 	},
-	{
-		name: 'remote',
-		value: 'remote',
-	},
+	// {
+	// 	name: 'remote',
+	// 	value: 'remote',
+	// },
 ];
 
 export const PROJECT_TYPES = [

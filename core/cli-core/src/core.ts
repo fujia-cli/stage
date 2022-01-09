@@ -13,7 +13,6 @@ import registerCommand, { program } from './register-command';
 
 const pkg = require('../package.json');
 import { DEFAULT_CLI_HOME } from './constant';
-import { StageCliHome } from './interface';
 
 let homeDir: string;
 
