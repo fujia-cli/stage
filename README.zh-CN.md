@@ -580,26 +580,26 @@ stage 目前是可用的，但仍处于快速开发中，所以存在着很多�
 
 ## 支持
 
-1，如果项目对你对你有帮助，请在[github](https://github.com/fujia-cli/stage)点个 star
+1，如果项目对你对你有帮助，请在[github](https://github.com/fujia-cli/stage)点个 star。
 
-## 参考
+## 参考资料
 
-1，Gitee OpenAPI - https://gitee.com/api/v5/swagger#/getV5ReposOwnerRepoStargazers?ex=no。
+1，Gitee OpenAPI - https://gitee.com/api/v5/swagger#/getV5ReposOwnerRepoStargazers?ex=no 。
 
-2，docker docs - https://docs.docker.com/get-docker/。
+2，docker docs - https://docs.docker.com/get-docker/ 。
 
-3，nvm - https://github.com/nvm-sh/nvm。
+3，nvm - https://github.com/nvm-sh/nvm 。
 
-4，pm2 - https://pm2.keymetrics.io/docs/usage/quick-start/。
+4，pm2 - https://pm2.keymetrics.io/docs/usage/quick-start/ 。
 
-5，vue-element-admin - (https://panjiachen.github.io/vue-element-admin-site/zh/guide/)。
+5，vue-element-admin - (https://panjiachen.github.io/vue-element-admin-site/zh/guide/) 。
 
-6，阿里云的容器镜像服务(ACR) - https://help.aliyun.com/document_detail/257112.html?spm=5176.21213303.1362911.4.592a3edaca90z8&scm=20140722.S_card@@%E5%8D%A1%E7%89%87@@652._.ID_card@@%E5%8D%A1%E7%89%87@@652-RL_%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A1-OR_ser-V_2-P0_0。
+6，阿里云的容器镜像服务(ACR) - https://help.aliyun.com/document_detail/257112.html?spm=5176.21213303.1362911.4.592a3edaca90z8&scm=20140722.S_card@@%E5%8D%A1%E7%89%87@@652._.ID_card@@%E5%8D%A1%E7%89%87@@652-RL_%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A1-OR_ser-V_2-P0_0 。
 
-7，腾讯云的容器镜像服务 - https://cloud.tencent.com/document/product/1141。
+7，腾讯云的容器镜像服务 - https://cloud.tencent.com/document/product/1141 。
 
-8，node.js = https://nodejs.org/en/docs/
+8，node.js = https://nodejs.org/en/docs/ 。
 
-9，npm docs - https://docs.npmjs.com/
+9，npm docs - https://docs.npmjs.com/ 。
 
-10，imooc-cli - https://github.com/imooc-lego/imooc-cli。
+10，imooc-cli - https://github.com/imooc-lego/imooc-cli 。
