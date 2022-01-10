@@ -83,10 +83,10 @@ export const INQUIRE_APP_LIST = [
 		name: 'electron-antd',
 		value: 'electron-antd',
 	},
-	{
-		name: 'electron-element',
-		value: 'electron-element',
-	},
+	// {
+	// 	name: 'electron-element',
+	// 	value: 'electron-element',
+	// },
 ];
 
 export const INQUIRE_LIB_LIST = [
