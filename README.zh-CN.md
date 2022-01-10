@@ -598,7 +598,7 @@ stage 目前是可用的，但仍处于快速开发中，所以存在着很多�
 
 7，腾讯云的容器镜像服务 - https://cloud.tencent.com/document/product/1141 。
 
-8，node.js = https://nodejs.org/en/docs/ 。
+8，node.js - https://nodejs.org/en/docs/ 。
 
 9，npm docs - https://docs.npmjs.com/ 。
 
