@@ -27,7 +27,7 @@ It built in many default templates which can resolve general requests and are im
 
 ## Getting started
 
-1, installation:
+1. installation:
 
 ```sh
 npm install -g @fujia/cli-core
@@ -72,9 +72,9 @@ stage
 
 ### Environments Description
 
-1, The commands of "stage docker" and "stage service" are depended on docker environment, makes sure the related commands are run correctly, you have to configure the docker in local host and servers. How to install docker? please consults: https://docs.docker.com/get-docker/.
+1. The commands of "stage docker" and "stage service" are depended on docker environment, makes sure the related commands are run correctly, you have to configure the docker in local host and servers. How to install docker? please consults: https://docs.docker.com/get-docker/.
 
-2, Running the command of "stage service", if you selected the PM2 to manage your services(applications), you have to configure node environment and install package of PM2 globally. we recommend to manage node by using nvm. How to install nvm? please consults: https://github.com/nvm-sh/nvm.
+2. Running the command of "stage service", if you selected the PM2 to manage your services(applications), you have to configure node environment and install package of PM2 globally. we recommend to manage node by using nvm. How to install nvm? please consults: https://github.com/nvm-sh/nvm.
 
 installing pm2 globally:
 
@@ -86,9 +86,9 @@ npm install -g pm2
 
 Head over to the docs of PM2(https://pm2.keymetrics.io/docs/usage/quick-start/).
 
-3, Before any commands are run, stage will check user home directory of local host. If don't exist, it'll throw exceptions and end the process.
+3. Before any commands are run, stage will check user home directory of local host. If don't exist, it'll throw exceptions and end the process.
 
-4, when some commands are run, stage will create a directory which named ".stage-cli" in the user home directory.
+4. when some commands are run, stage will create a directory which named ".stage-cli" in the user home directory.
 
 ### Options
 
@@ -103,7 +103,7 @@ stage -v
 # 1.1.5
 ```
 
-#### -d, --debug：enable debug mode，by default：false
+#### -d, --debug：enable debug mode, by default：false
 
 You can enable debug mode when you want to check the running details or development. If enabled, it will print the execution flows and key parameters information in the internal.
 
@@ -160,7 +160,7 @@ You can initialize, deploy and update an application(service) by series of comma
 
 #### init [options] [projectName]：to initialize a general project quickly
 
-1, view init command:
+1. view init command:
 
 ```sh
 stage help init
@@ -175,22 +175,22 @@ stage help init
 #   -h, --help   display help for command
 ```
 
-2, -f, --force, by default: false
+2. -f, --force, by default: false
 
 when you passed this parameter, it'll force to initialize a project even if the work directory is not empty.
 
 Note: it is a very **dangerous operation** of remove one folder. so stage will confirm again and check the removed folder name before remove.
 
-3, projectName
+3. projectName
 
 - optional, if don't pass or invalid, you have to re-enter and stage will verify it. Note that the name follow the same rules as npm package name and strongly recommended don't use special characters.
 
-4, select a template type, support the following:
+4. select a template type, support the following:
 
 - default: built in template, maintained by stage terms.
 - custom: use your own templates
 
-5, the available default templates, as follows:
+5. the available default templates, as follows:
 
 > tips: most of templates are in the stage of development, we will improve them as soon as possible.
 
@@ -224,7 +224,7 @@ In the templates, we will add some common best practices, as: husky, Dockerfile 
 
 > this functionality is not perfect and we are planing to refactor it.
 
-1，views the command：
+1. views the command：
 
 ```sh
 
@@ -243,13 +243,13 @@ stage help publish
 
 ```
 
-2, options: --refreshRepo、--refreshToken、--refreshOwner
+2. options: --refreshRepo、--refreshToken、--refreshOwner
 
 - --refreshRepo：force to update remote git repo
 - --refreshToken：force to refresh remote git token
 - --refreshOwner：force to update remote repository type(individual or organization)
 
-3, input git repo token
+3. input git repo token
 
 running the command first, you need to enter Git token, and stage will store the token in .stage-cli folder.
 
@@ -258,7 +258,7 @@ How to set token?
 - Github - seeing：https://github.com/settings/tokens
 - Gitee - seeing：https://gitee.com/profile/personal_access_tokens
 
-4, if the token is right, stage will finish the following operations automatically:
+4. if the token is right, stage will finish the following operations automatically:
 
 - initialize git and add default .gitignore file(Note: this .gitignore file only adjust to npm projects)
 - add remote git url and create a main branch
@@ -270,7 +270,7 @@ Note: stage will make some checks before running the command, as: check if the p
 
 You only need to select a sematic version and publish it to npm registry quickly.
 
-1, view the command:
+1. view the command:
 
 ```sh
 
@@ -286,20 +286,20 @@ stage help release
 
 ```
 
-2, to ensure that the project is completely and correctly published to the npm, the following checks are done before publishing:
+2. to ensure that the project is completely and correctly published to the npm, the following checks are done before publishing:
 
 - check if is a npm project
 - check for the existence of a files field in package.json or a .gitignore file in the project root, if they are not exist, stage will throw exceptions then end the process
 - check the npm registry, if you have used the other registry mirror as: taobao, stage will force to switch to official registry by executing "npx nrm use npm"
 - check if you are logged in to npm, if not, you'll be prompted to do so
 
-3, at last, select a sematic version and start publishing.
+3. at last, select a sematic version and start publishing.
 
 that all, we published a npm package simply and correctly.
 
 #### docker [options]：to build a docker image locally and push to container mirror repository
 
-1, view the command:
+1. view the command:
 
 ```sh
 
@@ -317,12 +317,12 @@ stage help docker
 
 ```
 
-2, the options: -b, --build and -u, --updateService [serviceName]
+2. the options: -b, --build and -u, --updateService [serviceName]
 
 - -b,--build：build a docker image locally and push to the container mirror repository if build successful, then stage will log in to the server by ssh and pull the latest built image
 - -u, --updateService [serviceName]：it's optional, but if you set the parameter, stage will update the corresponding service when the remote server pull the latest image.
 
-3, stage will check the following items before build:
+3. stage will check the following items before build:
 
 - check docker environment. **Note: stage don't install the docker automatically and only prompt that**
   - check if exist Dockerfile file in the project root
@@ -330,11 +330,11 @@ stage help docker
 - check the current branch name is "main" or "master", **Note: stage only you build a docker image in main or master branch**
 - check the git stash of current project is empty
 
-4, enter the server information, includes: username, port, ip.
+4. enter the server information, includes: username, port, ip.
 
 the server information will store to the server-info.json file in the .stage-cli folder. the purpose of this is to void entering the same things repetitively. **Note: this information is sensitive, please keep it safe!**
 
-5, enter the container mirror repo information, the details includes:
+5. enter the container mirror repo information, the details includes:
 
 - owner: username
 - userPwd: password
@@ -347,7 +347,7 @@ we recommend to use the free container mirror service provide by aliyun or tence
 
 #### service：deploy or update a service(application)
 
-1, view the command:
+1. view the command:
 
 ```sh
 
@@ -368,7 +368,7 @@ stage help service
 
 ```
 
-2, deploy a service via docker swarm
+2. deploy a service via docker swarm
 
 > stage assumes you have configured docker swarm in the server. seeing here: https://docs.docker.com/engine/swarm/stack-deploy/.
 
@@ -380,7 +380,7 @@ docker service deploy stack-name
 
 ```
 
-3, deploy or manage a service via PM2
+3. deploy or manage a service via PM2
 
 > stage assumes you have installed the PM2 globally, seeing here: https://pm2.keymetrics.io/docs/usage/quick-start/.
 
@@ -394,7 +394,7 @@ docker service deploy
 
 You can clean up the cached npm packages manually.
 
-1, view the command:
+1. view the command:
 
 ```sh
 
@@ -410,7 +410,7 @@ stage help clean
 
 ```
 
-2, examples:
+2. examples:
 
 ```sh
 
@@ -438,50 +438,50 @@ stage is available now, but still under rapid development, so there are many pro
 
 ### Testing
 
-1, unit tests, to ensure the high availability, stability and maintainability of the application, we must ensure sufficient unit testing.
+unit tests, to ensure the high availability, stability and maintainability of the application, we must ensure sufficient unit testing.
 
 ## Plans
 
 ### Template Ecological Construction
 
-1, to refine the default templates.
+1. to refine the default templates.
 
-2, to determine the development direction of custom templates.
+2. to determine the development direction of custom templates.
 
 ### More useful features
 
-1, support chinese.
+1. support chinese.
 
-2, commands plugged in, which is the focus of the next big release.
+2. commands plugged in, which is the focus of the next big release.
 
-3, cloud build.
+3. cloud build.
 
 ### Combining the power of third-party developers
 
-1, this is the focus and direction of the future development of the stage.
+this is the focus and direction of the future development of the stage.
 
 ## Supporting Stage
 
-1, If the project is helpful to you, please click a star on [github](https://github.com/fujia-cli/stage).
+if the project is helpful to you, please click a star on [github](https://github.com/fujia-cli/stage).
 
 ## References
 
-1，Gitee OpenAPI - https://gitee.com/api/v5/swagger#/getV5ReposOwnerRepoStargazers?ex=no.
+1. Gitee OpenAPI - https://gitee.com/api/v5/swagger#/getV5ReposOwnerRepoStargazers?ex=no.
 
-2，docker docs - https://docs.docker.com/get-docker/.
+2. docker docs - https://docs.docker.com/get-docker/.
 
-3，nvm - https://github.com/nvm-sh/nvm.
+3. nvm - https://github.com/nvm-sh/nvm.
 
-4，pm2 - https://pm2.keymetrics.io/docs/usage/quick-start/.
+4. pm2 - https://pm2.keymetrics.io/docs/usage/quick-start/.
 
-5，vue-element-admin - (https://panjiachen.github.io/vue-element-admin-site/zh/guide/).
+5. vue-element-admin - (https://panjiachen.github.io/vue-element-admin-site/zh/guide/).
 
-6，Container mirror service of aliyun(ACR) - https://help.aliyun.com/document_detail/257112.html?spm=5176.21213303.1362911.4.592a3edaca90z8&scm=20140722.S_card@@%E5%8D%A1%E7%89%87@@652._.ID_card@@%E5%8D%A1%E7%89%87@@652-RL_%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A1-OR_ser-V_2-P0_0.
+6. Container mirror service of aliyun(ACR) - https://help.aliyun.com/document_detail/257112.html?spm=5176.21213303.1362911.4.592a3edaca90z8&scm=20140722.S_card@@%E5%8D%A1%E7%89%87@@652._.ID_card@@%E5%8D%A1%E7%89%87@@652-RL_%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A1-OR_ser-V_2-P0_0.
 
-7，Container mirror service of tencent - https://cloud.tencent.com/document/product/1141.
+7. Container mirror service of tencent - https://cloud.tencent.com/document/product/1141.
 
-8，node.js - https://nodejs.org/en/docs/.
+8. node.js - https://nodejs.org/en/docs/.
 
-9，npm docs - https://docs.npmjs.com/.
+9. npm docs - https://docs.npmjs.com/.
 
-10，imooc-cli - https://github.com/imooc-lego/imooc-cli.
+10. imooc-cli - https://github.com/imooc-lego/imooc-cli.
