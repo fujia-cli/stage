@@ -593,8 +593,7 @@ stage 目前是可用的，但仍处于快速开发中，所以存在着很多�
 
 5，vue-element-admin - (https://panjiachen.github.io/vue-element-admin-site/zh/guide/) 。
 
-6，阿里云的容器镜像服务(ACR) - https://help.aliyun.com/document_detail/257112.html?spm=5176.21213303.1362911.4.592a3edaca90z8&scm=20140722.S_card@@%E5%8D%A1%E7%89%87@@652._.ID_card@@%E5%8D%A1%E7%89%87@@652-RL_%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A1-OR_ser-V_2-P0_0 。
-
+6，阿里云的容器镜像服务(ACR) - https://help.aliyun.com/document_detail/257112.html。
 7，腾讯云的容器镜像服务 - https://cloud.tencent.com/document/product/1141 。
 
 8，node.js - https://nodejs.org/en/docs/ 。
