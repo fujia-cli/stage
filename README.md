@@ -22,11 +22,12 @@ English | [简体中文](./README.zh-CN.md)
 
 ## Introduction
 
-stage are open source and aim at helping to develop, build and deploy various of applications quickly for individual developers or freelancer cli tools. It built in many default templates which can resolve general requests and are improving and extending. what's more, it's supported by customized templates.
+stage are open source and aim at helping to develop, build and deploy various of applications quickly for individual developers or freelancer cli tools.
+It built in many default templates which can resolve general requests and are improving and extending. what's more, it's supported by customized templates.
 
-## Installation
+## Getting started
 
-1, using follows commands to install:
+1, installation:
 
 ```sh
 npm install -g @fujia/cli-core
@@ -44,7 +45,7 @@ npm install -g @fujia/cli-core
 
 ## Usage
 
-<a id="help">🔗</a> views all commands and options：
+<a id="help">🔗</a> view all commands and options：
 
 ```sh
 
@@ -159,7 +160,7 @@ You can initialize, deploy and update an application(service) by series of comma
 
 #### init [options] [projectName]：to initialize a general project quickly
 
-1, views init command:
+1, view init command:
 
 ```sh
 stage help init
@@ -195,8 +196,8 @@ Note: it is a very **dangerous operation** of remove one folder. so stage will c
 
 web:
 
-- vue: base on vue.js@2.x
-- vue-next: base on vue.js@3.x
+- vue: base on [vue.js](https://github.com/vuejs/vue)
+- vue-next: base on [vue-next](https://github.com/vuejs/vue-next)
 - nuxtjs: base on nuxt.js
 - vue-admin: base on [vue-element-admin](https://panjiachen.github.io/vue-element-admin-site/zh/guide/)
 - react: base on react.js
@@ -269,7 +270,7 @@ Note: stage will make some checks before running the command, as: check if the p
 
 You only need to select a sematic version and publish it to npm registry quickly.
 
-1, views the command:
+1, view the command:
 
 ```sh
 
@@ -298,7 +299,7 @@ that all, we published a npm package simply and correctly.
 
 #### docker [options]：to build a docker image locally and push to container mirror repository
 
-1, views the command:
+1, view the command:
 
 ```sh
 
@@ -344,10 +345,143 @@ the server information will store to the server-info.json file in the .stage-cli
 
 we recommend to use the free container mirror service provide by aliyun or tencent.
 
-#### service：部署或更新一个服务(应用)
+#### service：deploy or update a service(application)
+
+1, view the command:
+
+```sh
+
+stage help service
+
+# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
+# Usage: stage service [options] [command]
+#
+# deploy or update a service
+#
+# Options:
+#   -h, --help                    display help for command
+#
+# Commands:
+#   deploy [stackName] [workDir]  deploy a service via docker image or PM2
+#   update [serviceName]          update a service via docker image
+#   help [command]                display help for command
+
+```
+
+2, deploy a service via docker swarm
+
+> stage assumes you have configured docker swarm in the server. seeing here: https://docs.docker.com/engine/swarm/stack-deploy/.
+
+use the following command:
+
+```sh
+
+docker service deploy stack-name
+
+```
+
+3, deploy or manage a service via PM2
+
+> stage assumes you have installed the PM2 globally, seeing here: https://pm2.keymetrics.io/docs/usage/quick-start/.
+
+```sh
+
+docker service deploy
+
+```
+
+#### clean [cacheFileName]：clean up caches
+
+You can clean up the cached npm packages manually.
+
+1, view the command:
+
+```sh
+
+stage help clean
+
+# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
+# Usage: stage clean [options] [cacheFileName]
+#
+# clean caches
+#
+# Options:
+#   -h, --help  display help for command
+
+```
+
+2, examples:
+
+```sh
+
+stage clean
+
+# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
+# ✔ Installed 1 packages
+# ✔ Linked 34 latest versions
+# ✔ Run 0 scripts
+# ✔ All packages installed (34 packages installed from npm registry, used 5s(network 5s), speed 299.45KB/# s, json 34(1.57MB), tarball 0B)
+# [stage] info starting to clean cached directories: /Users/sunny/.stage-cli/caches, /Users/sunny/.# stage-cli/templates
+# [stage] info process exited!
+
+```
+
+#### help [command]：view the usage of one command.
+
+## Examples
+
+we have provided a complete example to demonstrate how to create a web application so that you can quickly understand the entire process. [go to](./examples/README.md).
 
 ## Questions
 
+stage is available now, but still under rapid development, so there are many problems, please believe that we will actively work on them!
+
+### Testing
+
+1, unit tests, to ensure the high availability, stability and maintainability of the application, we must ensure sufficient unit testing.
+
 ## Plans
 
+### Template Ecological Construction
+
+1, to refine the default templates.
+
+2, to determine the development direction of custom templates.
+
+### More useful features
+
+1, support chinese.
+
+2, commands plugged in, which is the focus of the next big release.
+
+3, cloud build.
+
+### Combining the power of third-party developers
+
+1, this is the focus and direction of the future development of the stage.
+
 ## Supporting Stage
+
+1, If the project is helpful to you, please click a star on [github](https://github.com/fujia-cli/stage).
+
+## References
+
+1，Gitee OpenAPI - https://gitee.com/api/v5/swagger#/getV5ReposOwnerRepoStargazers?ex=no.
+
+2，docker docs - https://docs.docker.com/get-docker/.
+
+3，nvm - https://github.com/nvm-sh/nvm.
+
+4，pm2 - https://pm2.keymetrics.io/docs/usage/quick-start/.
+
+5，vue-element-admin - (https://panjiachen.github.io/vue-element-admin-site/zh/guide/).
+
+6，Container mirror service of aliyun(ACR) - https://help.aliyun.com/document_detail/257112.html?spm=5176.21213303.1362911.4.592a3edaca90z8&scm=20140722.S_card@@%E5%8D%A1%E7%89%87@@652._.ID_card@@%E5%8D%A1%E7%89%87@@652-RL_%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A1-OR_ser-V_2-P0_0.
+
+7，Container mirror service of tencent - https://cloud.tencent.com/document/product/1141.
+
+8，node.js - https://nodejs.org/en/docs/.
+
+9，npm docs - https://docs.npmjs.com/.
+
+10，imooc-cli - https://github.com/imooc-lego/imooc-cli.
