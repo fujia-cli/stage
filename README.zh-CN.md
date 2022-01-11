@@ -20,12 +20,12 @@
 
 </div>
 
-# 介绍
+## 介绍
 
 stage 是一款开源的，旨在协助个人开发者或自由职业者快速开发、构建以及部署各类应用的脚手架工具。它内置了大量的默认模板，基本覆盖了当前常见的应用类型，而且还在不断扩展中，当然，支持可定制。
 选择一款你想要创建的应用类型模板，下载并启动它。模板中内置了一些应用开发，构建以及部署通用的最佳实践，开发者可以根据需要决定是否采用它们。我们的初衷是希望能帮助开发者将更多的精力放在应用的创意上，快速构建应用的 MVP1.0 版本。
 
-# 安装
+## 安装
 
 1，使用下面命令安装
 
@@ -78,7 +78,7 @@ stage
 
 1，stage docker 和 stage service 命令依赖 docker 环境，为了保证相关命令的正确执行，请自行在本地主机和服务器上配置好 docker。如何安装 docker？请参考：https://docs.docker.com/get-docker/。
 
-2，在 stage service 中如果使用 PM2 方式管理服务(应用)，需要确保服务器上配置好了 node 环境，请全局安装了 pm2。我们建议使用 nvm 来管理 node，如何安装 nvm? 请参考：https://github.com/nvm-sh/nvm
+2，在 stage service 中如果使用 PM2 方式管理服务(应用)，需要确保服务器上配置好了 node 环境，请全局安装了 pm2。我们建议使用 nvm 来管理 node，如何安装 nvm? 请参考：https://github.com/nvm-sh/nvm。
 
 全局安装 pm2：
 
@@ -197,15 +197,15 @@ stage help init
 
 5，在执行过程中，需要你选择项目模板，目前可用模板如下：
 
-> 当前大部分的处于开发中，我们尽快完善整个模板生态。
+> 当前大部分的模板处于开发中，我们尽快完善整个模板生态。
 
 web:
 
 - vue: 基于 vue.js@2 的二次封装。
-- vue-next: 基于 vue.js@2 的二次封装。
+- vue-next: 基于 vue.js@3.x 的二次封装。
 - nuxtjs: 基于 nuxt.js 的二次封装。
 - vue-admin: 基于[vue-element-admin](https://panjiachen.github.io/vue-element-admin-site/zh/guide/)的二次封装，仅保留了基本结构，进一步完善应用的细节。
-- react: 基于 rect.js 的二次封装。
+- react: 基于 react.js 的二次封装。
 
 app:
 
@@ -266,11 +266,11 @@ stage help publish
 
 4，如果 token 正确，选择仓库类型后，stage 会完成下面的操作：
 
-- 初始化 git, 生成.git 和默认的.gitignore(注意：该.gitignore 仅适应 npm 项目)。
+- 初始化 git, 生成.git 和默认的.gitignore(注意：该.gitignore 仅适应于 npm 项目)。
 - 设置远程仓库地址，添加 main 分支。
 - 将初始化代码提交到远程仓库 main 分支上，并切换到开发分支 feature/0.1.0 版本。
 
-需要注意的是，stage 会一些校验，如是否是一个合法的 npm 项目等。
+需要注意的是，stage 会做一些校验，如：是否是一个合法的 npm 项目等。
 
 #### release [options]：快速发布一个 npm 包
 
@@ -311,7 +311,7 @@ stage help release
 
 ```sh
 
-stage help release
+stage help docker
 
 # [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
 # Usage: stage docker [options]
@@ -328,14 +328,13 @@ stage help release
 2，配置项：-b, --build 和 -u, --updateService [serviceName]
 
 - -b,--build：本地构建一个 docker image，成功后推送到容器镜像服务仓库，推送成功后，会登录服务器拉取最新构建的 image。
-- -u, --updateService [serviceName]：项目镜像构建并推动到容器镜像服务成功后，开始更新 serviceName 服务；serviceName 是可选的，如果没有填写，需要你输入或选择。
+- -u, --updateService [serviceName]：项目镜像构建并推动到容器镜像服务成功后，开始更新 serviceName 服务；serviceName 是可选的，如果没有填写，需要你在之后的流程中输入或选择。
 
 3，构建前校验：
 
 - 检查 docker 环境，**注意：stage 不会自动配置 docker 环境，只会给出相应的提示！！！**，如果本地主机以及服务器上没有配置 docker 环境或配置不正确，会导致构建失败。
   - 检查是否存在 Dockerfile 文件。
   - 检查是否存在.dockerignore 文件。
-- 检查用户主目录下.stage-cli 的命令目录。
 - 检查当前是否在 main 或 master 分支，**请注意：我们只允许你在 main 或 master 分支上构建 docker image**。
 - 检查当前项目的 git stash 是否为空，确保没有未提交的改动。
 
