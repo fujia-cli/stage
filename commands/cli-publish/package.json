@@ -1,49 +1,49 @@
 {
-  "name": "@fujia/cli-publish",
-  "version": "1.1.9",
-  "description": "A package to achieve deploy flows for stage cli.",
-  "keywords": [
-    "deploy",
-    "automatic",
-    "stage",
-    "cli",
-    "git"
-  ],
-  "author": "fujia <fujia.site@outlook.com>",
-  "homepage": "https://github.com/fujia-cli/stage/tree/main/commands/cli-publish#readme",
-  "license": "MIT",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__"
-  },
-  "files": [
-    "lib"
-  ],
-  "publishConfig": {
-    "access": "public"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/fujia-cli/stage.git"
-  },
-  "scripts": {
-    "tsc": "rimraf ./lib && tsc",
-    "test": "echo \"Error: run tests from root\" && exit 1"
-  },
-  "bugs": {
-    "url": "https://github.com/fujia-cli/stage/issues"
-  },
-  "dependencies": {
-    "@fujia/check-path": "^1.1.0",
-    "@fujia/cli-command": "file:../../models/cli-command",
-    "@fujia/cli-git": "file:../../models/cli-git",
-    "@fujia/cli-log": "file:../../utils/cli-log",
-    "fs-extra": "^10.0.0"
-  },
-  "devDependencies": {
-    "@types/fs-extra": "^9.0.13",
-    "rimraf": "^3.0.2"
-  }
+	"name": "@fujia/cli-publish",
+	"version": "1.1.7",
+	"description": "A package to achieve deploy flows for stage cli.",
+	"keywords": [
+		"deploy",
+		"automatic",
+		"stage",
+		"cli",
+		"git"
+	],
+	"author": "fujia <fujia.site@outlook.com>",
+	"homepage": "https://github.com/fujia-cli/stage/tree/main/commands/cli-publish#readme",
+	"license": "MIT",
+	"main": "lib/index.js",
+	"types": "lib/index.d.ts",
+	"directories": {
+		"lib": "lib",
+		"test": "__tests__"
+	},
+	"files": [
+		"lib"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/fujia-cli/stage.git"
+	},
+	"scripts": {
+		"tsc": "rimraf ./lib && tsc",
+		"test": "echo \"Error: run tests from root\" && exit 1"
+	},
+	"bugs": {
+		"url": "https://github.com/fujia-cli/stage/issues"
+	},
+	"dependencies": {
+		"@fujia/check-path": "^1.1.0",
+		"@fujia/cli-command": "file:../../models/cli-command",
+		"@fujia/cli-git": "file:../../models/cli-git",
+		"@fujia/cli-log": "file:../../utils/cli-log",
+		"fs-extra": "^10.0.0"
+	},
+	"devDependencies": {
+		"@types/fs-extra": "^9.0.13",
+		"rimraf": "^3.0.2"
+	}
 }
