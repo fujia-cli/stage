@@ -218,6 +218,7 @@ export class ServiceCommand extends CliCommand {
 				mirrorName,
 				repoZone,
 				repoNamespace,
+				mirrorVersion: this.upgradeMirrorVersion,
 				serviceName: this.serviceName,
 			});
 
