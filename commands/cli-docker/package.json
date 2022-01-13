@@ -1,6 +1,6 @@
 {
 	"name": "@fujia/cli-docker",
-	"version": "1.1.9",
+	"version": "1.2.0",
 	"description": "A npm package to make build a docker image and update corresponding service simple",
 	"keywords": [
 		"docker",
@@ -36,10 +36,10 @@
 	},
 	"dependencies": {
 		"@fujia/check-path": "^1.1.0",
-		"@fujia/cli-command": "^1.1.9",
-		"@fujia/cli-log": "^1.1.9",
-		"@fujia/cli-package": "^1.1.9",
-		"@fujia/cli-utils": "^1.1.9",
+		"@fujia/cli-command": "^1.2.0",
+		"@fujia/cli-log": "^1.2.0",
+		"@fujia/cli-package": "^1.2.0",
+		"@fujia/cli-utils": "^1.2.0",
 		"fs-extra": "^10.0.0",
 		"inquirer": "^8.2.0",
 		"semver": "^7.3.5",

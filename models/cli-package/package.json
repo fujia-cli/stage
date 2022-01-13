@@ -1,6 +1,6 @@
 {
 	"name": "@fujia/cli-package",
-	"version": "1.1.9",
+	"version": "1.2.0",
 	"description": "A class of cli module",
 	"author": "fujia <fujia.site@outlook.com>",
 	"homepage": "https://github.com/fujia-cli/stage/tree/main/models/cli-package#readme",
@@ -34,9 +34,9 @@
 	},
 	"dependencies": {
 		"@fujia/check-path": "^1.1.0",
-		"@fujia/cli-log": "^1.1.9",
-		"@fujia/cross-path": "^1.1.9",
-		"@fujia/get-pkg-info": "^1.1.9",
+		"@fujia/cli-log": "^1.2.0",
+		"@fujia/cross-path": "^1.2.0",
+		"@fujia/get-pkg-info": "^1.2.0",
 		"@fujia/hammer": "^0.5.3",
 		"@fujia/user-home": "^1.0.0",
 		"fs-extra": "^10.0.0",
