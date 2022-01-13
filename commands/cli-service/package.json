@@ -1,6 +1,6 @@
 {
 	"name": "@fujia/cli-service",
-	"version": "1.1.7",
+	"version": "1.1.8",
 	"description": "A npm package to make deploying a service simple.",
 	"keywords": [
 		"web",

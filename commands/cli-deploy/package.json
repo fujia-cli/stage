@@ -1,6 +1,6 @@
 {
 	"name": "@fujia/cli-deploy",
-	"version": "1.1.7",
+	"version": "1.1.8",
 	"description": "A package of stage cli to deploy an application",
 	"keywords": [
 		"stage",
