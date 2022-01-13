@@ -21,8 +21,6 @@ export const genBuildImageCmd = (options: BuildImageCmdOptions) => {
     IMAGE_ID=$(docker image ls -q ${mirrorName}:${mirrorVersion})
 
     docker tag $IMAGE_ID ${repoZone}/${repoNamespace}/${mirrorName}:${mirrorVersion}
-
-    docker tag $IMAGE_ID ${repoZone}/${repoNamespace}/${mirrorName}:latest
   `;
 };
 
@@ -36,8 +34,6 @@ export const genPushImageCmd = (options: ContainerMirrorServiceInfo) => {
 
     # 2. push to your private repository
     docker push ${repoZone}/${repoNamespace}/${mirrorName}:${mirrorVersion}
-
-    docker push ${repoZone}/${repoNamespace}/${mirrorName}:latest
   `;
 };
 
@@ -58,8 +54,6 @@ export const genPullImageToServerCmd = (options: PullImageCmdOptions) => {
     ssh -tt -p ${sshPort} ${userName}@${serverIP} << EOF
     docker login --username=${owner} --password=${userPwd} ${repoZone}
 
-    docker pull ${repoZone}/${repoNamespace}/${mirrorName}:latest
-
     docker pull ${repoZone}/${repoNamespace}/${mirrorName}:${mirrorVersion}
 
     exit
@@ -76,14 +70,23 @@ export const genDeployServiceCmd = (options: DeployServiceCmdOptions) => {
 };
 
 export const genUpdateServiceCmd = (options: UpdateServiceCmdOptions) => {
-	const { sshPort, userName, serverIP, mirrorName, repoZone, repoNamespace, serviceName } = options;
+	const {
+		sshPort,
+		userName,
+		serverIP,
+		mirrorName,
+		repoZone,
+		repoNamespace,
+		serviceName,
+		mirrorVersion,
+	} = options;
 
 	return `
     #!/bin/bash
     # if you are using docker swarm, please make sure the follow ip address is the master node
     ssh -tt -p ${sshPort} ${userName}@${serverIP} << EOF
 
-    docker service update --image ${repoZone}/${repoNamespace}/${mirrorName}:latest ${serviceName}
+    docker service update --image ${repoZone}/${repoNamespace}/${mirrorName}:${mirrorVersion} ${serviceName}
 
     exit
     EOF
