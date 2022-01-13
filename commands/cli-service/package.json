@@ -41,11 +41,13 @@
 		"@fujia/cli-log": "file:../../utils/cli-log",
 		"@fujia/cli-utils": "file:../../utils/cli-utils",
 		"fs-extra": "^10.0.0",
-		"inquirer": "^8.2.0"
+		"inquirer": "^8.2.0",
+		"semver": "^7.3.5"
 	},
 	"devDependencies": {
 		"@types/fs-extra": "^9.0.13",
 		"@types/inquirer": "^8.1.3",
+		"@types/semver": "^7.3.9",
 		"rimraf": "^3.0.2"
 	}
 }

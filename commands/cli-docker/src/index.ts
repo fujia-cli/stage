@@ -6,7 +6,7 @@ import fse from 'fs-extra';
 import { pathExistSync } from '@fujia/check-path';
 import simpleGit, { SimpleGit } from 'simple-git';
 import semver from 'semver';
-import { NewEnvVariables, spawnAsync, readFile, spinnerInstance } from '@fujia/cli-utils';
+import { NewEnvVariables, spawnAsync } from '@fujia/cli-utils';
 
 import {
 	inquireServerInfo,
