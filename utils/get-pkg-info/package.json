@@ -1,6 +1,6 @@
 {
 	"name": "@fujia/get-pkg-info",
-	"version": "1.1.8",
+	"version": "1.1.9",
 	"description": "Obtain the package info via npm's api",
 	"author": "fujia <fujia.site@outlook.com>",
 	"homepage": "https://github.com/fujia-cli/stage/tree/main/utils/get-pkg-info#readme",
