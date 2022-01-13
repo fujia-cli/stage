@@ -1,6 +1,6 @@
 {
 	"name": "@fujia/cli-init",
-	"version": "1.1.5",
+	"version": "1.1.6",
 	"description": "cli init",
 	"author": "fujia <fujia.site@outlook.com>",
 	"homepage": "https://github.com/fujia-cli/stage/tree/main/commands/cli-init#readme",
