@@ -1,59 +1,59 @@
 {
-  "name": "@fujia/cli-core",
-  "version": "1.1.6-alpha.0",
-  "description": "cli core",
-  "author": "fujia <fujia.site@outlook.com>",
-  "homepage": "https://github.com/fujia-cli/stage/tree/main/packages/core#readme",
-  "license": "MIT",
-  "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
-  "directories": {
-    "lib": "lib",
-    "test": "__tests__"
-  },
-  "files": [
-    "lib"
-  ],
-  "bin": {
-    "stage": "bin/index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/fujia-cli/stage.git",
-    "directory": "core/cli"
-  },
-  "scripts": {
-    "tsc": "rimraf ./lib && tsc",
-    "test": "echo \"Error: run tests from root\" && exit 1"
-  },
-  "bugs": {
-    "url": "https://github.com/fujia-cli/stage/issues"
-  },
-  "gitHead": "12c19c9108320379ca8b9684a02cc746def031bc",
-  "publishConfig": {
-    "access": "public"
-  },
-  "dependencies": {
-    "@fujia/check-path": "^1.2.0",
-    "@fujia/cli-exec": "file:../cli-exec",
-    "@fujia/cli-init": "file:../../commands/cli-init",
-    "@fujia/cli-log": "file:../../utils/cli-log",
-    "@fujia/cli-utils": "file:../../utils/cli-utils",
-    "@fujia/get-pkg-info": "file:../../utils/get-pkg-info",
-    "@fujia/root": "^0.3.2",
-    "@fujia/user-home": "^1.1.0",
-    "colors": "^1.4.0",
-    "commander": "^8.3.0",
-    "dotenv": "^10.0.0",
-    "fs-extra": "^10.0.0",
-    "import-local": "^3.0.3",
-    "npmlog": "^6.0.0",
-    "semver": "^7.3.5"
-  },
-  "devDependencies": {
-    "@types/fs-extra": "^9.0.13",
-    "@types/root-check": "^1.0.0",
-    "@types/semver": "^7.3.9",
-    "rimraf": "^3.0.2"
-  }
+	"name": "@fujia/cli-core",
+	"version": "1.1.5",
+	"description": "cli core",
+	"author": "fujia <fujia.site@outlook.com>",
+	"homepage": "https://github.com/fujia-cli/stage/tree/main/packages/core#readme",
+	"license": "MIT",
+	"main": "./lib/index.js",
+	"types": "./lib/index.d.ts",
+	"directories": {
+		"lib": "lib",
+		"test": "__tests__"
+	},
+	"files": [
+		"lib"
+	],
+	"bin": {
+		"stage": "bin/index.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/fujia-cli/stage.git",
+		"directory": "core/cli"
+	},
+	"scripts": {
+		"tsc": "rimraf ./lib && tsc",
+		"test": "echo \"Error: run tests from root\" && exit 1"
+	},
+	"bugs": {
+		"url": "https://github.com/fujia-cli/stage/issues"
+	},
+	"gitHead": "12c19c9108320379ca8b9684a02cc746def031bc",
+	"publishConfig": {
+		"access": "public"
+	},
+	"dependencies": {
+		"@fujia/check-path": "^1.2.0",
+		"@fujia/cli-exec": "file:../cli-exec",
+		"@fujia/cli-init": "file:../../commands/cli-init",
+		"@fujia/cli-log": "file:../../utils/cli-log",
+		"@fujia/cli-utils": "file:../../utils/cli-utils",
+		"@fujia/get-pkg-info": "file:../../utils/get-pkg-info",
+		"@fujia/root": "^0.3.2",
+		"@fujia/user-home": "^1.1.0",
+		"colors": "^1.4.0",
+		"commander": "^8.3.0",
+		"dotenv": "^10.0.0",
+		"fs-extra": "^10.0.0",
+		"import-local": "^3.0.3",
+		"npmlog": "^6.0.0",
+		"semver": "^7.3.5"
+	},
+	"devDependencies": {
+		"@types/fs-extra": "^9.0.13",
+		"@types/root-check": "^1.0.0",
+		"@types/semver": "^7.3.9",
+		"rimraf": "^3.0.2"
+	}
 }
