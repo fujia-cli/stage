@@ -36,13 +36,14 @@
 	},
 	"dependencies": {
 		"@fujia/check-path": "^1.1.0",
-		"@fujia/cli-command": "file:../../models/cli-command",
-		"@fujia/cli-log": "file:../../utils/cli-log",
-		"@fujia/cli-utils": "file:../../utils/cli-utils",
+		"@fujia/cli-command": "^1.1.9",
+		"@fujia/cli-log": "^1.1.9",
+		"@fujia/cli-utils": "^1.1.9",
 		"@types/fs-extra": "^9.0.13",
 		"fs-extra": "^10.0.0"
 	},
 	"devDependencies": {
 		"rimraf": "^3.0.2"
-	}
+	},
+	"gitHead": "75c5a0673281a27e8534e9c2b22fba5cf76c24cb"
 }

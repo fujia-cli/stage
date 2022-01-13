@@ -34,13 +34,14 @@
 	},
 	"dependencies": {
 		"@fujia/check-path": "^1.1.0",
-		"@fujia/cli-log": "file:../../utils/cli-log",
-		"@fujia/cross-path": "file:../../utils/cross-path",
-		"@fujia/get-pkg-info": "file:../../utils/get-pkg-info",
+		"@fujia/cli-log": "^1.1.9",
+		"@fujia/cross-path": "^1.1.9",
+		"@fujia/get-pkg-info": "^1.1.9",
 		"@fujia/hammer": "^0.5.3",
 		"@fujia/user-home": "^1.0.0",
 		"fs-extra": "^10.0.0",
 		"npminstall": "^5.3.1",
 		"pkg-dir": "^5.0.0"
-	}
+	},
+	"gitHead": "75c5a0673281a27e8534e9c2b22fba5cf76c24cb"
 }

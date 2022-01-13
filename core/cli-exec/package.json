@@ -34,11 +34,12 @@
 		"url": "https://github.com/fujia-cli/stage/issues"
 	},
 	"dependencies": {
-		"@fujia/cli-log": "file:../../utils/cli-log",
-		"@fujia/cli-package": "file:../../models/cli-package",
-		"@fujia/cli-utils": "file:../../utils/cli-utils"
+		"@fujia/cli-log": "^1.1.9",
+		"@fujia/cli-package": "^1.1.9",
+		"@fujia/cli-utils": "^1.1.9"
 	},
 	"devDependencies": {
 		"rimraf": "^3.0.2"
-	}
+	},
+	"gitHead": "75c5a0673281a27e8534e9c2b22fba5cf76c24cb"
 }

@@ -40,8 +40,8 @@
 		"rimraf": "^3.0.2"
 	},
 	"dependencies": {
-		"@fujia/cli-log": "file:../../utils/cli-log",
-		"@fujia/cli-utils": "file:../../utils/cli-utils",
+		"@fujia/cli-log": "^1.1.9",
+		"@fujia/cli-utils": "^1.1.9",
 		"@fujia/user-home": "^1.1.0",
 		"axios": "^0.24.0",
 		"fs-extra": "^10.0.0",
@@ -49,5 +49,6 @@
 		"semver": "^7.3.5",
 		"simple-git": "^2.48.0",
 		"terminal-link": "^2.1.1"
-	}
+	},
+	"gitHead": "75c5a0673281a27e8534e9c2b22fba5cf76c24cb"
 }

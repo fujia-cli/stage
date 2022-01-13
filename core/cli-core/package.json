@@ -29,17 +29,17 @@
 	"bugs": {
 		"url": "https://github.com/fujia-cli/stage/issues"
 	},
-	"gitHead": "12c19c9108320379ca8b9684a02cc746def031bc",
+	"gitHead": "75c5a0673281a27e8534e9c2b22fba5cf76c24cb",
 	"publishConfig": {
 		"access": "public"
 	},
 	"dependencies": {
 		"@fujia/check-path": "^1.2.0",
-		"@fujia/cli-exec": "file:../cli-exec",
-		"@fujia/cli-init": "file:../../commands/cli-init",
-		"@fujia/cli-log": "file:../../utils/cli-log",
-		"@fujia/cli-utils": "file:../../utils/cli-utils",
-		"@fujia/get-pkg-info": "file:../../utils/get-pkg-info",
+		"@fujia/cli-exec": "^1.1.9",
+		"@fujia/cli-init": "^1.1.9",
+		"@fujia/cli-log": "^1.1.9",
+		"@fujia/cli-utils": "^1.1.9",
+		"@fujia/get-pkg-info": "^1.1.9",
 		"@fujia/root": "^0.3.2",
 		"@fujia/user-home": "^1.1.0",
 		"colors": "^1.4.0",
