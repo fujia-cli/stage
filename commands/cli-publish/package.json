@@ -1,6 +1,6 @@
 {
 	"name": "@fujia/cli-publish",
-	"version": "1.3.0",
+	"version": "1.3.1",
 	"description": "A package to achieve deploy flows for stage cli.",
 	"keywords": [
 		"deploy",
@@ -37,8 +37,8 @@
 	},
 	"dependencies": {
 		"@fujia/check-path": "^1.1.0",
-		"@fujia/cli-command": "^1.3.0",
-		"@fujia/cli-git": "^1.3.0",
+		"@fujia/cli-command": "^1.3.1",
+		"@fujia/cli-git": "^1.3.1",
 		"@fujia/cli-log": "^1.2.0",
 		"fs-extra": "^10.0.0"
 	},
