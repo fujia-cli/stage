@@ -137,6 +137,8 @@ export class ServiceCommand extends CliCommand {
 				`docker build the image ${mirrorName}:${this.upgradeMirrorVersion} successfully`,
 			);
 			await this.pushMainWithUpgradeVersion();
+		} else {
+			process.exit(execCode as number);
 		}
 	}
 
@@ -199,6 +201,8 @@ export class ServiceCommand extends CliCommand {
 				'',
 				`pull the image ${mirrorName}:${this.upgradeMirrorVersion} to ${serverIP} successfully`,
 			);
+		} else {
+			process.exit(execCode as number);
 		}
 	}
 
@@ -367,7 +371,7 @@ export class ServiceCommand extends CliCommand {
 	checkDockerEnv() {
 		log.info(
 			'',
-			'please make sure the docker environment is configured on the local host and the remote server',
+			'please make sure the docker environment is configured and running on the local host and the remote server',
 		);
 		const cwdPath = process.cwd();
 		const dockerFilePath = path.resolve(cwdPath, DOCKER_FILE);
