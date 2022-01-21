@@ -2,11 +2,9 @@ import path from 'path';
 import fs from 'fs';
 import CliCommand from '@fujia/cli-command';
 import log from '@fujia/cli-log';
-import fse from 'fs-extra';
-import { pathExistSync } from '@fujia/check-path';
-import { getInfoFromPkgJson, getLatestVersion } from '@fujia/get-pkg-info';
+import { getInfoFromPkgJson } from '@fujia/get-pkg-info';
 import simpleGit, { SimpleGit } from 'simple-git';
-import { spawn, NewEnvVariables, spawnAsync, readDotFileToObj } from '@fujia/cli-utils';
+import { NewEnvVariables, spawnAsync, readDotFileToObj } from '@fujia/cli-utils';
 import { inquireUpgradeVersionType } from './inquirer-prompt';
 
 import { NPM_REGISTRY } from './constants';
@@ -27,7 +25,7 @@ export class ReleaseCommand extends CliCommand {
 	}
 
 	init() {
-		log.verbose('[cli-release]', `init`);
+		log.verbose('[cli-release]', `access: ${this.cmd?.access}`);
 	}
 
 	async exec() {
@@ -91,7 +89,7 @@ export class ReleaseCommand extends CliCommand {
 			);
 		}
 		this.branch = branch.current;
-		log.success('[cli-release]', `current git branch: ${branch.current}`);
+		log.success('', `current git branch: ${branch.current}`);
 	}
 
 	checkGitIgnore() {
@@ -110,7 +108,7 @@ export class ReleaseCommand extends CliCommand {
 			registry: string;
 		}>(npmRcPath);
 		const registry = npmRcObj?.registry;
-		log.info('[cli-release]', `current npm registry: ${registry}`);
+		log.info('', `current npm registry: ${registry}`);
 
 		if (registry && registry !== NPM_REGISTRY) {
 			await spawnAsync('npx', ['nrm', 'use', 'npm'], {
@@ -118,14 +116,13 @@ export class ReleaseCommand extends CliCommand {
 				stdio: 'ignore',
 			});
 			log.success(
-				'[cli-release]',
-				`run "npx nrm use npm" successfully and current npm registry:  https://registry.npmjs.org/`,
+				'',
+				`run "npx nrm use npm" successfully and current npm registry: ${NPM_REGISTRY}`,
 			);
 		}
 	}
 
 	async checkNpmLogin() {
-		// const execRes = shelljs.exec('npm whoami');
 		const execCode = await spawnAsync('npm', ['whoami'], {
 			cwd: process.cwd(),
 			stdio: 'inherit',
@@ -133,9 +130,9 @@ export class ReleaseCommand extends CliCommand {
 		});
 
 		if (execCode === 0) {
-			log.success('[cli-release]', 'the user have been logged in npm');
+			log.success('', 'you have been logged in npm');
 		} else if (execCode === 1) {
-			log.warn('[cli-release]', `you're not logged into npm, please login first!`);
+			log.warn('', `you're not logged into npm, please login first!`);
 			await spawnAsync('npm', ['login'], {
 				cwd: process.cwd(),
 				stdio: 'inherit',
@@ -157,21 +154,20 @@ export class ReleaseCommand extends CliCommand {
 			throw new Error('the git status is not empty, please handle manually!');
 		}
 
-		log.success('[cli-release]', 'the git status is empty');
+		log.success('', 'the git status is empty');
 	}
 
 	async checkStash() {
-		log.info('[cli-git]', 'check stash records');
+		log.info('', 'check stash records');
 
 		const stashList = await this.git.stashList();
 
 		if (stashList.all.length > 0) {
 			await this.git.stash(['pop']);
-			log.success('[cli-git]', 'stash pop successfully');
+			log.success('', 'stash pop successfully');
+			await this.git.push('origin', this.branch);
+			log.success('', 'execute push operations successfully before publish');
 		}
-
-		await this.git.push('origin', this.branch);
-		log.success('cli-release', 'execute push operations successfully before publish');
 	}
 
 	async upgradeVersion() {
@@ -183,12 +179,16 @@ export class ReleaseCommand extends CliCommand {
 				stdio: 'inherit',
 			});
 			await this.git.push('origin', this.branch);
-			log.success('cli-release', `upgraded version successfully and push to ${this.branch} branch`);
+			log.success('', `upgraded version successfully and push to ${this.branch} branch`);
 		}
 	}
 
 	async releasePackage() {
-		await spawnAsync('npm', ['publish', '-access', 'public'], {
+		const params = ['publish', '--access'];
+
+		params.push(this.cmd?.access!);
+
+		await spawnAsync('npm', params, {
 			stdio: 'inherit',
 		});
 	}

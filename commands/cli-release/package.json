@@ -39,8 +39,6 @@
 		"@fujia/cli-log": "^1.2.0",
 		"@fujia/cli-utils": "^1.2.0",
 		"@fujia/get-pkg-info": "^1.2.0",
-		"@types/fs-extra": "^9.0.13",
-		"fs-extra": "^10.0.0",
 		"inquirer": "^8.2.0",
 		"semver": "^7.3.5",
 		"simple-git": "^2.48.0"

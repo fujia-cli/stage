@@ -1,4 +1,4 @@
-import commander from 'commander';
+import commander, { Option } from 'commander';
 import { red, blue } from 'colors/safe';
 import { NewEnvVariables, StageCliCmd } from '@fujia/cli-utils';
 import exec from '@fujia/cli-exec';
@@ -36,7 +36,11 @@ export default function registerCommand() {
 	program
 		.command('release')
 		.description('release a npm package')
-		.option('-a, --access <publishAccess>', 'set publish access is true', 'public')
+		.addOption(
+			new Option('-a, --access <publishAccess>')
+				.choices(['public', 'restricted'])
+				.default('public'),
+		)
 		.action(exec);
 
 	// NOTE: register deploy command
@@ -105,7 +109,7 @@ export default function registerCommand() {
 		console.log(red(`Unknown Command: ${cmdList[0]}`));
 
 		if (availableCommands.length > 0) {
-			console.log(blue(`The available commands are: ${availableCommands.join(', ')}`));
+			console.log(blue(`available commands: ${availableCommands.join(', ')}`));
 			console.log();
 		}
 	});

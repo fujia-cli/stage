@@ -12,4 +12,5 @@ export interface StageCliCmd extends Command {
 	updateService?: boolean | string; // update a corresponding service
 	cmdName?: string; // exec command name
 	template?: string; // specify the component template type
+	access?: string; // specify the npm publish access
 }
