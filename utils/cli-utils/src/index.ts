@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-09 21:31:09
- * @LastEditTime: 2022-01-21 17:28:34
+ * @LastEditTime: 2022-01-21 23:55:19
  * @LastEditors: fujia(as default)
  * @Description: An awesome utilities for stage-cli
  * @FilePath: /stage/utils/cli-utils/src/index.ts
@@ -232,7 +232,6 @@ export const getNpmRegistry = () => {
 		registry: string;
 	}>(npmRcPath);
 	const registry = npmRcObj?.registry || NPM_REGISTRY;
-	log.info('', `current npm registry: ${registry}`);
 
 	return registry;
 };
