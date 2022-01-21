@@ -1,3 +1,5 @@
+export const ADD_CUSTOM_TPL_TEXT = 'add-new';
+
 export const TEMPLATE_TYPES = [
 	{
 		name: 'default',
@@ -76,17 +78,9 @@ export const INQUIRE_APP_LIST = [
 		value: 'react-native',
 	},
 	{
-		name: 'electron-rect',
-		value: 'electron-rect',
+		name: 'electron',
+		value: 'electron',
 	},
-	{
-		name: 'electron-antd',
-		value: 'electron-antd',
-	},
-	// {
-	// 	name: 'electron-element',
-	// 	value: 'electron-element',
-	// },
 ];
 
 export const INQUIRE_LIB_LIST = [
@@ -142,7 +136,13 @@ export const INQUIRE_COMPONENTS = [
 	},
 ];
 
-export const EJS_IGNORE_FILES = ['node_modules/**', 'public/**', 'static/**', 'store/**'];
+export const EJS_IGNORE_FILES = [
+	'node_modules/**',
+	'public/**',
+	'static/**',
+	'store/**',
+	'assets/**',
+];
 
 export const WHITE_COMMANDS = ['npm', 'cnpm', 'yarn'];
 
@@ -200,25 +200,17 @@ export const DEFAULT_APP_TEMPLATES = [
 	},
 	{
 		_id: `STAGE_${Date.now()}`,
-		name: 'electron-rect',
+		name: 'electron-vite-vue',
 		version: 'latest',
-		npmName: '@fujia/electron-rect-template',
+		npmName: '@fujia/electron-vite-template',
 		installCommand: 'npm install --registry=https://registry.npmmirror.com',
 		startCommand: 'npm start',
 	},
 	{
 		_id: `STAGE_${Date.now()}`,
-		name: 'electron-antd',
+		name: 'electron-react-webpack',
 		version: 'latest',
-		npmName: '@fujia/electron-antd-template',
-		installCommand: 'npm install --registry=https://registry.npmmirror.com',
-		startCommand: 'npm start',
-	},
-	{
-		_id: `STAGE_${Date.now()}`,
-		name: 'electron-element',
-		version: 'latest',
-		npmName: '@fujia/electron-element-template',
+		npmName: '@fujia/electron-webpack-react-template',
 		installCommand: 'npm install --registry=https://registry.npmmirror.com',
 		startCommand: 'npm start',
 	},
@@ -278,43 +270,43 @@ export const DEFAULT_MINI_PROGRAM_TEMPLATES = [
 	},
 ];
 
-export const DEFAULT_COMPONENT_TEMPLATES = [
-	{
-		_id: `STAGE_${Date.now()}`,
-		name: 'react',
-		version: 'latest',
-		npmName: '@fujia/react-component-template',
-	},
-	{
-		_id: `STAGE_${Date.now()}`,
-		name: 'vue',
-		version: 'latest',
-		npmName: '@fujia/vue-component-template',
-	},
-	{
-		_id: `STAGE_${Date.now()}`,
-		name: 'h5',
-		version: 'latest',
-		npmName: '@fujia/h5-component-template',
-	},
-	{
-		_id: `STAGE_${Date.now()}`,
-		name: 'web-component',
-		version: 'latest',
-		npmName: '@fujia/web-component-template',
-	},
-	{
-		_id: `STAGE_${Date.now()}`,
-		name: 'react-native',
-		version: 'latest',
-		npmName: '@fujia/react-native-component-template',
-	},
-	{
-		_id: `STAGE_${Date.now()}`,
-		name: 'wechat',
-		version: 'latest',
-		npmName: '@fujia/wechat-component-template',
-	},
-];
+// export const DEFAULT_COMPONENT_TEMPLATES = [
+// 	{
+// 		_id: `STAGE_${Date.now()}`,
+// 		name: 'react',
+// 		version: 'latest',
+// 		npmName: '@fujia/react-component-template',
+// 	},
+// 	{
+// 		_id: `STAGE_${Date.now()}`,
+// 		name: 'vue',
+// 		version: 'latest',
+// 		npmName: '@fujia/vue-component-template',
+// 	},
+// 	{
+// 		_id: `STAGE_${Date.now()}`,
+// 		name: 'h5',
+// 		version: 'latest',
+// 		npmName: '@fujia/h5-component-template',
+// 	},
+// 	{
+// 		_id: `STAGE_${Date.now()}`,
+// 		name: 'web-component',
+// 		version: 'latest',
+// 		npmName: '@fujia/web-component-template',
+// 	},
+// 	{
+// 		_id: `STAGE_${Date.now()}`,
+// 		name: 'react-native',
+// 		version: 'latest',
+// 		npmName: '@fujia/react-native-component-template',
+// 	},
+// 	{
+// 		_id: `STAGE_${Date.now()}`,
+// 		name: 'wechat',
+// 		version: 'latest',
+// 		npmName: '@fujia/wechat-component-template',
+// 	},
+// ];
 
 export const STAGE_CLI_TEMPLATES_DIR = 'templates';

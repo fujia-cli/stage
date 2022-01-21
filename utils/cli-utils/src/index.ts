@@ -1,17 +1,25 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-09 21:31:09
- * @LastEditTime: 2022-01-01 21:04:19
+ * @LastEditTime: 2022-01-21 17:28:34
  * @LastEditors: fujia(as default)
  * @Description: An awesome utilities for stage-cli
  * @FilePath: /stage/utils/cli-utils/src/index.ts
  */
 import cp, { CommonSpawnOptions, ChildProcess, SpawnOptions } from 'child_process';
 import fs from 'fs';
+import path from 'path';
+import log from '@fujia/cli-log';
 import { Spinner } from 'cli-spinner';
-import { NewEnvVariables } from './constants';
+import { NewEnvVariables, NPM_REGISTRY } from './constants';
 
-export { NewEnvVariables, STAGE_CLI_TEMPLATES_DIR, EJS_IGNORE_FILES } from './constants';
+export {
+	NewEnvVariables,
+	STAGE_CLI_TEMPLATES_DIR,
+	EJS_IGNORE_FILES,
+	CUSTOM_TPL_FILE,
+	STAGE_CONFIG_FILE,
+} from './constants';
 
 export type { StageCliCmd } from './interface';
 
@@ -215,4 +223,16 @@ export const genInquirerChoices = (
 	}
 
 	return formatChoices;
+};
+
+export const getNpmRegistry = () => {
+	const homeDir = process.env[NewEnvVariables.USER_HOME]!;
+	const npmRcPath = path.resolve(homeDir, '.npmrc');
+	const npmRcObj = readDotFileToObj<{
+		registry: string;
+	}>(npmRcPath);
+	const registry = npmRcObj?.registry || NPM_REGISTRY;
+	log.info('', `current npm registry: ${registry}`);
+
+	return registry;
 };

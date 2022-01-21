@@ -4,7 +4,7 @@ import CliCommand from '@fujia/cli-command';
 import log from '@fujia/cli-log';
 import { getInfoFromPkgJson } from '@fujia/get-pkg-info';
 import simpleGit, { SimpleGit } from 'simple-git';
-import { NewEnvVariables, spawnAsync, readDotFileToObj } from '@fujia/cli-utils';
+import { NewEnvVariables, spawnAsync, getNpmRegistry } from '@fujia/cli-utils';
 import { inquireUpgradeVersionType } from './inquirer-prompt';
 
 import { NPM_REGISTRY } from './constants';
@@ -102,13 +102,7 @@ export class ReleaseCommand extends CliCommand {
 	}
 
 	async checkNpmRegistry() {
-		const homeDir = process.env[NewEnvVariables.USER_HOME]!;
-		const npmRcPath = path.resolve(homeDir, '.npmrc');
-		const npmRcObj = readDotFileToObj<{
-			registry: string;
-		}>(npmRcPath);
-		const registry = npmRcObj?.registry;
-		log.info('', `current npm registry: ${registry}`);
+		const registry = getNpmRegistry();
 
 		if (registry && registry !== NPM_REGISTRY) {
 			await spawnAsync('npx', ['nrm', 'use', 'npm'], {

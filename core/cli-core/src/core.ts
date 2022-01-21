@@ -3,7 +3,7 @@ import semver from 'semver';
 import { red, yellow } from 'colors/safe';
 import { checkRoot } from '@fujia/root';
 import log from '@fujia/cli-log';
-import { NewEnvVariables } from '@fujia/cli-utils';
+import { NewEnvVariables, CUSTOM_TPL_FILE, STAGE_CONFIG_FILE } from '@fujia/cli-utils';
 import { getLatestVersion } from '@fujia/get-pkg-info';
 import userHome from '@fujia/user-home';
 import { pathExistSync } from '@fujia/check-path';
@@ -39,11 +39,47 @@ async function prepare() {
 	await checkUserHome();
 	await checkStageHome();
 	await checkVersionUpgrade();
+	await createCustomTplFile();
+	createStageRcFile();
+}
+
+async function createCustomTplFile() {
+	const stageHome = process.env[NewEnvVariables.STAGE_CLI_HOME]!;
+	const customTplFile = path.resolve(stageHome, CUSTOM_TPL_FILE);
+
+	if (!pathExistSync(customTplFile)) {
+		const tplObj = {
+			nameList: [],
+			pkgList: [],
+		};
+
+		await fse.writeJSON(customTplFile, tplObj);
+
+		log.success('', `create the ${customTplFile} file successfully`);
+	}
+}
+
+function createStageRcFile() {
+	const stageHome = process.env[NewEnvVariables.STAGE_CLI_HOME]!;
+	const globalConfigFile = path.resolve(stageHome, STAGE_CONFIG_FILE);
+
+	if (!pathExistSync(globalConfigFile)) {
+		fse.writeFileSync(globalConfigFile, '');
+
+		log.success('', `create the ${globalConfigFile} file successfully`);
+	}
 }
 
 async function checkVersionUpgrade() {
 	const curVersion = pkg.version;
 	const npmName = pkg.name;
+	log.verbose(
+		'[cli-core]',
+		`
+      npmName: ${npmName},
+      curVersion: ${curVersion}
+    `,
+	);
 	const latestVersion = await getLatestVersion(npmName, curVersion);
 
 	if (latestVersion && semver.gt(latestVersion, curVersion)) {
@@ -83,7 +119,7 @@ async function checkUserHome() {
 }
 
 function checkPkgVersion() {
-	log.info('', `Thanks to use @fujia/stage(version: ${pkg.version})🏖`);
+	log.info('', `Thanks to use @fujia/stage(version: ${pkg.version})^_^`);
 }
 
 export default core;

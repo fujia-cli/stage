@@ -37,6 +37,7 @@
 		"rimraf": "^3.0.2"
 	},
 	"dependencies": {
+		"@fujia/cli-log": "file:../cli-log",
 		"commander": "^8.3.0",
 		"cli-spinner": "^0.2.10"
 	},

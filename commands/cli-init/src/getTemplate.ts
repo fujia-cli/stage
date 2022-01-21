@@ -1,82 +1,69 @@
 import request, { AxiosPromise } from '@fujia/cli-request';
 
+import { TemplateType, ProjectCategory, ProjectTemplate } from './interface';
 import {
-  TemplateType,
-  ProjectCategory,
-  ProjectTemplate,
-  ComponentTemplate
-} from './interface';
-import {
-  DEFAULT_WEB_TEMPLATES,
-  DEFAULT_APP_TEMPLATES,
-  DEFAULT_LIBRARY_TEMPLATES,
-  DEFAULT_MINI_PROGRAM_TEMPLATES,
-  DEFAULT_COMPONENT_TEMPLATES,
+	DEFAULT_WEB_TEMPLATES,
+	DEFAULT_APP_TEMPLATES,
+	DEFAULT_LIBRARY_TEMPLATES,
+	DEFAULT_MINI_PROGRAM_TEMPLATES,
 } from './constants';
+import { getCustomTplInfo } from './utils';
 
-const genProjectTemplate = (projectCategory: ProjectCategory) => {
-  switch(projectCategory) {
-    case 'app':
-      return DEFAULT_APP_TEMPLATES;
-    case 'library':
-      return DEFAULT_LIBRARY_TEMPLATES;
-    case 'mini-program':
-      return DEFAULT_MINI_PROGRAM_TEMPLATES;
-    case 'web':
-      return DEFAULT_WEB_TEMPLATES;
-    default:
-      return [];
-  }
-}
+export const getDefaultTemplates = (projectCategory: ProjectCategory) => {
+	let tplList: ProjectTemplate[];
 
-const fetchProjectTemplate = (): AxiosPromise<ProjectTemplate[]> => {
-  return request({
-    url: '/project/template'
-  });
+	switch (projectCategory) {
+		case 'app':
+			tplList = DEFAULT_APP_TEMPLATES;
+			break;
+		case 'library':
+			tplList = DEFAULT_LIBRARY_TEMPLATES;
+			break;
+		case 'mini-program':
+			tplList = DEFAULT_MINI_PROGRAM_TEMPLATES;
+			break;
+		case 'web':
+			tplList = DEFAULT_WEB_TEMPLATES;
+			break;
+		default:
+			tplList = [];
+			break;
+	}
+
+	return Promise.resolve({
+		data: tplList,
+	});
 };
 
-const fetchComponentTemplate = (): AxiosPromise<ComponentTemplate[]> => {
-  return request({
-    url: '/component/template'
-  });
+const fetchProjectTemplate = async () => {
+	return request({
+		url: '/project/template',
+	});
 };
 
-const getCustomProjectTemplates = () => {
-  return Promise.resolve({
-    data: []
-  });
+export const getCustomProjectTemplates = async () => {
+	const { pkgList } = await getCustomTplInfo();
+
+	return Promise.resolve({
+		data: pkgList,
+	});
 };
 
-const getCustomComponentTemplates = () => {
-  return Promise.resolve({
-    data: []
-  });
-};
-
-export const getProjectTemplate = (tempType: TemplateType, projectCategory: ProjectCategory): Promise<{
-  data: Array<ProjectTemplate>
-}> | AxiosPromise<ProjectTemplate[]> => {
-  if (tempType === 'remote') {
-    return fetchProjectTemplate();
-  } else if (tempType === 'custom') {
-    return getCustomProjectTemplates();
-  } else {
-    return Promise.resolve({
-      data: genProjectTemplate(projectCategory)
-    });
-  }
-};
-
-export const getComponentTemplate = (tempType: TemplateType): Promise<{
-  data: Array<ComponentTemplate>
-}> | AxiosPromise<ComponentTemplate[]> => {
-  if (tempType === 'remote') {
-    return fetchComponentTemplate();
-  } else if (tempType === 'custom') {
-    return getCustomComponentTemplates();
-  } else {
-    return Promise.resolve({
-      data: DEFAULT_COMPONENT_TEMPLATES
-    });
-  }
-};
+// export const getProjectTemplate = (
+// 	tempType: TemplateType,
+// 	projectCategory: ProjectCategory,
+// ):
+// 	| Promise<{
+// 			data: Array<ProjectTemplate>;
+// 	  }>
+// 	| AxiosPromise<ProjectTemplate[]> => {
+// 	if (tempType === 'remote') {
+// 		return fetchProjectTemplate();
+// 	} else if (tempType === 'custom') {
+// 		return getCustomProjectTemplates();
+// 	} else {
+// 		return Promise.resolve({
+// 			data: getDefaultTemplate(projectCategory),
+// 		});
+// 	}
+// };

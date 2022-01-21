@@ -34,9 +34,10 @@
 	},
 	"dependencies": {
 		"@fujia/check-path": "^1.1.0",
-		"@fujia/cli-log": "^1.2.0",
+		"@fujia/cli-log": "file:../../utils/cli-log",
+		"@fujia/cli-utils": "file:../../utils/cli-utils",
 		"@fujia/cross-path": "^1.2.0",
-		"@fujia/get-pkg-info": "^1.2.0",
+		"@fujia/get-pkg-info": "file:../../utils/get-pkg-info",
 		"@fujia/hammer": "^0.5.3",
 		"@fujia/user-home": "^1.0.0",
 		"fs-extra": "^10.0.0",

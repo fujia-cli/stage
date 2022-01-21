@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 10:54:19
- * @LastEditTime: 2021-12-26 10:11:44
+ * @LastEditTime: 2022-01-21 23:05:57
  * @LastEditors: fujia(as default)
  * @Description: To initialize a project
  * @FilePath: /stage/commands/cli-init/src/index.ts
@@ -15,46 +15,41 @@ import fse from 'fs-extra';
 import kebabCase from 'kebab-case';
 import ejs from 'ejs';
 import glob from 'glob';
-import { spinnerInstance, sleep, spawnAsync, printErrorStackInDebug } from '@fujia/cli-utils';
+import { spinnerInstance, sleep, spawnAsync } from '@fujia/cli-utils';
 
 import {
-	inquireProjectType,
 	inquireProjectCategory,
 	inquireTemplateType,
 	inquireCleanContinued,
 	inquireCleanConfirmed,
 	inquireProjectInfo,
-	inquireComponentInfo,
+	inquireNewCustomTpl,
+	inquireCustomTplInfo,
+	inquireSelectTplName,
 } from './inquirer-prompt';
-import { getProjectTemplate, getComponentTemplate } from './getTemplate';
+import { getDefaultTemplates, getCustomProjectTemplates } from './getTemplate';
 
-import {
-	ComponentTemplate,
-	ITemplate,
-	ProjectInfo,
-	ProjectTemplate,
-	ComponentInfo,
-} from './interface';
-import { verifyCmd, isDirEmpty } from './utils';
-import { EJS_IGNORE_FILES, STAGE_CLI_TEMPLATES_DIR } from './constants';
+import { ITemplate, ProjectInfo, ProjectTemplate, TemplateType } from './interface';
+import { verifyCmd, isDirEmpty, getCustomTplInfo, writeCustomTplToJson } from './utils';
+import { EJS_IGNORE_FILES, STAGE_CLI_TEMPLATES_DIR, ADD_CUSTOM_TPL_TEXT } from './constants';
 
 export class CliInit extends CliCommand {
 	projectName: string;
 	destination: string;
 	force: boolean;
-	template: Array<ProjectTemplate | ComponentTemplate>;
-	isProjectType: boolean;
+	template: Array<ProjectTemplate>;
 	projectInfo?: ProjectInfo;
-	componentInfo?: ComponentInfo;
-	templateInfo?: ProjectTemplate | ComponentTemplate;
+	templateInfo?: ProjectTemplate;
 	templatePkg?: CliPackage;
+	templateType: TemplateType;
+	customTplInfo?: ProjectTemplate;
 	constructor(args: any[]) {
 		super(args);
 		this.projectName = '';
 		this.destination = '';
 		this.force = false;
 		this.template = [];
-		this.isProjectType = true;
+		this.templateType = 'default';
 	}
 
 	init() {
@@ -105,28 +100,49 @@ export class CliInit extends CliCommand {
 		 * 5, select the type of project
 		 * 6, obtain the info of project
 		 */
-		const templateType = (await inquireTemplateType()).templateType;
-		const projectType = (await inquireProjectType()).projectType;
+		await this.checkCwdEmpty();
 
-		this.isProjectType = projectType === 'component-package' || projectType === 'project';
+		this.templateType = (await inquireTemplateType()).templateType;
 
 		let template: ITemplate;
-
-		if (this.isProjectType) {
+		// get default templates
+		if (this.templateType === 'default') {
 			const projectCategory = (await inquireProjectCategory()).projectCategory;
-			template = await getProjectTemplate(templateType, projectCategory);
-		} else {
-			template = await getComponentTemplate(templateType);
+			template = await getDefaultTemplates(projectCategory);
+
+			if (template.data.length <= 0) throw new Error("The template doesn't exist");
+
+			this.template = template.data;
+
+			log.verbose(
+				'[cli-init]',
+				`
+          template: ${template.data?.length}
+        `,
+			);
+		} else if (this.templateType === 'custom') {
+			// handle custom templates
+			template = await getCustomProjectTemplates();
+
+			if (template.data.length <= 0) {
+				const isNewTpl = (await inquireNewCustomTpl()).isNewTpl;
+
+				if (!isNewTpl) process.exit(0);
+
+				await this.newCustomTpl();
+			} else {
+				await this.getOrNewCustomTpl();
+			}
 		}
 
-		if (!template.data || template.data.length <= 0) throw new Error("The template doesn't exist");
+		await this.getProjectInfo();
+	}
 
-		this.template = template.data;
-
+	async checkCwdEmpty() {
 		const cwdPath = process.cwd();
 		const isCwdEmpty = await isDirEmpty(cwdPath);
 
-		if (this.isProjectType && !isCwdEmpty) {
+		if (!isCwdEmpty) {
 			if (!this.force) {
 				// NOTE: Inquiry into whether continue creating
 				const continued = (await inquireCleanContinued()).continued;
@@ -145,47 +161,34 @@ export class CliInit extends CliCommand {
 				await fse.emptyDir(cwdPath);
 			}
 		}
-
-		await this.getProjectOrCompInfo();
 	}
 
-	async getProjectOrCompInfo() {
+	async getProjectInfo() {
 		let projectDetail: ProjectInfo | undefined;
-		let componentDetail: ComponentInfo | undefined;
+		log.verbose('[cli-init]', `this.projectName: ${this.projectName}`);
 
-		if (this.isProjectType) {
-			log.verbose('[cli-init]', `this.projectName: ${this.projectName}`);
+		projectDetail = await inquireProjectInfo(this.template as ProjectTemplate[], this.projectName);
+		let { projectName } = projectDetail || {};
 
-			projectDetail = await inquireProjectInfo(
-				this.template as ProjectTemplate[],
-				this.projectName,
-			);
-			let { projectName } = projectDetail || {};
+		if (!projectName && this.projectName) {
+			projectName = this.projectName;
+		}
 
-			if (!projectName && this.projectName) {
-				projectName = this.projectName;
-			}
+		if (projectDetail && projectName) {
+			projectDetail.packageName = kebabCase(projectName).replace(/^-/, '');
+		}
 
-			if (projectDetail && projectName) {
-				projectDetail.packageName = kebabCase(projectName).replace(/^-/, '');
-			}
+		this.projectInfo = projectDetail;
 
-			this.projectInfo = projectDetail;
-
-			log.verbose(
-				'[cli-init]',
-				`this.projectInfo:
+		log.verbose(
+			'[cli-init]',
+			`this.projectInfo:
         packageName?: ${this.projectInfo?.packageName}
         projectName: ${this.projectInfo?.projectName}
         projectVersion: ${this.projectInfo?.version}
         projectTemplate: ${this.projectInfo?.projectTemplate}
       `,
-			);
-		} else {
-			componentDetail = await inquireComponentInfo(this.template);
-
-			this.componentInfo = componentDetail;
-		}
+		);
 	}
 
 	async downloadTemplate() {
@@ -198,23 +201,20 @@ export class CliInit extends CliCommand {
 		 *   1.3, You can store the template information in databases, such as: mongoDB, MySQL etc.
 		 *   1.4, Gets the template information by request api services.
 		 */
-		let selectTemplate: string | undefined;
-
-		if (this.isProjectType) {
-			selectTemplate = this.projectInfo?.projectTemplate;
-		} else {
-			selectTemplate = this.componentInfo?.componentTemplate;
-		}
-
-		if (!selectTemplate) throw new Error('The selected template is not exist!');
-
-		const templateInfo = this.template.find((t) => t.npmName === selectTemplate);
 		const homeDir = await userHome();
 		const localPath = path.resolve(homeDir!, '.stage-cli', STAGE_CLI_TEMPLATES_DIR);
 		const storeDir = path.resolve(localPath, 'node_modules');
-		const { npmName, version } = templateInfo!;
 
-		this.templateInfo = templateInfo;
+		if (this.templateType === 'default') {
+			const selectTemplate = this.projectInfo?.projectTemplate;
+
+			if (!selectTemplate) throw new Error('The selected template is not exist!');
+
+			const templateInfo = this.template.find((t) => t.npmName === selectTemplate);
+			this.templateInfo = templateInfo;
+		}
+
+		const { npmName, version } = this.templateInfo!;
 
 		const templatePkg = new CliPackage({
 			localPath,
@@ -225,11 +225,11 @@ export class CliInit extends CliCommand {
 		log.verbose(
 			'[cli-init]',
 			`template downloading: {
-      localPath: ${localPath},
-      storeDir: ${storeDir},
-      name: ${npmName},
-      version: ${version},
-    }`,
+        localPath: ${localPath},
+        storeDir: ${storeDir},
+        name: ${npmName},
+        version: ${version},
+      }`,
 		);
 
 		if (!(await templatePkg.exist())) {
@@ -276,13 +276,7 @@ export class CliInit extends CliCommand {
 		const templatePath = path.resolve(cacheFilePath, 'template');
 		fse.ensureDirSync(templatePath);
 
-		if (this.isProjectType) {
-			// NOTE: normal install
-			await this.installProjectTemplate(templatePath);
-		} else {
-			// NOTE: custom install
-			await this.installComponentTemplate(templatePath);
-		}
+		await this.installProjectTemplate(templatePath);
 	}
 
 	async installProjectTemplate(templatePath: string) {
@@ -323,24 +317,6 @@ export class CliInit extends CliCommand {
 		}
 	}
 
-	async installComponentTemplate(templatePath: string) {
-		log.verbose('[cli-init]', 'starting install component template ...');
-
-		const spinner = spinnerInstance('template installing...');
-		await sleep();
-		try {
-			const cwdPath = process.cwd();
-			fse.copySync(templatePath, cwdPath);
-		} catch (err) {
-			throw err;
-		} finally {
-			spinner.stop(true);
-			log.success('', 'template installed successfully!');
-		}
-
-		await this.ejsRender(this.componentInfo);
-	}
-
 	async execCommand(command: string, errMsg?: string) {
 		let result: number | unknown;
 
@@ -378,13 +354,27 @@ export class CliInit extends CliCommand {
 						reject(err);
 					}
 
+					const filterFiles = files.filter((f) => {
+						const fileExt = path.extname(f);
+						const validExt = ['.html', '.md', '.json', '.tsx', '.ts', '.js', '.vue'];
+
+						return validExt.includes(fileExt);
+					});
+
 					Promise.all(
-						files.map((file) => {
+						filterFiles.map((file) => {
 							const filePath = path.join(cwdDir, file);
 
 							return new Promise((innerResolve, innerReject) => {
 								ejs.renderFile(filePath, data, (err, res) => {
 									if (err) {
+										log.error(
+											'[cli-init]',
+											`
+                      file: ${file},
+                      err: ${err}
+                    `,
+										);
 										return innerReject(err);
 									}
 									fse.writeFileSync(filePath, res);
@@ -402,6 +392,38 @@ export class CliInit extends CliCommand {
 				},
 			);
 		});
+	}
+
+	async newCustomTpl() {
+		this.templateInfo = await inquireCustomTplInfo();
+		const { name } = this.templateInfo;
+
+		const newTplObj = {
+			nameList: [name],
+			pkgList: [this.templateInfo],
+		};
+
+		await writeCustomTplToJson(newTplObj);
+	}
+
+	async getOrNewCustomTpl() {
+		const { nameList, pkgList } = await getCustomTplInfo();
+
+		const selectName = (await inquireSelectTplName(nameList)).tplName;
+
+		if (selectName === ADD_CUSTOM_TPL_TEXT) {
+			this.templateInfo = await inquireCustomTplInfo();
+
+			const { name } = this.templateInfo;
+			const newTplObj = {
+				nameList: [name, ...nameList],
+				pkgList: [this.templateInfo, ...pkgList],
+			};
+
+			await writeCustomTplToJson(newTplObj);
+		} else {
+			this.templateInfo = pkgList.find((s) => s.name === selectName);
+		}
 	}
 }
 

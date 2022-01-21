@@ -34,6 +34,8 @@
 	},
 	"dependencies": {
 		"@fujia/check-path": "^1.1.0",
+		"@fujia/cli-utils": "file:../cli-utils",
+		"@fujia/cli-log": "file:../cli-log",
 		"@types/semver": "^7.3.9",
 		"@types/url-join": "^4.0.1",
 		"axios": "^0.24.0",
