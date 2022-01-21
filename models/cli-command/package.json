@@ -1,6 +1,6 @@
 {
 	"name": "@fujia/cli-command",
-	"version": "1.3.1",
+	"version": "1.3.2",
 	"description": "A command class of stage",
 	"author": "fujia <fujia.site@outlook.com>",
 	"homepage": "https://github.com/fujia-cli/stage/tree/main/models/cli-command#readme",
@@ -33,7 +33,7 @@
 	},
 	"dependencies": {
 		"@fujia/cli-log": "^1.2.0",
-		"@fujia/cli-utils": "^1.3.1"
+		"@fujia/cli-utils": "^1.3.2"
 	},
 	"gitHead": "34eeaf98160d388ac383bc5087951a4006be45d0"
 }
