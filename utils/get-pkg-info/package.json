@@ -1,6 +1,6 @@
 {
 	"name": "@fujia/get-pkg-info",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"description": "Obtain the package info via npm's api",
 	"author": "fujia <fujia.site@outlook.com>",
 	"homepage": "https://github.com/fujia-cli/stage/tree/main/utils/get-pkg-info#readme",
@@ -34,8 +34,8 @@
 	},
 	"dependencies": {
 		"@fujia/check-path": "^1.1.0",
-		"@fujia/cli-utils": "file:../cli-utils",
 		"@fujia/cli-log": "file:../cli-log",
+		"@fujia/cli-utils": "file:../cli-utils",
 		"@types/semver": "^7.3.9",
 		"@types/url-join": "^4.0.1",
 		"axios": "^0.24.0",

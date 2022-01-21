@@ -1,6 +1,6 @@
 {
 	"name": "@fujia/cli-utils",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"description": "An awesome utilities for stage-cli.",
 	"keywords": [
 		"utils",
@@ -38,8 +38,8 @@
 	},
 	"dependencies": {
 		"@fujia/cli-log": "file:../cli-log",
-		"commander": "^8.3.0",
-		"cli-spinner": "^0.2.10"
+		"cli-spinner": "^0.2.10",
+		"commander": "^8.3.0"
 	},
 	"gitHead": "75c5a0673281a27e8534e9c2b22fba5cf76c24cb"
 }
