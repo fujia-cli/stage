@@ -27,6 +27,8 @@
 	},
 	"devDependencies": {
 		"@types/fs-extra": "^9.0.13",
+		"@types/semver": "^7.3.9",
+		"@types/url-join": "^4.0.1",
 		"rimraf": "^3.0.2"
 	},
 	"publishConfig": {
@@ -36,8 +38,6 @@
 		"@fujia/check-path": "^1.1.0",
 		"@fujia/cli-log": "^1.2.0",
 		"@fujia/cli-utils": "^1.3.2",
-		"@types/semver": "^7.3.9",
-		"@types/url-join": "^4.0.1",
 		"axios": "^0.24.0",
 		"fs-extra": "^10.0.0",
 		"semver": "^7.3.5",

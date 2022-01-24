@@ -36,6 +36,7 @@ export const isDirEmpty = async (curDir: string, ignoreFiles = ['node_modules'])
 };
 
 const stageHome = process.env[NewEnvVariables.STAGE_CLI_HOME]!;
+
 const customTplFile = path.resolve(stageHome, CUSTOM_TPL_FILE);
 export const getCustomTplInfo = async () => {
 	const customTplInfo: CustomPkgInfoJson = await fse.readJson(customTplFile);

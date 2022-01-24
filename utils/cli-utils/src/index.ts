@@ -8,6 +8,7 @@
  */
 import cp, { CommonSpawnOptions, ChildProcess, SpawnOptions } from 'child_process';
 import fs from 'fs';
+import os from 'os';
 import path from 'path';
 import log from '@fujia/cli-log';
 import { Spinner } from 'cli-spinner';
@@ -156,13 +157,13 @@ export const getCurDirName = (filePath?: string) => {
 
 export const readDotFileToObj = <T>(filePath: string) => {
 	if (!fs.existsSync(filePath))
-		throw new Error(`[cli-utils]/readDotFileToObj: the path of ${filePath} is not exist`);
+		throw new Error(`the path of ${filePath} is not exist`);
 
 	const dotConfig: Record<string, string> = {};
 	const fileToStr = readFile(filePath) as string;
 
 	const configList = fileToStr
-		.split('\n')
+		.split(os.EOL) // better compatible 
 		.filter((_) => _)
 		.map((c) => c.split('='));
 

@@ -62,8 +62,9 @@ export function getPkgInfo(pkgName: string, registry?: string): Promise<PkgInfo>
 	log.verbose(
 		'[cli-utils]',
 		`
-    pkgUrl: ${pkgUrl}
-  `,
+			pkgName: ${pkgName}
+			pkgUrl: ${pkgUrl}
+		`
 	);
 
 	return axios

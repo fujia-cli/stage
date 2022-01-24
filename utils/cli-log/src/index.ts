@@ -10,7 +10,7 @@
 import log, { Logger } from "npmlog";
 
 export interface CliLog extends Logger {
-  success(prefix: string, message: string, ...args: any[]): void;
+  success: (prefix: string, message: string, ...args: any[]) => void;
 }
 
 // adjust level and support customization
@@ -29,4 +29,6 @@ log.addLevel("success", 2000, {
   bold: true,
 });
 
-export default log as CliLog;
+const enhanceLog = log as CliLog;
+
+export default enhanceLog;

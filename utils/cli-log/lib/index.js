@@ -25,5 +25,6 @@ npmlog_1.default.addLevel("success", 2000, {
     fg: "green",
     bold: true,
 });
-exports.default = npmlog_1.default;
+var enhanceLog = npmlog_1.default;
+exports.default = enhanceLog;
 //# sourceMappingURL=index.js.map

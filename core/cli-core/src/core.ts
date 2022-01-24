@@ -24,7 +24,7 @@ const core = async () => {
 		await prepare();
 		registerCommand();
 	} catch (e: any) {
-		log.error('[core/cli]', e?.message);
+		log.error('[cli-core]', e?.message);
 
 		if (program.debug) {
 			// NOTE: in debug mode: print the call stack of error.
