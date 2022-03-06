@@ -1,15 +1,3 @@
-/*
- * @Author: fujia
- * @Date: 2021-12-09 21:31:09
-<<<<<<< HEAD
- * @LastEditTime: 2022-03-06 21:27:52
-=======
- * @LastEditTime: 2022-03-06 16:29:16
->>>>>>> a11967b (fix: fixed issues #21)
- * @LastEditors: fujia(as default)
- * @Description: An awesome utilities for stage-cli
- * @FilePath: /stage/utils/cli-utils/src/index.ts
- */
 import cp, { CommonSpawnOptions, ChildProcess } from 'child_process';
 import fs from 'fs';
 import os from 'os';
