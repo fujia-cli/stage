@@ -1,16 +1,14 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-09 21:31:09
- * @LastEditTime: 2022-01-21 23:55:19
+ * @LastEditTime: 2022-03-06 16:35:25
  * @LastEditors: fujia(as default)
  * @Description: An awesome utilities for stage-cli
  * @FilePath: /stage/utils/cli-utils/src/index.ts
  */
-import cp, { CommonSpawnOptions, ChildProcess, SpawnOptions } from 'child_process';
+import cp, { CommonSpawnOptions, ChildProcess } from 'child_process';
 import fs from 'fs';
-import os from 'os';
 import path from 'path';
-import log from '@fujia/cli-log';
 import { Spinner } from 'cli-spinner';
 import { NewEnvVariables, NPM_REGISTRY } from './constants';
 
@@ -156,24 +154,23 @@ export const getCurDirName = (filePath?: string) => {
 };
 
 export const readDotFileToObj = <T>(filePath: string) => {
-	if (!fs.existsSync(filePath))
-		throw new Error(`the path of ${filePath} is not exist`);
+	if (fs.existsSync(filePath)) {
+		const dotConfig: Record<string, string> = {};
+		const fileToStr = readFile(filePath) as string;
 
-	const dotConfig: Record<string, string> = {};
-	const fileToStr = readFile(filePath) as string;
+		const configList = fileToStr
+			.split('\n')
+			.filter((_) => _)
+			.map((c) => c.split('='));
 
-	const configList = fileToStr
-		.split(os.EOL) // better compatible 
-		.filter((_) => _)
-		.map((c) => c.split('='));
+		configList.forEach((c) => {
+			if (c[0] && c[1]) {
+				dotConfig[c[0]] = c[1];
+			}
+		});
 
-	configList.forEach((c) => {
-		if (c[0] && c[1]) {
-			dotConfig[c[0]] = c[1];
-		}
-	});
-
-	return dotConfig as Record<keyof T, string>;
+		return dotConfig as Record<keyof T, string>;
+	}
 };
 
 export const writeSimpleObjToDotFile = <T extends Record<string, any>>(
