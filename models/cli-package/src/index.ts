@@ -1,13 +1,14 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 16:57:47
- * @LastEditTime: 2022-01-21 16:49:52
+ * @LastEditTime: 2022-03-06 19:56:08
  * @LastEditors: fujia(as default)
  * @Description: A package class for stage cli
  * @FilePath: /stage/models/cli-package/src/index.ts
  */
 import path from 'path';
-import { isPlainObject, toRawType } from '@fujia/hammer';
+import { readdir, rename } from 'fs/promises';
+import { isPlainObject, toRawType, isFunction } from '@fujia/hammer';
 import pkgDir from 'pkg-dir';
 import crossPath from '@fujia/cross-path';
 import { getLatestVersion, getPkgInfo } from '@fujia/get-pkg-info';
@@ -18,6 +19,8 @@ import { pathExistSync } from '@fujia/check-path';
 import fse from 'fs-extra';
 
 import { ConstructorOptions, ICliPackage } from './interface';
+
+const NPM_IGNORE_FILES = ['gitignore', 'npmrc'];
 
 class CliPackage implements ICliPackage {
 	localPath: string;
@@ -97,21 +100,37 @@ class CliPackage implements ICliPackage {
 		return pathExistSync(this.localPath);
 	}
 
+	async runNpmInstall(version?: string) {
+		try {
+			await npmInstall({
+				root: this.localPath,
+				storeDir: this.storeDir,
+				registry: getNpmRegistry(),
+				pkgs: [
+					{
+						name: this.pkgName,
+						version: version || this.pkgVersion,
+					},
+				],
+			});
+
+			/**
+			 * Note: there is an extra step that rename there ignore files by npm, such as: .gitignore, .npmrc etc.
+			 */
+			await this.ignoreFilesHandle();
+		} catch (err: any) {
+			log.info(
+				'',
+				`The ${this.pkgName} package install failed. the errors: ${err?.message || err}`,
+			);
+		}
+	}
+
 	async install() {
 		log.verbose('[cli-package]', `Starting install ${this.pkgName}...`);
-		await this.prepare();
 
-		return npmInstall({
-			root: this.localPath,
-			storeDir: this.storeDir,
-			registry: getNpmRegistry(),
-			pkgs: [
-				{
-					name: this.pkgName,
-					version: this.pkgVersion,
-				},
-			],
-		});
+		await this.prepare();
+		await this.runNpmInstall();
 	}
 
 	async update() {
@@ -133,17 +152,7 @@ class CliPackage implements ICliPackage {
 		}
 		const latestVerCachedPath = this.genCacheFilePath(latestVersion);
 		if (!pathExistSync(latestVerCachedPath)) {
-			await npmInstall({
-				root: this.localPath,
-				storeDir: this.storeDir,
-				registry: getNpmRegistry(),
-				pkgs: [
-					{
-						name: this.pkgName,
-						version: latestVersion,
-					},
-				],
-			});
+			await this.runNpmInstall(latestVersion);
 			this.pkgVersion = latestVersion;
 		} else {
 			this.pkgVersion = latestVersion;
@@ -179,6 +188,18 @@ class CliPackage implements ICliPackage {
 		}
 
 		return _getEntryFile(this.localPath);
+	}
+
+	async ignoreFilesHandle() {
+		const tmpDir = path.resolve(this.cacheFilePath, 'template');
+
+		const readTmpDir = await readdir(tmpDir);
+
+		for await (const fileName of readTmpDir) {
+			if (NPM_IGNORE_FILES.includes(fileName)) {
+				await rename(`${tmpDir}/${fileName}`, `${tmpDir}/.${fileName}`);
+			}
+		}
 	}
 }
 
