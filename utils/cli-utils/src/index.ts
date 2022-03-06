@@ -1,13 +1,14 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-09 21:31:09
- * @LastEditTime: 2022-03-06 16:35:25
+ * @LastEditTime: 2022-03-06 16:38:51
  * @LastEditors: fujia(as default)
  * @Description: An awesome utilities for stage-cli
  * @FilePath: /stage/utils/cli-utils/src/index.ts
  */
 import cp, { CommonSpawnOptions, ChildProcess } from 'child_process';
 import fs from 'fs';
+import os from 'os';
 import path from 'path';
 import { Spinner } from 'cli-spinner';
 import { NewEnvVariables, NPM_REGISTRY } from './constants';
@@ -159,7 +160,7 @@ export const readDotFileToObj = <T>(filePath: string) => {
 		const fileToStr = readFile(filePath) as string;
 
 		const configList = fileToStr
-			.split('\n')
+			.split(os.EOL)
 			.filter((_) => _)
 			.map((c) => c.split('='));
 
