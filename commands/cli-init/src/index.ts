@@ -1,12 +1,12 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 10:54:19
- * @LastEditTime: 2022-03-06 17:20:25
  * @LastEditors: fujia(as default)
  * @Description: To initialize a project
  * @FilePath: /stage/commands/cli-init/src/index.ts
  */
 import path from 'path';
+import { readdir, rename } from 'fs/promises';
 import userHome from '@fujia/user-home';
 import CliCommand from '@fujia/cli-command';
 import CliPackage from '@fujia/cli-package';
@@ -32,6 +32,8 @@ import { getDefaultTemplates, getCustomProjectTemplates } from './getTemplate';
 import { ITemplate, ProjectInfo, ProjectTemplate, TemplateType } from './interface';
 import { verifyCmd, isDirEmpty, getCustomTplInfo, writeCustomTplToJson } from './utils';
 import { EJS_IGNORE_FILES, STAGE_CLI_TEMPLATES_DIR, ADD_CUSTOM_TPL_TEXT } from './constants';
+
+const NPM_IGNORE_FILES = ['gitignore', 'npmrc'];
 
 export class CliInit extends CliCommand {
 	projectName: string;
@@ -241,6 +243,11 @@ export class CliInit extends CliCommand {
 				spinner.stop(true);
 				log.success('', 'Downloaded template successfully!');
 				this.templatePkg = templatePkg;
+
+				/**
+				 * Note: there is an extra step that rename there ignore files by npm, such as: .gitignore, .npmrc etc.
+				 */
+				await this.ignoreFilesHandle();
 			} catch (error) {
 				spinner.stop(true);
 				throw error;
@@ -256,9 +263,27 @@ export class CliInit extends CliCommand {
 			spinner.stop(true);
 			log.success('', 'Updated template successfully!');
 			this.templatePkg = templatePkg;
+
+			await this.ignoreFilesHandle();
 		} catch (error) {
 			spinner.stop(true);
 			throw error;
+		}
+	}
+
+	async ignoreFilesHandle() {
+		if (this.templatePkg?.cacheFilePath) {
+			const tmpDir = path.resolve(this.templatePkg?.cacheFilePath, 'template');
+
+			if (tmpDir) {
+				const readTmpDir = await readdir(tmpDir);
+
+				for await (const fileName of readTmpDir) {
+					if (NPM_IGNORE_FILES.includes(fileName)) {
+						await rename(`${tmpDir}/${fileName}`, `${tmpDir}/.${fileName}`);
+					}
+				}
+			}
 		}
 	}
 

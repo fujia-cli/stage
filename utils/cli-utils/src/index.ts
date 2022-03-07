@@ -133,7 +133,7 @@ export const getCurDirName = (filePath?: string) => {
 	const curPath = filePath ? filePath : process.cwd();
 
 	let dirName = '';
-	const formatPath = curPath.replace('\\', '/');
+	const formatPath = curPath.replace(/\\/g, '/');
 	const pathList = formatPath.split('/');
 
 	for (let i = pathList.length - 1; i >= 0; i--) {

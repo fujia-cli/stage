@@ -83,8 +83,8 @@ async function checkVersionUpgrade() {
 	const latestVersion = await getLatestVersion(npmName, curVersion);
 
 	if (latestVersion && semver.gt(latestVersion, curVersion)) {
-		log.warn(
-			`[${npmName} - upgrade]`,
+		log.info(
+			``,
 			yellow(`
       The latest version(${latestVersion}) is available, please upgrade it manually!
       Current version is ${curVersion}, you can run follows command to install it:
