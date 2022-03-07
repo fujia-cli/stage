@@ -39,14 +39,11 @@ build/Release
 node_modules/
 jspm_packages/
 
-# package-lock.json
-# yarn.lock
-
 .DS_Store
 **/*/.DS_Store
 # lerna
 **/*/node_modules
-**/*/package-lock.json
+# **/*/package-lock.json
 **/*/yarn.lock
 **/*/lib
 
