@@ -1,45 +1,47 @@
 {
-  "name": "@fujia/stage",
-  "description": "An awesome CLI tool kits",
-  "keywords": [
-    "cli",
-    "JavaScript",
-    "Node.js",
-    "lerna",
-    "tools",
-    "stage"
-  ],
-  "author": {
-    "name": "fujia",
-    "url": "https://github.com/fushenguang",
-    "email": "fujia.site@outlook.com"
-  },
-  "homepage": "https://github.com/fujia-cli/stage",
-  "bugs": {
-    "url": "https://github.com/fujia-cli/stage/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fujia-cli/stage"
-  },
-  "license": "MIT",
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
-  "devDependencies": {
-    "@commitlint/config-conventional": "^15.0.0",
-    "@types/jest": "^27.0.3",
-    "@types/node": "^16.11.11",
-    "commitlint": "^15.0.0",
-    "husky": "^7.0.4",
-    "jest": "^27.4.3",
-    "lerna": "^4.0.0",
-    "ts-jest": "^27.1.0"
-  },
-  "scripts": {
-    "prepare": "husky install",
-    "publish": "lerna run tsc && lerna publish"
-  }
+	"name": "@fujia/stage",
+	"description": "An awesome CLI tool kits",
+	"keywords": [
+		"cli",
+		"JavaScript",
+		"Node.js",
+		"lerna",
+		"tools",
+		"stage"
+	],
+	"author": {
+		"name": "fujia",
+		"url": "https://github.com/fushenguang",
+		"email": "fujia.site@outlook.com"
+	},
+	"homepage": "https://github.com/fujia-cli/stage",
+	"bugs": {
+		"url": "https://github.com/fujia-cli/stage/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/fujia-cli/stage"
+	},
+	"license": "MIT",
+	"commitlint": {
+		"extends": [
+			"@commitlint/config-conventional"
+		]
+	},
+	"devDependencies": {
+		"@commitlint/config-conventional": "^15.0.0",
+		"@types/jest": "^27.0.3",
+		"@types/node": "^16.11.11",
+		"chalk": "^4.1.2",
+		"commitlint": "^15.0.0",
+		"husky": "^7.0.4",
+		"jest": "^27.4.3",
+		"lerna": "^4.0.0",
+		"ts-jest": "^27.1.0"
+	},
+	"scripts": {
+		"prepare": "husky install",
+		"prepublish": "node ./scripts/prepublish.js",
+		"publish": "lerna run tsc && lerna publish"
+	}
 }
