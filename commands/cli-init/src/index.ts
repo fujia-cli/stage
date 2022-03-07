@@ -1,7 +1,6 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 10:54:19
- * @LastEditTime: 2022-03-07 18:14:13
  * @LastEditors: fujia(as default)
  * @Description: To initialize a project
  * @FilePath: /stage/commands/cli-init/src/index.ts
