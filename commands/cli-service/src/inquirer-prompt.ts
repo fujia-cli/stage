@@ -10,6 +10,7 @@ import {
 	DeployType,
 	UpgradeVersionType,
 } from './interface';
+import { getCwdProjectPackageJson } from './helper';
 
 export const inquireServerInfo = async () =>
 	await inquirer.prompt<ServerInfo>([
@@ -104,14 +105,6 @@ export const inquireSelectServerIp = async (ipList: string[]) =>
 		choices: genChoices(ipList),
 	});
 
-export const getCwdProjectPackageJson = () => {
-	const cwdPath = process.cwd();
-	const pkgJsonPath = path.resolve(cwdPath, 'package.json');
-	const pkgDetail = fse.readJSONSync(pkgJsonPath);
-
-	return pkgDetail;
-};
-
 const genMirrorVersionChoices = (version: string) =>
 	UPGRADE_VERSION_CHOICES.map((t) => {
 		const curVersion = semver.inc(version, t as UpgradeVersionType);
@@ -122,21 +115,46 @@ const genMirrorVersionChoices = (version: string) =>
 		};
 	});
 export const inquireUpgradeMirrorVersion = async () => {
-	const { version } = getCwdProjectPackageJson();
+	const { version } = getCwdProjectPackageJson() || {};
+
+	if (version) {
+		return await inquirer.prompt<{
+			mirrorVersion: string;
+		}>({
+			type: 'list',
+			name: 'mirrorVersion',
+			message: 'please select build mirror version:',
+			default: 0,
+			choices: genMirrorVersionChoices(version),
+		});
+	}
 
 	return await inquirer.prompt<{
 		mirrorVersion: string;
-	}>({
-		type: 'list',
-		name: 'mirrorVersion',
-		message: 'please select build mirror version:',
-		default: 0,
-		choices: genMirrorVersionChoices(version),
-	});
+	}>([
+		{
+			type: 'input',
+			name: 'mirrorVersion',
+			message: 'please input build mirror version:',
+			default: '0.1.0',
+			validate(val: string) {
+				const done = (this as any).async();
+
+				setTimeout(function () {
+					if (!semver.valid(val)) {
+						done('the version is illegal, please re-input!');
+						return false;
+					}
+
+					done(null, true);
+				}, 300);
+			},
+		},
+	]);
 };
 
 export const inquireContainerMirrorServiceInfo = async () => {
-	const { name } = getCwdProjectPackageJson();
+	const { name } = getCwdProjectPackageJson() || {};
 
 	return await inquirer.prompt<ContainerMirrorServiceInfo>([
 		{

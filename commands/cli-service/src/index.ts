@@ -85,7 +85,7 @@ export class ServiceCommand extends CliCommand {
 
 		await this.getRemoteServerInfo();
 
-		if (this.deployType === 'local+docker' || this.subCmd === 'update') {
+		if (this.deployType === 'local+docker' && this.subCmd === 'update') {
 			await this.getContainerMirrorServiceInfo();
 		}
 	}
@@ -148,7 +148,7 @@ export class ServiceCommand extends CliCommand {
 			});
 
 			log.verbose(
-				'[cli-docker]',
+				'[cli-service]',
 				`exec the command of deploy the ${this.stackName} service and the exec code ${execCode}`,
 			);
 
@@ -179,7 +179,7 @@ export class ServiceCommand extends CliCommand {
 		});
 
 		log.verbose(
-			'[cli-docker]',
+			'[cli-service]',
 			`exec the command of deploy the ${this.serviceName} service via PM2 and the exec code ${execCode}`,
 		);
 
@@ -216,7 +216,7 @@ export class ServiceCommand extends CliCommand {
 			});
 
 			log.verbose(
-				'[cli-docker]',
+				'[cli-service]',
 				`exec the command of update the ${this.serviceName} service and the exec code ${execCode}`,
 			);
 
