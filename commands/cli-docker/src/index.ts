@@ -38,6 +38,7 @@ import {
 	genPushImageCmd,
 	genPullImageToServerCmd,
 	genUpdateServiceCmd,
+	getCwdProjectPackageJson,
 } from './helper';
 
 export class ServiceCommand extends CliCommand {
@@ -168,6 +169,8 @@ export class ServiceCommand extends CliCommand {
 				'',
 				`push the image ${mirrorName}:${this.upgradeMirrorVersion} to ${repoZone} successfully`,
 			);
+		} else {
+			process.exit(execCode as number);
 		}
 	}
 
@@ -391,7 +394,10 @@ export class ServiceCommand extends CliCommand {
 			`upgrade version to ${this.upgradeMirrorVersion} before building docker image`,
 		);
 
-		if (semver.valid(this.upgradeMirrorVersion)) {
+		/**
+		 * NOTE: It's not certain that the project is an npm project.
+		 */
+		if (getCwdProjectPackageJson() && semver.valid(this.upgradeMirrorVersion)) {
 			await spawnAsync('npm', ['version', this.upgradeMirrorVersion], {
 				stdio: 'inherit',
 				shell: true,

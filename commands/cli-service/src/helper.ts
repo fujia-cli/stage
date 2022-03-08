@@ -1,8 +1,24 @@
+import path from 'path';
+import fse from 'fs-extra';
+
 import {
 	UpdateServiceCmdOptions,
 	DeployViaPM2CmdOptions,
 	DeployServiceCmdOptions,
 } from './interface';
+
+export const getCwdProjectPackageJson = () => {
+	const cwdPath = process.cwd();
+	const pkgJsonPath = path.resolve(cwdPath, 'package.json');
+
+	if (fse.existsSync(pkgJsonPath)) {
+		const pkgDetail = fse.readJSONSync(pkgJsonPath);
+
+		return pkgDetail;
+	}
+
+	return null;
+};
 
 export const genCheckServerWorkDirCmd = (options: DeployServiceCmdOptions) => {
 	const { sshPort, userName, serverIP, stackName, appDir } = options;

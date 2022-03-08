@@ -1,3 +1,6 @@
+import path from 'path';
+import fse from 'fs-extra';
+
 import {
 	BuildImageCmdOptions,
 	ContainerMirrorServiceInfo,
@@ -6,6 +9,19 @@ import {
 	DeployViaPM2CmdOptions,
 	DeployServiceCmdOptions,
 } from './interface';
+
+export const getCwdProjectPackageJson = () => {
+	const cwdPath = process.cwd();
+	const pkgJsonPath = path.resolve(cwdPath, 'package.json');
+
+	if (fse.existsSync(pkgJsonPath)) {
+		const pkgDetail = fse.readJSONSync(pkgJsonPath);
+
+		return pkgDetail;
+	}
+
+	return null;
+};
 
 export const formatMirrorName = (name: string) => name.replace(/(\.|\@|\_|\/)/g, '-');
 
@@ -55,6 +71,8 @@ export const genPullImageToServerCmd = (options: PullImageCmdOptions) => {
     docker login --username=${owner} --password=${userPwd} ${repoZone}
 
     docker pull ${repoZone}/${repoNamespace}/${mirrorName}:${mirrorVersion}
+
+    docker tag ${repoZone}/${repoNamespace}/${mirrorName}:${mirrorVersion} ${repoZone}/${repoNamespace}/${mirrorName}:latest
 
     exit
     EOF

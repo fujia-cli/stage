@@ -34,7 +34,6 @@ const core = async () => {
 };
 
 async function prepare() {
-	checkPkgVersion();
 	checkRoot();
 	await checkUserHome();
 	await checkStageHome();
@@ -116,10 +115,6 @@ async function checkUserHome() {
 
 	homeDir = curUserHome;
 	process.env[NewEnvVariables.USER_HOME] = curUserHome;
-}
-
-function checkPkgVersion() {
-	log.info('', `Thanks to use @fujia/stage(version: ${pkg.version})^_^`);
 }
 
 export default core;
