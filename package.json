@@ -41,7 +41,7 @@
 	},
 	"scripts": {
 		"prepare": "husky install",
-		"prepublish": "node ./scripts/prepublish.js",
-		"publish": "lerna run tsc && lerna publish"
+		"prerelease": "node ./scripts/prepublish.js",
+		"release": "lerna run tsc && lerna publish"
 	}
 }
