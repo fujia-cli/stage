@@ -4,10 +4,10 @@ import CliCommand from '@fujia/cli-command';
 import log from '@fujia/cli-log';
 import { getInfoFromPkgJson } from '@fujia/get-pkg-info';
 import simpleGit, { SimpleGit } from 'simple-git';
-import { NewEnvVariables, spawnAsync, getNpmRegistry } from '@fujia/cli-utils';
+import { spawnAsync, getNpmRegistry } from '@fujia/cli-utils';
 import { inquireUpgradeVersionType } from './inquirer-prompt';
 
-import { NPM_REGISTRY } from './constants';
+import { NPM_REGISTRY, VALID_BRANCHES } from './constants';
 
 export class ReleaseCommand extends CliCommand {
 	branch: string;
@@ -83,7 +83,7 @@ export class ReleaseCommand extends CliCommand {
 		}
 
 		const branch = await this.git.branch();
-		if (!['main', 'master'].includes(branch.current)) {
+		if (!VALID_BRANCHES.includes(branch.current)) {
 			throw new Error(
 				`the current git branch is not main or master, please run the command: "git checkout main", then try again!`,
 			);
