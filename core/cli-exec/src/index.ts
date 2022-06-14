@@ -1,7 +1,7 @@
 /*
  * @Author: fujia
  * @Date: 2021-12-04 15:48:52
- * @LastEditTime: 2022-01-13 20:11:31
+ * @LastEditTime: 2022-06-14 10:00:36
  * @LastEditors: fujia(as default)
  * @Description: An execute package of stage cli
  * @FilePath: /stage/core/cli-exec/src/index.ts
@@ -9,7 +9,8 @@
 import path from 'path';
 import CliPackage from '@fujia/cli-package';
 import log from '@fujia/cli-log';
-import { spawn, NewEnvVariables, spreadObjToString } from '@fujia/cli-utils';
+import { NewEnvVariables, spreadObjToString } from '@fujia/cli-utils';
+import { spawn } from '@fujia/spawn';
 
 import { CMD_MAP_PACKAGE, CACHE_DIR, WITH_SUB_CMD_LIST } from './constants';
 

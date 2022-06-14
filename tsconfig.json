@@ -1,25 +1,21 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "lib": [
-      "ESNext"
-    ],
-    "declaration": true,
-    "sourceMap": true,
-    // "declarationMap": true,
-    "moduleResolution": "node",
-    "outDir": "./lib",
-    "esModuleInterop": true,
-    "emitDeclarationOnly": false,
-    // "isolatedModules": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "allowJs": true,
-    "strict": true
-  },
-  "exclude": [
-    "node_modules",
-    "**/*.test.ts"
-  ]
+	"compilerOptions": {
+		"target": "es5",
+		"module": "commonjs",
+		"lib": ["ESNext"],
+		"declaration": true,
+		"sourceMap": true,
+		// "declarationMap": true,
+		"moduleResolution": "node",
+		"outDir": "./lib",
+		"esModuleInterop": true,
+		"emitDeclarationOnly": false,
+		// "isolatedModules": true,
+		"skipLibCheck": true,
+		"resolveJsonModule": true,
+		"allowJs": true,
+		"strict": true
+	},
+	"include": ["commands", "core", "examples", "models", "utils"],
+	"exclude": ["node_modules", "**/*.test.ts"]
 }

@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://github.com/fujia-cli/stage" target="_blank">
-    <img alt="stage logo" width="200" src="https://github.com/fujia-blogs/articles/blob/main/stage-ci/assets/stage.svg"/>
+    <img alt="stage logo" width="200" src="https://images-1254102905.file.myqcloud.com/assets/stage.svg"/>
   </a>
 </div>
 
@@ -49,9 +49,8 @@ npm install -g @fujia/cli-core
 
 ```sh
 
-stage
+stage -h
 
-# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
 # Usage: stage <command> [options]
 #
 # Options:
@@ -72,9 +71,9 @@ stage
 
 ### Environments Description
 
-1. The commands of "stage docker" and "stage service" are depended on docker environment, makes sure the related commands are run correctly, you have to configure the docker in local host and servers. How to install docker? please consults: https://docs.docker.com/get-docker/.
+1. The command of "stage docker" and "stage service" are depended on docker environment, makes sure the related commands are run correctly, you have to configure the docker in local host and the server. How to install docker? please consults: https://docs.docker.com/get-docker/.
 
-2. Running the command of "stage service", if you selected the PM2 to manage your services(applications), you have to configure node environment and install package of PM2 globally. we recommend to manage node by using nvm. How to install nvm? please consults: https://github.com/nvm-sh/nvm.
+2. Running the command of "stage service", if you selected the PM2 to manage your services(applications), you have to configure node environment and install package of PM2 globally in the server. we recommend to manage node version by using nvm. How to install nvm? please consults: https://github.com/nvm-sh/nvm.
 
 installing pm2 globally:
 
@@ -98,9 +97,7 @@ enter the following command：
 
 ```sh
 stage -v
-
-# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
-# 1.1.5
+# 1.3.6
 ```
 
 #### -d, --debug：enable debug mode, by default：false
@@ -112,7 +109,6 @@ take the clean command as an example：
 ```sh
 stage -d clean
 
-# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
 # [stage] verb [cli-exec]
 # [stage] verb [cli-exec]     localPath: undefined,
 # [stage] verb [cli-exec]     pkgName: @fujia/cli-clean,
@@ -127,21 +123,20 @@ stage -d clean
 # [stage] verb [cli-package]       storeDir: /Users/sunny/.stage-cli/caches/node_modules
 # [stage] verb [cli-package]
 # [stage] verb [cli-package]
-# [stage] verb [cli-package] The version of installing package is: 1.1.5
+# [stage] verb [cli-package] The version of installing package is: 1.3.6
 # [stage] verb [cli-package] Starting install @fujia/cli-clean...
 # ...
 ```
 
-#### -lp, --localPath <localPath>：specify local path of the command when in development or debug
+#### -lp, --localPath <localPath>：specify local path of the command when in development or debug mode
 
-In development or debug, you can add the parameter: --localPath <localPath>, then it will use local npm package to execute the corresponding command.
+In development or debug mode, you can add the parameter: --localPath <localPath>, then it will use local npm package to execute the corresponding command.
 
 for example：
 
 ```sh
 stage -d -lp [workDir]/stage/commands/cli-clean clean
 
-# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
 # [stage] verb [cli-exec]
 # [stage] verb [cli-exec]     localPath: undefined,
 # [stage] verb [cli-exec]     pkgName: @fujia/cli-clean,
@@ -165,7 +160,6 @@ You can initialize, deploy and update an application(service) by series of comma
 ```sh
 stage help init
 
-# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
 # Usage: stage init [options] [projectName]
 #
 # initializing an universal project quickly
@@ -179,15 +173,15 @@ stage help init
 
 when you passed this parameter, it'll force to initialize a project even if the work directory is not empty.
 
-Note: it is a very **dangerous operation** of remove one folder. so stage will confirm again and check the removed folder name before remove.
+Note: this is a very **dangerous operation** of remove one folder. so "stage" will confirm again and check the removed folder name before remove.
 
 3. projectName
 
-- optional, if don't pass or invalid, you have to re-enter and stage will verify it. Note that the name follow the same rules as npm package name and strongly recommended don't use special characters.
+- optional, if don't pass or invalid, you have to re-enter and "stage" will verify it. Note that the name follow the same rules as npm package name and strongly recommended don't use special characters.
 
 4. select a template type, support the following:
 
-- default: built in template, maintained by stage terms.
+- default: built in template, maintained by "stage" terms.
 - custom: use your own templates
 
 5. the available default templates, as follows:
@@ -220,6 +214,14 @@ mini-program:
 
 In the templates, we will add some common best practices, as: husky, Dockerfile and hot update of electron etc. of cause, you can remove them as your like. we hope that you can pay more attention to the business and ideas, producing the product of MVP1.0 quickly.
 
+6. **we also provide a way to initial project which more simple, as follows:**
+
+```sh
+npm init stage@latest demos
+```
+
+That all, enjoy your works.
+
 #### publish [options]：push your project to the github or gitee
 
 > this functionality is not perfect and we are planing to refactor it.
@@ -230,7 +232,6 @@ In the templates, we will add some common best practices, as: husky, Dockerfile 
 
 stage help publish
 
-# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
 # Usage: stage publish [options]
 #
 # publish a project
@@ -305,7 +306,7 @@ that all, we published a npm package simply and correctly.
 
 stage help docker
 
-# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
+
 # Usage: stage docker [options]
 #
 # to build a docker image and update corresponding service
@@ -353,7 +354,6 @@ we recommend to use the free container mirror service provide by aliyun or tence
 
 stage help service
 
-# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
 # Usage: stage service [options] [command]
 #
 # deploy or update a service
@@ -400,7 +400,6 @@ You can clean up the cached npm packages manually.
 
 stage help clean
 
-# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
 # Usage: stage clean [options] [cacheFileName]
 #
 # clean caches
@@ -416,7 +415,7 @@ stage help clean
 
 stage clean
 
-# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
+
 # ✔ Installed 1 packages
 # ✔ Linked 34 latest versions
 # ✔ Run 0 scripts
@@ -462,7 +461,7 @@ this is the focus and direction of the future development of the stage.
 
 ## Supporting Stage
 
-if the project is helpful to you, please click a star on [github](https://github.com/fujia-cli/stage).
+if the project is helpful to you, please click a star on [github](https://github.com/fujia-cli/stage), thanks so much.
 
 ## References
 
