@@ -30,6 +30,7 @@
 	},
 	"devDependencies": {
 		"@commitlint/config-conventional": "^15.0.0",
+		"@fujia/spawn": "^1.0.1",
 		"@types/jest": "^27.0.3",
 		"@types/node": "^16.11.11",
 		"chalk": "^4.1.2",
