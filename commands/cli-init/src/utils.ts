@@ -49,3 +49,5 @@ export const writeCustomTplToJson = async (obj = {}, filePath = customTplFile) =
 
 	log.success('', `write the content into the ${filePath} file successfully`);
 };
+
+export const isRNApp = (name: string) => name === 'react-native';

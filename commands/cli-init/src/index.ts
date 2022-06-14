@@ -15,7 +15,7 @@ import fse from 'fs-extra';
 import kebabCase from 'kebab-case';
 import ejs from 'ejs';
 import glob from 'glob';
-import { spinnerInstance, sleep } from '@fujia/cli-utils';
+import { spinnerInstance, sleep, getCurDirName } from '@fujia/cli-utils';
 import { spawnAsync } from '@fujia/spawn';
 
 import {
@@ -29,12 +29,18 @@ import {
 	inquireSelectTplName,
 } from './inquirer-prompt';
 import { getDefaultTemplates, getCustomProjectTemplates } from './getTemplate';
-
 import { ITemplate, ProjectInfo, ProjectTemplate, TemplateType } from './interface';
-import { verifyCmd, isDirEmpty, getCustomTplInfo, writeCustomTplToJson } from './utils';
-import { EJS_IGNORE_FILES, STAGE_CLI_TEMPLATES_DIR, ADD_CUSTOM_TPL_TEXT } from './constants';
+import { verifyCmd, isDirEmpty, getCustomTplInfo, writeCustomTplToJson, isRNApp } from './utils';
+import {
+	EJS_IGNORE_FILES,
+	STAGE_CLI_TEMPLATES_DIR,
+	ADD_CUSTOM_TPL_TEXT,
+	ORIGINAL_RN_NEEDLESS_FILES,
+} from './constants';
 
 const NPM_IGNORE_FILES = ['gitignore', 'npmrc'];
+
+const cwdPath = process.cwd();
 
 export class CliInit extends CliCommand {
 	projectName: string;
@@ -46,6 +52,7 @@ export class CliInit extends CliCommand {
 	templatePkg?: CliPackage;
 	templateType: TemplateType;
 	customTplInfo?: ProjectTemplate;
+
 	constructor(args: any[]) {
 		super(args);
 		this.projectName = '';
@@ -142,7 +149,6 @@ export class CliInit extends CliCommand {
 	}
 
 	async checkCwdEmpty() {
-		const cwdPath = process.cwd();
 		const isCwdEmpty = await isDirEmpty(cwdPath);
 
 		if (!isCwdEmpty) {
@@ -167,10 +173,11 @@ export class CliInit extends CliCommand {
 	}
 
 	async getProjectInfo() {
-		let projectDetail: ProjectInfo | undefined;
+		let projectDetail: ProjectInfo;
 		log.verbose('[cli-init]', `this.projectName: ${this.projectName}`);
 
 		projectDetail = await inquireProjectInfo(this.template as ProjectTemplate[], this.projectName);
+
 		let { projectName } = projectDetail || {};
 
 		if (!projectName && this.projectName) {
@@ -214,6 +221,7 @@ export class CliInit extends CliCommand {
 			if (!selectTemplate) throw new Error('The selected template is not exist!');
 
 			const templateInfo = this.template.find((t) => t.npmName === selectTemplate);
+
 			this.templateInfo = templateInfo;
 		}
 
@@ -306,7 +314,7 @@ export class CliInit extends CliCommand {
 	}
 
 	async installProjectTemplate(templatePath: string) {
-		const { installCommand, startCommand } = this.templateInfo as ProjectTemplate;
+		const { installCommand, startCommand, name } = this.templateInfo as ProjectTemplate;
 
 		log.verbose(
 			'[cli-init]',
@@ -317,10 +325,21 @@ export class CliInit extends CliCommand {
 		);
 
 		const spinner = spinnerInstance('template installing...');
+
 		await sleep();
+
 		try {
-			const cwdPath = process.cwd();
-			fse.copySync(templatePath, cwdPath);
+			/**
+			 * NOTE: we relate the template with your project in the certain point. you can do some extra actions what you want.
+			 *
+			 * 1. In fact, if we want to initial a React Native project, It should to handle individually.
+			 */
+
+			if (isRNApp(name)) {
+				await this.initOriginalRN();
+			}
+
+			await fse.copy(templatePath, cwdPath);
 		} catch (err) {
 			throw err;
 		} finally {
@@ -341,6 +360,52 @@ export class CliInit extends CliCommand {
 		if (startCommand) {
 			await this.execCommand(startCommand);
 		}
+	}
+
+	async initOriginalRN() {
+		const appName = getCurDirName();
+
+		const execCode = await spawnAsync(
+			'npx',
+			[
+				'-y',
+				'react-native',
+				'init',
+				appName,
+				'--template',
+				'react-native-template-typescript',
+				'--skip-install',
+			],
+			{
+				stdio: 'inherit',
+				shell: true,
+			},
+		);
+
+		if (execCode === 0) {
+			log.success('', `run 'npx react-native init ${appName}' successfully`);
+
+			await this.copyOriginalAndRemoveNeedlessFiles(appName);
+		} else {
+			process.exit(execCode as number);
+		}
+	}
+
+	async copyOriginalAndRemoveNeedlessFiles(appName: string) {
+		const originProjectPath = path.join(cwdPath, appName);
+
+		await fse.copy(originProjectPath, cwdPath, {
+			recursive: true,
+			filter: (src) => {
+				const lastFileName = src.split(path.sep).pop();
+
+				if (!lastFileName) return false;
+
+				return !ORIGINAL_RN_NEEDLESS_FILES.includes(lastFileName);
+			},
+		});
+
+		await fse.remove(originProjectPath);
 	}
 
 	async execCommand(command: string, errMsg?: string) {
@@ -422,8 +487,8 @@ export class CliInit extends CliCommand {
 
 	async newCustomTpl() {
 		this.templateInfo = await inquireCustomTplInfo();
-		const { name } = this.templateInfo;
 
+		const { name } = this.templateInfo;
 		const newTplObj = {
 			nameList: [name],
 			pkgList: [this.templateInfo],
