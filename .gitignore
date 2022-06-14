@@ -43,7 +43,7 @@ jspm_packages/
 **/*/.DS_Store
 # lerna
 **/*/node_modules
-# **/*/package-lock.json
+**/*/package-lock.json
 **/*/yarn.lock
 **/*/lib
 
