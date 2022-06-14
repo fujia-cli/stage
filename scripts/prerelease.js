@@ -2,6 +2,7 @@
 
 const chalk = require('chalk');
 const { execSync, spawn } = require('child_process');
+const { spawnAsync } = require('@fujia/spawn');
 
 const ORIGIN_REGISTRY = 'https://registry.npmjs.org/';
 /**
@@ -9,20 +10,6 @@ const ORIGIN_REGISTRY = 'https://registry.npmjs.org/';
  */
 const RELEASE_BRANCH = 'release';
 const log = console.log;
-
-const spawnAsync = (command, args, options) => {
-	return new Promise((resolve, reject) => {
-		const cp = spawn(command, args, options);
-
-		cp.on('error', (err) => {
-			reject(err);
-		});
-
-		cp.on('exit', (chunk) => {
-			resolve(chunk);
-		});
-	});
-};
 
 async function prepublish() {
 	const curBranch = execSync('git rev-parse --abbrev-ref HEAD').toString().replace(/\s+/, '');

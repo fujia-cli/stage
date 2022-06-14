@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://github.com/fujia-cli/stage" target="_blank">
-    <img alt="stage logo" width="200" src="https://github.com/fujia-blogs/articles/blob/main/stage-ci/assets/stage.svg"/>
+    <img alt="stage logo" width="200" src="https://images-1254102905.file.myqcloud.com/assets/stage.svg"/>
   </a>
 </div>
 
@@ -55,7 +55,6 @@ yarn global add @fujia/core-cli
 
 stage
 
-# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
 # Usage: stage <command> [options]
 #
 # Options:
@@ -103,8 +102,7 @@ pm2 使用文档，请参考：https://pm2.keymetrics.io/docs/usage/quick-start/
 ```sh
 stage -v
 
-# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
-# 1.1.5
+# 1.3.6
 ```
 
 #### -d, --debug：启动调试模式，默认：false
@@ -116,7 +114,6 @@ stage -v
 ```sh
 stage -d clean
 
-# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
 # [stage] verb [cli-exec]
 # [stage] verb [cli-exec]     localPath: undefined,
 # [stage] verb [cli-exec]     pkgName: @fujia/cli-clean,
@@ -131,7 +128,7 @@ stage -d clean
 # [stage] verb [cli-package]       storeDir: /Users/sunny/.stage-cli/caches/node_modules
 # [stage] verb [cli-package]
 # [stage] verb [cli-package]
-# [stage] verb [cli-package] The version of installing package is: 1.1.5
+# [stage] verb [cli-package] The version of installing package is: 1.3.6
 # [stage] verb [cli-package] Starting install @fujia/cli-clean...
 # ...
 ```
@@ -145,7 +142,6 @@ stage -d clean
 ```sh
 stage -d -lp [文件路径]/stage/commands/cli-clean clean
 
-# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
 # [stage] verb [cli-exec]
 # [stage] verb [cli-exec]     localPath: undefined,
 # [stage] verb [cli-exec]     pkgName: @fujia/cli-clean,
@@ -169,7 +165,7 @@ stage -d -lp [文件路径]/stage/commands/cli-clean clean
 ```sh
 stage help init
 
-# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
+
 # Usage: stage init [options] [projectName]
 #
 # initializing an universal project quickly
@@ -225,6 +221,14 @@ mini-program:
 
 在模板开发中，我们将一些通用的最佳实践融入模板，如：husky，Dockerfile 以及 Electron 热更新等等，用一种合适的方式提供基础配置，当然你可以按照需要进行修改，从而，希望你可以将更多的精力投注到业务开发以及更好的创意上，快速开发出产品的 MVP1.0 版本。同时，对于经验不足的同学，也会更友好。
 
+1. **"stage"同时提供了一种更加简单的方式来初始化项目，** 使用下面的命令：
+
+```sh
+npm init stage@latest demos
+```
+
+现在，可以快速开始你的工作了。
+
 #### publish [options]：将初始化的项目推送到 github 或 gitee 上
 
 > tips: 该功能目前可用，但并不完善，我们计划将它与其它的功能结合(如：云构建)，产生更多的玩法。
@@ -236,7 +240,6 @@ mini-program:
 
 stage help publish
 
-# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
 # Usage: stage publish [options]
 #
 # publish a project
@@ -313,7 +316,6 @@ stage help release
 
 stage help docker
 
-# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
 # Usage: stage docker [options]
 #
 # to build a docker image and update corresponding service
@@ -365,7 +367,6 @@ stage help docker
 
 stage help service
 
-# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
 # Usage: stage service [options] [command]
 #
 # deploy or update a service
@@ -430,7 +431,6 @@ docker service deploy
 
 stage help component
 
-# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
 # Usage: stage component [options] <componentName> [destination]
 #
 # create a component template for ui-puzzles UI library
@@ -463,7 +463,6 @@ stage component -t react tag /src/component
 
 stage help clean
 
-# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
 # Usage: stage clean [options] [cacheFileName]
 #
 # clean caches
@@ -479,7 +478,6 @@ stage help clean
 
 stage clean
 
-# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
 # ✔ Installed 1 packages
 # ✔ Linked 34 latest versions
 # ✔ Run 0 scripts
@@ -497,7 +495,7 @@ stage clean
 
 stage help docker
 
-# [stage] info Thanks to use @fujia/stage(version: 1.1.5)🏖
+
 # Usage: stage docker [options]
 #
 # to build a docker image and update corresponding service
