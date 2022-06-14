@@ -4,7 +4,9 @@ import CliCommand from '@fujia/cli-command';
 import log from '@fujia/cli-log';
 import { getInfoFromPkgJson } from '@fujia/get-pkg-info';
 import simpleGit, { SimpleGit } from 'simple-git';
-import { spawnAsync, getNpmRegistry } from '@fujia/cli-utils';
+import { getNpmRegistry } from '@fujia/cli-utils';
+import { spawnAsync } from '@fujia/spawn';
+
 import { inquireUpgradeVersionType } from './inquirer-prompt';
 
 import { NPM_REGISTRY, VALID_BRANCHES } from './constants';

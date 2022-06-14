@@ -3,7 +3,8 @@ import CliCommand from '@fujia/cli-command';
 import log from '@fujia/cli-log';
 import fse from 'fs-extra';
 import { pathExistSync } from '@fujia/check-path';
-import { NewEnvVariables, spawnAsync } from '@fujia/cli-utils';
+import { NewEnvVariables } from '@fujia/cli-utils';
+import { spawnAsync } from '@fujia/spawn';
 
 import {
 	inquireServerInfo,
