@@ -1,5 +1,15 @@
 export const ADD_CUSTOM_TPL_TEXT = 'add-new';
 
+export const ORIGINAL_RN_NEEDLESS_FILES = [
+	'tsconfig.json',
+	'metro.config.js',
+	'package.json',
+	'index.js',
+	'App.tsx',
+	'babel.config.js',
+	'.eslintrc.js',
+];
+
 export const TEMPLATE_TYPES = [
 	{
 		name: 'default',
@@ -195,8 +205,8 @@ export const DEFAULT_APP_TEMPLATES = [
 		name: 'react-native',
 		version: 'latest',
 		npmName: '@fujia/react-native-template',
-		installCommand: 'npm install --registry=https://registry.npmmirror.com',
-		startCommand: 'yarn ios',
+		installCommand: 'yarn --registry=https://registry.npmmirror.com',
+		startCommand: '',
 	},
 	{
 		_id: `STAGE_${Date.now()}`,
