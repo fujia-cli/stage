@@ -15,7 +15,8 @@ import fse from 'fs-extra';
 import kebabCase from 'kebab-case';
 import ejs from 'ejs';
 import glob from 'glob';
-import { spinnerInstance, sleep, spawnAsync } from '@fujia/cli-utils';
+import { spinnerInstance, sleep } from '@fujia/cli-utils';
+import { spawnAsync } from '@fujia/spawn';
 
 import {
 	inquireProjectCategory,
