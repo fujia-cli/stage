@@ -17,6 +17,7 @@ import ejs from 'ejs';
 import glob from 'glob';
 import { spinnerInstance, sleep, getCurDirName } from '@fujia/cli-utils';
 import { spawnAsync } from '@fujia/spawn';
+import { green } from 'colors/safe';
 
 import {
 	inquireProjectCategory,
@@ -359,6 +360,23 @@ export class CliInit extends CliCommand {
 
 		if (startCommand) {
 			await this.execCommand(startCommand);
+		}
+
+		/**
+		 * NOTE:
+		 */
+		if (isRNApp(name)) {
+			log.info(
+				``,
+				green(`
+        Getting Started:
+
+        1. 'npm run pod:install' for iOS platform.
+
+        2. run above corresponding instructions to launch app.
+
+      `),
+			);
 		}
 	}
 

@@ -36,6 +36,7 @@
 		"@fujia/cli-utils": "^1.5.0",
 		"@fujia/spawn": "^1.0.1",
 		"@fujia/user-home": "^1.1.0",
+		"colors": "^1.4.0",
 		"ejs": "^3.1.6",
 		"fs-extra": "^10.0.0",
 		"glob": "^7.2.0",
