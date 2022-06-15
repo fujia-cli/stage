@@ -16,12 +16,6 @@
 		"allowJs": true,
 		"strict": true
 	},
-	"include": [
-		"commands/**/*.ts",
-		"core/**/*.ts",
-		"examples/**/*.ts",
-		"models/**/*.ts",
-		"utils/**/*.ts"
-	],
+	"include": ["commands/**/*.ts", "core/**/*.ts", "examples", "models/**/*.ts", "utils/**/*.ts"],
 	"exclude": ["node_modules", "**/*.test.ts"]
 }
