@@ -10,7 +10,7 @@
 
 <div align="center">
 
-A cli tools making application development simple and powerful.
+A CLI tool makes application development simple and powerful.
 
 </div>
 
@@ -54,28 +54,28 @@ stage -h
 # Usage: stage <command> [options]
 #
 # Options:
-#   -v, --version                 output the version number
-#   -d, --debug                   enable debug model (default: false)
-#   -lp, --localPath <localPath>  specify the local debug file path (default: "")
-#   -h, --help                    display help for command
+#   -v, --version                 Print the version number
+#   -d, --debug                   Enable debug model (default: false)
+#   -lp, --localPath <localPath>  Specify the local debug file path (default: "")
+#   -h, --help                    Show command help
 #
 # Commands:
-#   init [options] [projectName]  initializing an universal project quickly
-#   publish [options]             publish a project
-#   release [options]             release a npm package
-#   docker [options]              to build a docker image and update corresponding service
-#   service                       deploy or update a service
-#   clean [cacheFileName]         clean caches
-#   help [command]                display help for command
+#   init [options] [projectName]  Quickly initialize a universal project
+#   publish [options]             Publish a project
+#   release [options]             Release an npm package
+#   docker [options]              To build a docker image and update  the corresponding service
+#   service                       Deploy or update a service
+#   clean [cacheFileName]         Clean the caches
+#   help [command]                Show command help
 ```
 
 ### Environments Description
 
-1. The command of "stage docker" and "stage service" are depended on docker environment, makes sure the related commands are run correctly, you have to configure the docker in local host and the server. How to install docker? please consults: https://docs.docker.com/get-docker/.
+1. The command of "stage docker" and "stage service" are dependent on docker environment, make sure the related commands are run correctly, you need to configure the docker in local host and the server. How to install docker? please consult: https://docs.docker.com/get-docker/.
 
-2. Running the command of "stage service", if you selected the PM2 to manage your services(applications), you have to configure node environment and install package of PM2 globally in the server. we recommend to manage node version by using nvm. How to install nvm? please consults: https://github.com/nvm-sh/nvm.
+2. Running the command of "stage service", if you selected the PM2 to manage your services(applications), you have to configure node environment and install package of PM2 globally in the server. we recommend to manage node version by using NVM. How to install nvm? please consult: https://github.com/nvm-sh/nvm.
 
-installing pm2 globally:
+Instal PM2 globally:
 
 ```sh
 
@@ -83,17 +83,17 @@ npm install -g pm2
 
 ```
 
-Head over to the docs of PM2(https://pm2.keymetrics.io/docs/usage/quick-start/).
+Go to the PM2 docs(https://pm2.keymetrics.io/docs/usage/quick-start/).
 
-3. Before any commands are run, stage will check user home directory of local host. If don't exist, it'll throw exceptions and end the process.
+3. Before running any commands, stage will check the user home directory of the local host. If it doesn't exist, it will throw exceptions and terminate the process.
 
-4. when some commands are run, stage will create a directory which named ".stage-cli" in the user home directory.
+4. when some commands are executed, stage will create a directory which named ".stage-cli" in the user's home directory.
 
 ### Options
 
 #### -v,--version：view stage version
 
-enter the following command：
+Type the following command：
 
 ```sh
 stage -v
@@ -102,9 +102,9 @@ stage -v
 
 #### -d, --debug：enable debug mode, by default：false
 
-You can enable debug mode when you want to check the running details or development. If enabled, it will print the execution flows and key parameters information in the internal.
+You can enable debug mode if you want to check the details of execution or development. When enabled, it will print the execution flows and key parameter information in the internal.
 
-take the clean command as an example：
+Take the clean command as an example：
 
 ```sh
 stage -d clean
@@ -123,7 +123,7 @@ stage -d clean
 # [stage] verb [cli-package]       storeDir: /Users/sunny/.stage-cli/caches/node_modules
 # [stage] verb [cli-package]
 # [stage] verb [cli-package]
-# [stage] verb [cli-package] The version of installing package is: 1.3.6
+# [stage] verb [cli-package] The version of the installing package is: 1.3.6
 # [stage] verb [cli-package] Starting install @fujia/cli-clean...
 # ...
 ```
