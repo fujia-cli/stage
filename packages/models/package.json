@@ -1,0 +1,45 @@
+{
+  "name": "@fujia/stage-models",
+  "description": "",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "scripts": {
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "build": "tsup"
+  },
+  "main": "lib/index.cjs",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.js"
+      },
+      "require": {
+        "types": "./lib/index.d.cts",
+        "default": "./lib/index.cjs"
+      }
+    }
+  },
+  "devDependencies": {
+    "@fujia/typescript-config": "workspace:*"
+  },
+  "homepage": "https://github.com/fujia-cli/stage",
+  "bugs": {
+    "url": "https://github.com/fujia-cli/stage/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fujia-cli/stage",
+    "directory": "https://github.com/fujia-cli/stage"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": []
+}

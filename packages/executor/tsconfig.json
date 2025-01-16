@@ -1,0 +1,12 @@
+{
+  "extends": "@fujia/typescript-config/node.json",
+  "compilerOptions": {
+
+  },
+  "include": [
+
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

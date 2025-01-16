@@ -1,0 +1,41 @@
+{
+  "name": "stage-next",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "prepare": "husky",
+    "docs:dev": "turbo docs:dev --filter=docs",
+    "docs:build": "turbo docs:build --filter=docs",
+    "lint": "turbo lint",
+    "publish:packages": "turbo run build --filter=./packages/* --parallel && turbo run check-exports --filter=./widgets/* && changeset version && changeset publish",
+    "publish:widgets": "turbo run build --filter=./widgets/* --parallel && turbo run check-exports --filter=./widgets/* && changeset version && changeset publish",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.17.2",
+    "@changesets/cli": "^2.27.11",
+    "@commitlint/cli": "^19.6.1",
+    "@commitlint/config-conventional": "^19.6.0",
+    "husky": "^9.1.7",
+    "prettier": "^3.2.5",
+    "tsup": "^8.3.5",
+    "turbo": "^2.3.3",
+    "typescript": "5.5.4",
+    "vitest": "^2.1.8"
+  },
+  "author": "JiaFu <fujia.site@gmail.com> (https://fujia.site)",
+  "homepage": "https://github.com/fujia-cli/stage",
+  "bugs": {
+    "url": "https://github.com/fujia-cli/stage/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fujia-cli/stage",
+    "directory": "https://github.com/fujia-cli/stage"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=18"
+  }
+}
