@@ -8,7 +8,6 @@
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
   "ignore": [
-    "@cogito-agents/docs",
-    "@cogito-agents/client"
+    "docs"
   ]
 }

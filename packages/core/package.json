@@ -1,12 +1,13 @@
 {
   "name": "@fujia/stage-core",
-  "description": "",
+  "description": "The core package for Stage CLI",
   "version": "0.1.0",
   "private": false,
   "type": "module",
   "scripts": {
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
-    "build": "tsup"
+    "build": "tsup",
+    "check-exports": "attw --pack ."
   },
   "main": "lib/index.cjs",
   "module": "lib/index.js",
@@ -27,7 +28,9 @@
     }
   },
   "devDependencies": {
-    "@fujia/typescript-config": "workspace:*"
+    "@fujia/typescript-config": "workspace:*",
+    "@types/fs-extra": "^11.0.4",
+    "@types/semver": "^7.5.8"
   },
   "homepage": "https://github.com/fujia-cli/stage",
   "bugs": {
@@ -41,5 +44,18 @@
   "publishConfig": {
     "access": "public"
   },
-  "keywords": []
+  "keywords": [],
+  "dependencies": {
+    "@fujia/check-path": "^1.2.0",
+    "@fujia/root": "^0.3.2",
+    "@fujia/stage-executor": "^0.2.0",
+    "@fujia/stage-share": "^0.1.0",
+    "@fujia/user-home": "^1.1.1",
+    "colors": "^1.4.0",
+    "commander": "^13.0.0",
+    "fs-extra": "^11.3.0",
+    "import-local": "^3.2.0",
+    "npmlog": "^7.0.1",
+    "semver": "^7.6.3"
+  }
 }

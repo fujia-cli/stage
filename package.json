@@ -8,8 +8,7 @@
     "docs:dev": "turbo docs:dev --filter=docs",
     "docs:build": "turbo docs:build --filter=docs",
     "lint": "turbo lint",
-    "publish:packages": "turbo run build --filter=./packages/* --parallel && turbo run check-exports --filter=./widgets/* && changeset version && changeset publish",
-    "publish:widgets": "turbo run build --filter=./widgets/* --parallel && turbo run check-exports --filter=./widgets/* && changeset version && changeset publish",
+    "npm:publish": "turbo run build --filter=./packages/* --parallel && turbo run check-exports --filter=./packages/* && changeset version && changeset publish",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
@@ -17,6 +16,7 @@
     "@changesets/cli": "^2.27.11",
     "@commitlint/cli": "^19.6.1",
     "@commitlint/config-conventional": "^19.6.0",
+    "@types/node": "^22.10.7",
     "husky": "^9.1.7",
     "prettier": "^3.2.5",
     "tsup": "^8.3.5",

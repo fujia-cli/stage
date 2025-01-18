@@ -1,12 +1,13 @@
 {
   "name": "@fujia/stage-executor",
   "description": "",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": false,
   "type": "module",
   "scripts": {
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
-    "build": "tsup"
+    "build": "tsup",
+    "check-exports": "attw --pack ."
   },
   "main": "lib/index.cjs",
   "module": "lib/index.js",
@@ -41,5 +42,10 @@
   "publishConfig": {
     "access": "public"
   },
-  "keywords": []
+  "keywords": [],
+  "dependencies": {
+    "@fujia/spawn": "^1.0.1",
+    "@fujia/stage-models": "^0.2.0",
+    "@fujia/stage-share": "^0.1.0"
+  }
 }
