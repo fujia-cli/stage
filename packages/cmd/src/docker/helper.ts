@@ -2,33 +2,34 @@ import path from 'path';
 import fse from 'fs-extra';
 
 import {
-	BuildImageCmdOptions,
-	ContainerMirrorServiceInfo,
-	PullImageCmdOptions,
-	UpdateServiceCmdOptions,
-	DeployViaPM2CmdOptions,
-	DeployServiceCmdOptions,
+  BuildImageCmdOptions,
+  ContainerMirrorServiceInfo,
+  PullImageCmdOptions,
+  UpdateServiceCmdOptions,
+  DeployViaPM2CmdOptions,
+  DeployServiceCmdOptions,
 } from './interface';
 
 export const getCwdProjectPackageJson = () => {
-	const cwdPath = process.cwd();
-	const pkgJsonPath = path.resolve(cwdPath, 'package.json');
+  const cwdPath = process.cwd();
+  const pkgJsonPath = path.resolve(cwdPath, 'package.json');
 
-	if (fse.existsSync(pkgJsonPath)) {
-		const pkgDetail = fse.readJSONSync(pkgJsonPath);
+  if (fse.existsSync(pkgJsonPath)) {
+    const pkgDetail = fse.readJSONSync(pkgJsonPath);
 
-		return pkgDetail;
-	}
+    return pkgDetail;
+  }
 
-	return null;
+  return null;
 };
 
-export const formatMirrorName = (name: string) => name.replace(/(\.|\@|\_|\/)/g, '-');
+export const formatMirrorName = (name: string) =>
+  name.replace(/(\.|\@|\_|\/)/g, '-');
 
 export const genBuildImageCmd = (options: BuildImageCmdOptions) => {
-	const { mirrorName, mirrorVersion, repoZone, repoNamespace } = options;
+  const { mirrorName, mirrorVersion, repoZone, repoNamespace } = options;
 
-	return `
+  return `
     #!/bin/bash
     # 1. build image
     docker build --platform linux/amd64 -t ${mirrorName}:${mirrorVersion} .
@@ -41,8 +42,9 @@ export const genBuildImageCmd = (options: BuildImageCmdOptions) => {
 };
 
 export const genPushImageCmd = (options: ContainerMirrorServiceInfo) => {
-	const { owner, userPwd, mirrorName, mirrorVersion, repoZone, repoNamespace } = options;
-	return `
+  const { owner, userPwd, mirrorName, mirrorVersion, repoZone, repoNamespace } =
+    options;
+  return `
     # 1. use free container mirror service and login private repository，recommended:
     #       - aliyun(https://help.aliyun.com/document_detail/257112.html?spm=5176.166170.J_5253785160.5.93cf5164mGxRDG)
     #       - tencent(https://console.cloud.tencent.com/tcr)
@@ -54,18 +56,18 @@ export const genPushImageCmd = (options: ContainerMirrorServiceInfo) => {
 };
 
 export const genPullImageToServerCmd = (options: PullImageCmdOptions) => {
-	const {
-		sshPort,
-		userName,
-		serverIP,
-		owner,
-		userPwd,
-		mirrorName,
-		mirrorVersion,
-		repoZone,
-		repoNamespace,
-	} = options;
-	return `
+  const {
+    sshPort,
+    userName,
+    serverIP,
+    owner,
+    userPwd,
+    mirrorName,
+    mirrorVersion,
+    repoZone,
+    repoNamespace,
+  } = options;
+  return `
     # if you are using docker swarm, please make sure the follow ip address is the master node
     ssh -tt -p ${sshPort} ${userName}@${serverIP} << EOF
     docker login --username=${owner} --password=${userPwd} ${repoZone}
@@ -80,26 +82,26 @@ export const genPullImageToServerCmd = (options: PullImageCmdOptions) => {
 };
 
 export const genDeployServiceCmd = (options: DeployServiceCmdOptions) => {
-	const { serviceName } = options;
+  const { serviceName } = options;
 
-	return `
+  return `
     docker stack deploy -c stack.yml ${serviceName}
   `;
 };
 
 export const genUpdateServiceCmd = (options: UpdateServiceCmdOptions) => {
-	const {
-		sshPort,
-		userName,
-		serverIP,
-		mirrorName,
-		repoZone,
-		repoNamespace,
-		serviceName,
-		mirrorVersion,
-	} = options;
+  const {
+    sshPort,
+    userName,
+    serverIP,
+    mirrorName,
+    repoZone,
+    repoNamespace,
+    serviceName,
+    mirrorVersion,
+  } = options;
 
-	return `
+  return `
     #!/bin/bash
     # if you are using docker swarm, please make sure the follow ip address is the master node
     ssh -tt -p ${sshPort} ${userName}@${serverIP} << EOF
@@ -112,15 +114,15 @@ export const genUpdateServiceCmd = (options: UpdateServiceCmdOptions) => {
 };
 
 export const genDeployServiceViaPM2Cmd = (options: DeployViaPM2CmdOptions) => {
-	const { sshPort, userName, serverIP, appDir = '/apps' } = options;
+  const { sshPort, userName, serverIP, appDir = '/apps' } = options;
 
-	if (appDir === '/') {
-		throw new Error(
-			`Dangerous!!! the deploy directory must not the root directory of host machine`,
-		);
-	}
+  if (appDir === '/') {
+    throw new Error(
+      `Dangerous!!! the deploy directory must not the root directory of host machine`,
+    );
+  }
 
-	return `
+  return `
     ssh -tt -p ${sshPort} ${userName}@${serverIP} << EOF
 
     if [ ! -d "${appDir}" ]; then

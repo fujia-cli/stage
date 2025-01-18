@@ -14,7 +14,7 @@ interface NpmInstallOptions {
   pkgs: Array<{
     name: string;
     version: string;
-  }>,
+  }>;
   // install to specific directory, default to root
   targetDir?: string;
   // link bin to specific directory (for global install), i.e. '/home/admin/.global/bin'
@@ -32,5 +32,7 @@ interface NpmInstallOptions {
 }
 
 declare module 'npminstall' {
-  export default function npminstall<T = any>(options: NpmInstallOptions): Promise<T>;
+  export default function npminstall<T = any>(
+    options: NpmInstallOptions,
+  ): Promise<T>;
 }
